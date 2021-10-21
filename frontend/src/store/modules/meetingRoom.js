@@ -2,13 +2,13 @@ import Participant from './js/participant.js';
 import Vue from 'vue';
 import router from '../../router';
 import { setRoomOnLive } from '@/api/rooms.js';
-
+import { BASE_URL } from '@/constant/index.js';
 import kurentoUtils from 'kurento-utils';
 import axios from 'axios';
 import _ from 'lodash';
 
-const API_SERVER_URL = 'https://i5a107.p.ssafy.io:8446';
-//const API_SERVER_URL = 'https://localhost:8446';
+//const API_SERVER_URL = 'https://i5a107.p.ssafy.io:8446';
+const API_SERVER_URL = BASE_URL;
 
 export default {
   namespaced: true,

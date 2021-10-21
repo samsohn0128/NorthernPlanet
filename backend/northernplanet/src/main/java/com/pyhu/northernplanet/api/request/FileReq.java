@@ -13,10 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 @ApiModel("FileRequest")
 public class FileReq {
 
-	@ApiModelProperty
-	int room_id;
-	@ApiModelProperty
-	int user_id;
-	@ApiModelProperty
-	List<MultipartFile>files;
+  @ApiModelProperty
+  int room_id;
+  @ApiModelProperty
+  int user_id;
+  @ApiModelProperty
+  List<MultipartFile> files;
 }

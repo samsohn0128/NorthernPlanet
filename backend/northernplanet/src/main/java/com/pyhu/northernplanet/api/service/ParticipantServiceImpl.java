@@ -10,19 +10,21 @@ import org.springframework.stereotype.Service;
 
 @Service("participantService")
 public class ParticipantServiceImpl implements ParticipantService {
-	@Autowired
-	ParticipantRepository participantRepository;
 
-	@Override
-	public List<ParticipantGetRes> getParticipantByRoomId(int roomId) {
-		List<Participants> participants = participantRepository.findByrooms_roomId(roomId);
-		List<ParticipantGetRes> participantGetReqList = new ArrayList<>();
+  @Autowired
+  ParticipantRepository participantRepository;
 
-		for (Participants item : participants) {
-			participantGetReqList.add(new ParticipantGetRes(item.getUsers().getName(), item.getUsers().getEmail(),
-					item.getGroupcode(), item.getCode()));
-		}
-		return participantGetReqList;
-	}
+  @Override
+  public List<ParticipantGetRes> getParticipantByRoomId(int roomId) {
+    List<Participants> participants = participantRepository.findByrooms_roomId(roomId);
+    List<ParticipantGetRes> participantGetReqList = new ArrayList<>();
+
+    for (Participants item : participants) {
+      participantGetReqList
+          .add(new ParticipantGetRes(item.getUsers().getName(), item.getUsers().getEmail(),
+              item.getGroupcode(), item.getCode()));
+    }
+    return participantGetReqList;
+  }
 
 }

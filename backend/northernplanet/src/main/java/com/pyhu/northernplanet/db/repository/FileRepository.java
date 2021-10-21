@@ -7,9 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FileRepository extends JpaRepository<Presentations, Integer> {
-	// @Query(value="select g.user_id from Presentations p inner join
-	// Rooms_Presentations g where g.room_id=?1",nativeQuery=true)
+
+  // @Query(value="select g.user_id from Presentations p inner join
+  // Rooms_Presentations g where g.room_id=?1",nativeQuery=true)
 //    List<FileRes> findAllBygoupid(int roomId);
-	List<Presentations> findByroomspresentations_GroupId(int groupId);
+  List<Presentations> findByroomspresentations_GroupId(int groupId);
 
 }

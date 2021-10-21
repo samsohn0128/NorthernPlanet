@@ -9,28 +9,29 @@ import lombok.Setter;
 @Setter
 @ApiModel("UserGetResponse")
 public class UserGetRes {
-    @ApiModelProperty
-    int userId;
-    @ApiModelProperty
-    String email;
-    @ApiModelProperty
-    String name;
 
-    public UserGetRes() {
-    }
+  @ApiModelProperty
+  int userId;
+  @ApiModelProperty
+  String email;
+  @ApiModelProperty
+  String name;
 
-    public UserGetRes(int userId, String email, String name) {
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
-    }
+  public UserGetRes() {
+  }
 
-    @Override
-    public String toString() {
-        return "UserGetRes{" +
-                "userId=" + userId +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
+  public UserGetRes(int userId, String email, String name) {
+    this.userId = userId;
+    this.email = email;
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return "UserGetRes{" +
+        "userId=" + userId +
+        ", email='" + email + '\'' +
+        ", name='" + name + '\'' +
+        '}';
+  }
 }

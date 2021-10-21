@@ -9,9 +9,10 @@ import lombok.Setter;
 @Setter
 @ApiModel("LoginRegRequest")
 public class LoginReq {
-	@ApiModelProperty
-	String email;
-	@ApiModelProperty
-	String password;
+
+  @ApiModelProperty
+  String email;
+  @ApiModelProperty
+  String password;
 
 }

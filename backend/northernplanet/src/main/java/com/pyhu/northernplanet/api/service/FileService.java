@@ -9,20 +9,21 @@ import java.io.IOException;
 import java.util.List;
 
 public interface FileService {
-	FileReq saveFile(FileReq filereq) throws Exception;
 
-	// Rooms_Presentations getFile(int id);
-	List<FileRes> findbyroomid(int roomId);
+  FileReq saveFile(FileReq filereq) throws Exception;
 
-	List<FiledetailRes> findbygroupid(ShowFileReq filereq);
+  // Rooms_Presentations getFile(int id);
+  List<FileRes> findbyroomid(int roomId);
 
-	byte[] getImage(int roomId, int userId, int currentPage) throws IOException;
+  List<FiledetailRes> findbygroupid(ShowFileReq filereq);
 
-	List<String> getAllImages(int roomId, int userId) throws IOException;
+  byte[] getImage(int roomId, int userId, int currentPage) throws IOException;
 
-	FileReq update(FileReq registerInfo) throws Exception;
+  List<String> getAllImages(int roomId, int userId) throws IOException;
 
-	void deletefile(FileReq registerInfo);
+  FileReq update(FileReq registerInfo) throws Exception;
 
-	void delete(ShowFileReq registerInfo);
+  void deletefile(FileReq registerInfo);
+
+  void delete(ShowFileReq registerInfo);
 }

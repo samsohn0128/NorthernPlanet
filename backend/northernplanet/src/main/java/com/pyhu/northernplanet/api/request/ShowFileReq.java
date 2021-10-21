@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @ApiModel("ShowFileRequest")
 public class ShowFileReq {
-	@ApiModelProperty
-	int room_id;
-	@ApiModelProperty
-	int user_id;
+
+  @ApiModelProperty
+  int room_id;
+  @ApiModelProperty
+  int user_id;
 }

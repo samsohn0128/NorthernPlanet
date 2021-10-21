@@ -24,140 +24,143 @@ import org.springframework.stereotype.Service;
 
 @Service("roomSerice")
 public class RoomServiceImpl implements RoomService {
-	@Autowired
-	RoomRepository roomRepository;
 
-	@Autowired
-	UserRepository userRepository;
+  @Autowired
+  RoomRepository roomRepository;
 
-	@Autowired
-	ParticipantRepository participantRepository;
+  @Autowired
+  UserRepository userRepository;
 
-	private final Logger log = LoggerFactory.getLogger(RoomServiceImpl.class);
-	private final String groupCodeRole = "00";
+  @Autowired
+  ParticipantRepository participantRepository;
 
-	@Override
-	public Rooms createRoom(RoomRegisterPostReq roomInfo) {
-		log.info("[createRoom] room post req: {}", roomInfo);
-		Rooms room = new Rooms();
+  private final Logger log = LoggerFactory.getLogger(RoomServiceImpl.class);
+  private final String groupCodeRole = "00";
 
-		room.setName(roomInfo.getName());
-		if (roomInfo.getStartTime() == null) {
-			LocalDateTime datetime = LocalDateTime.now();
-			room.setStartTime(Timestamp.valueOf(datetime));
-		} else {
-			room.setStartTime(Timestamp.valueOf(roomInfo.getStartTime()));
-		}
-		room.setOnLive(false);
-		room.setDescription(roomInfo.getDescription());
-		Users user = userRepository.findByEmail(roomInfo.getEmail());
-		room.setUsers(user);
-		log.info("[createRoom] set users : {}", room);
+  @Override
+  public Rooms createRoom(RoomRegisterPostReq roomInfo) {
+    log.info("[createRoom] room post req: {}", roomInfo);
+    Rooms room = new Rooms();
 
-		roomRepository.save(room);
-		log.info("[createRoom] save room complete");
-		// Rooms inroom = roomRepository.findByRoomId(room.getRoomId());
+    room.setName(roomInfo.getName());
+    if (roomInfo.getStartTime() == null) {
+      LocalDateTime datetime = LocalDateTime.now();
+      room.setStartTime(Timestamp.valueOf(datetime));
+    } else {
+      room.setStartTime(Timestamp.valueOf(roomInfo.getStartTime()));
+    }
+    room.setOnLive(false);
+    room.setDescription(roomInfo.getDescription());
+    Users user = userRepository.findByEmail(roomInfo.getEmail());
+    room.setUsers(user);
+    log.info("[createRoom] set users : {}", room);
 
-		saveParticipants(roomInfo.getParticipants(), room);
-		log.info("[createRoom] save participants complete");
-		return room;
-	}
+    roomRepository.save(room);
+    log.info("[createRoom] save room complete");
+    // Rooms inroom = roomRepository.findByRoomId(room.getRoomId());
 
-	private void saveParticipants(List<ParticipantReq> person, Rooms room) {
-		Group_Code group_code = new Group_Code();
-		group_code.setGroupCode(groupCodeRole);
-		Participants participant;
-		Code code;
+    saveParticipants(roomInfo.getParticipants(), room);
+    log.info("[createRoom] save participants complete");
+    return room;
+  }
 
-		int size = person.size();
-		for (int i = 0; i < size; i++) {
-			log.info("[saveParticipants] i:{},  person: {}", i, person.get(i));
-			code = new Code();
-			code.setCodeId(person.get(i).getCodeId().getCodeId());
+  private void saveParticipants(List<ParticipantReq> person, Rooms room) {
+    Group_Code group_code = new Group_Code();
+    group_code.setGroupCode(groupCodeRole);
+    Participants participant;
+    Code code;
 
-			participant = new Participants();
-			participant.setCode(code);
-			participant.setGroupcode(group_code);
+    int size = person.size();
+    for (int i = 0; i < size; i++) {
+      log.info("[saveParticipants] i:{},  person: {}", i, person.get(i));
+      code = new Code();
+      code.setCodeId(person.get(i).getCodeId().getCodeId());
 
-			participant.setUsers(userRepository.findByEmail(person.get(i).getEmail()));
-			participant.setRooms(room);
+      participant = new Participants();
+      participant.setCode(code);
+      participant.setGroupcode(group_code);
 
-			participantRepository.save(participant);
-		}
+      participant.setUsers(userRepository.findByEmail(person.get(i).getEmail()));
+      participant.setRooms(room);
 
-	}
+      participantRepository.save(participant);
+    }
 
-	@Override // 방삭제
-	public void deleteRoom(int roomId) {
-		int ret = participantRepository.deleteAllByRooms_RoomId(roomId);
-		log.info("[DeleteRoom] All participants in room {} are deleted - service - {}", roomId, ret);
-		int ret2 = roomRepository.deleteAllByRoomId(roomId);
-		log.info("[DeleteRoom] Room {} is deleted - service - {}", roomId, ret2);
-	}
+  }
 
-	@Override
-	public Rooms getRoom(int roomId) {
-		Rooms room = roomRepository.getById(roomId);
-		return room;
-	}
+  @Override // 방삭제
+  public void deleteRoom(int roomId) {
+    int ret = participantRepository.deleteAllByRooms_RoomId(roomId);
+    log.info("[DeleteRoom] All participants in room {} are deleted - service - {}", roomId, ret);
+    int ret2 = roomRepository.deleteAllByRoomId(roomId);
+    log.info("[DeleteRoom] Room {} is deleted - service - {}", roomId, ret2);
+  }
 
-	@Override
-	public List<RoomGetRes> findAll() {
-		List<Rooms> room = roomRepository.findAll();
-		List<RoomGetRes> roomres = new ArrayList<>();
-		RoomGetRes roomGetRes;
-		for (Rooms r : room) {
-			roomGetRes = new RoomGetRes(r.getName(), r.getDescription(), r.getStartTime().toLocalDateTime(),
-					r.getUsers().getUserId(), r.getUsers().getName(), r.getRoomId());
-			if (r.getEndTime() == null) {
-				roomGetRes.setEndTime(null);
-			} else {
-				roomGetRes.setEndTime(r.getEndTime().toLocalDateTime());
-			}
-			roomres.add(roomGetRes);
-		}
-		return roomres;
-	}
+  @Override
+  public Rooms getRoom(int roomId) {
+    Rooms room = roomRepository.getById(roomId);
+    return room;
+  }
 
-	@Override
-	public Rooms updateRoom(RoomUpdateReq room) {
-		Rooms updateRoomData = getRoom(room.getRoom_id());
-		updateRoomData.setStartTime(Timestamp.valueOf(room.getStartTime()));
-		updateRoomData.setName(room.getName());
-		updateRoomData.setDescription(room.getDescription());
-		participantRepository.deleteAllByRooms_RoomId(room.getRoom_id());
-		saveParticipants(room.getParticipants(), updateRoomData);
-		roomRepository.save(updateRoomData);
-		return updateRoomData;
-	}
+  @Override
+  public List<RoomGetRes> findAll() {
+    List<Rooms> room = roomRepository.findAll();
+    List<RoomGetRes> roomres = new ArrayList<>();
+    RoomGetRes roomGetRes;
+    for (Rooms r : room) {
+      roomGetRes = new RoomGetRes(r.getName(), r.getDescription(),
+          r.getStartTime().toLocalDateTime(),
+          r.getUsers().getUserId(), r.getUsers().getName(), r.getRoomId());
+      if (r.getEndTime() == null) {
+        roomGetRes.setEndTime(null);
+      } else {
+        roomGetRes.setEndTime(r.getEndTime().toLocalDateTime());
+      }
+      roomres.add(roomGetRes);
+    }
+    return roomres;
+  }
 
-	@Override
-	public List<RoomGetRes> findbyuser(int userId) {
-		List<RoomGetRes> roomres = new ArrayList<>();
-		List<Participants> pa = participantRepository.findByusers_userId(userId);
-		log.debug("[findbyuser] userId: {}, pa:{}", userId, pa);
-		RoomGetRes roomGetRes;
-		for (Participants party : pa) {
-			Rooms r = party.getRooms();
-			roomGetRes = new RoomGetRes(r.getName(), r.getDescription(), r.getStartTime().toLocalDateTime(),
-					r.getUsers().getUserId(), r.getUsers().getName(), r.getRoomId());
-			if (r.getEndTime() == null) {
-				roomGetRes.setEndTime(null);
-			} else {
-				roomGetRes.setEndTime(r.getEndTime().toLocalDateTime());
-			}
-			roomres.add(roomGetRes);
-		}
-		return roomres;
-	}
+  @Override
+  public Rooms updateRoom(RoomUpdateReq room) {
+    Rooms updateRoomData = getRoom(room.getRoom_id());
+    updateRoomData.setStartTime(Timestamp.valueOf(room.getStartTime()));
+    updateRoomData.setName(room.getName());
+    updateRoomData.setDescription(room.getDescription());
+    participantRepository.deleteAllByRooms_RoomId(room.getRoom_id());
+    saveParticipants(room.getParticipants(), updateRoomData);
+    roomRepository.save(updateRoomData);
+    return updateRoomData;
+  }
 
-	@Override
-	public void setRoomOnLive(RoomOnLiveReq roomInfo) {
-		try {
-			roomRepository.updateRoomOnLive(roomInfo.getOn_live(), roomInfo.getRoom_id());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+  @Override
+  public List<RoomGetRes> findbyuser(int userId) {
+    List<RoomGetRes> roomres = new ArrayList<>();
+    List<Participants> pa = participantRepository.findByusers_userId(userId);
+    log.debug("[findbyuser] userId: {}, pa:{}", userId, pa);
+    RoomGetRes roomGetRes;
+    for (Participants party : pa) {
+      Rooms r = party.getRooms();
+      roomGetRes = new RoomGetRes(r.getName(), r.getDescription(),
+          r.getStartTime().toLocalDateTime(),
+          r.getUsers().getUserId(), r.getUsers().getName(), r.getRoomId());
+      if (r.getEndTime() == null) {
+        roomGetRes.setEndTime(null);
+      } else {
+        roomGetRes.setEndTime(r.getEndTime().toLocalDateTime());
+      }
+      roomres.add(roomGetRes);
+    }
+    return roomres;
+  }
 
-	}
+  @Override
+  public void setRoomOnLive(RoomOnLiveReq roomInfo) {
+    try {
+      roomRepository.updateRoomOnLive(roomInfo.getOn_live(), roomInfo.getRoom_id());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
 }
