@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @RequestMapping("/board")
-public class FileController {
+public class FileController { 
 //
 //  @Autowired
 //  private FileService fileservice;
