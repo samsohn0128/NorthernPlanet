@@ -10,9 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Group_Code {
-	@Column(name = "group_code")
-	@Id
-	String groupCode;
 
-	String groupCodeName;
+  @Column(name = "group_code")
+  @Id
+  String groupCode;
+
+  String groupCodeName;
 }

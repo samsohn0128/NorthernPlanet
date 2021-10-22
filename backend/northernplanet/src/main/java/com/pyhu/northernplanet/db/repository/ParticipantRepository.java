@@ -8,12 +8,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ParticipantRepository extends JpaRepository<Participants, Integer> {
-	@Transactional
-	List<Participants> findByrooms_roomId(int room_id);
 
-	@Transactional
-	List<Participants> findByusers_userId(int user_id);
+  @Transactional
+  List<Participants> findByrooms_roomId(int room_id);
 
-	@Transactional
-	int deleteAllByRooms_RoomId(int roomId);
+  @Transactional
+  List<Participants> findByusers_userId(int user_id);
+
+  @Transactional
+  int deleteAllByRooms_RoomId(int roomId);
 }

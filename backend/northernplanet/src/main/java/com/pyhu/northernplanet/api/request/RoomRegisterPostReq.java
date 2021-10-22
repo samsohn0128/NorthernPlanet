@@ -12,25 +12,26 @@ import lombok.Setter;
 @ApiModel("RoomRegisterPostRequest")
 
 public class RoomRegisterPostReq {
-	@ApiModelProperty(name="방 이름", example = "방 이름")
-	String name;
-	@ApiModelProperty(name="방 설명", example = "방 설명")
-	String description;
-	@ApiModelProperty(example="시작 시간")
-	LocalDateTime startTime;
-	@ApiModelProperty(name="방장 이메일", example = "방장 이메일")
-	String email;
-	@ApiModelProperty(example="참가자 목록")
-	List<ParticipantReq> participants;
 
-	@Override
-	public String toString() {
-		return "RoomRegisterPostReq{" +
-				"name='" + name + '\'' +
-				", description='" + description + '\'' +
-				", startTime=" + startTime +
-				", email=" + email +
-				", participants=" + participants +
-				'}';
-	}
+  @ApiModelProperty(name = "방 이름", example = "방 이름")
+  String name;
+  @ApiModelProperty(name = "방 설명", example = "방 설명")
+  String description;
+  @ApiModelProperty(example = "시작 시간")
+  LocalDateTime startTime;
+  @ApiModelProperty(name = "방장 이메일", example = "방장 이메일")
+  String email;
+  @ApiModelProperty(example = "참가자 목록")
+  List<ParticipantReq> participants;
+
+  @Override
+  public String toString() {
+    return "RoomRegisterPostReq{" +
+        "name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", startTime=" + startTime +
+        ", email=" + email +
+        ", participants=" + participants +
+        '}';
+  }
 }

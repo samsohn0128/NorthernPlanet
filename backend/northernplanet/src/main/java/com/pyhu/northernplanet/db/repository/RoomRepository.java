@@ -13,13 +13,14 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RoomRepository extends JpaRepository<Rooms, Integer> {
-	Rooms findByRoomId(int roomId);
 
-	@Transactional
-	int deleteAllByRoomId(int roomId);
+  Rooms findByRoomId(int roomId);
 
-	@Modifying
-	@Transactional
-	@Query(value="UPDATE rooms SET on_live=?1 WHERE room_id=?2",nativeQuery=true)
-	void updateRoomOnLive(Boolean onLive, int room_id);
+  @Transactional
+  int deleteAllByRoomId(int roomId);
+
+  @Modifying
+  @Transactional
+  @Query(value = "UPDATE rooms SET on_live=?1 WHERE room_id=?2", nativeQuery = true)
+  void updateRoomOnLive(Boolean onLive, int room_id);
 }

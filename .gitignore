@@ -17,11 +17,11 @@
 /backend/webrtc/src/main/resources/static
 /backend/webrtc/target/
 
-/backend/springboot/.metadata/
-/backend/springboot/.gradle/
-/backend/springboot/.mvn/
-/backend/springboot/src/main/resources/static/
-/backend/springboot/target/
+/backend/northernplanet/.metadata/
+/backend/northernplanet/.gradle/
+/backend/northernplanet/.mvn/
+/backend/northernplanet/src/main/resources/static/
+/backend/northernplanet/target/
 
 /S05P13A107.git/
 

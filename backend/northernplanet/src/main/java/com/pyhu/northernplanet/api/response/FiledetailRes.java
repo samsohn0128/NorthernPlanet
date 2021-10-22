@@ -9,15 +9,17 @@ import lombok.Setter;
 @Setter
 @ApiModel("BaseResponseBody")
 public class FiledetailRes {
-	@ApiModelProperty
-	String directory;
-	@ApiModelProperty
-	String original;
-	public FiledetailRes(String directory, String original) {
-		super();
-		this.directory = directory;
-		this.original = original;
-	}
-	
-	
+
+  @ApiModelProperty
+  String directory;
+  @ApiModelProperty
+  String original;
+
+  public FiledetailRes(String directory, String original) {
+    super();
+    this.directory = directory;
+    this.original = original;
+  }
+
+
 }

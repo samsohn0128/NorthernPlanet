@@ -10,14 +10,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Code {
-	@Column(name = "code_id")
-	@Id
-	String codeId;
 
-	String codeName;
+  @Column(name = "code_id")
+  @Id
+  String codeId;
 
-	@Override
-	public String toString() {
-		return "Code{" + "codeId='" + codeId + '\'' + ", codeName='" + codeName + '\'' + '}';
-	}
+  String codeName;
+
+  @Override
+  public String toString() {
+    return "Code{" + "codeId='" + codeId + '\'' + ", codeName='" + codeName + '\'' + '}';
+  }
 }

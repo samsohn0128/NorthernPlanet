@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @ApiModel("UserUpdateRequest")
 public class UserUpdateNameReq {
-	@ApiModelProperty(example = "사용자 아이디")
-	int user_id;
-	@ApiModelProperty(example = "사용자 이름")
-	String name;
+
+  @ApiModelProperty(example = "사용자 아이디")
+  int user_id;
+  @ApiModelProperty(example = "사용자 이름")
+  String name;
 }

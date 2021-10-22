@@ -9,12 +9,19 @@ import java.util.List;
 
 
 public interface RoomService {
-	Rooms createRoom(RoomRegisterPostReq room);
-	void deleteRoom(int roomId);
-	Rooms getRoom(int roomId);
-	//void deleteParticipants(String );
-	List<RoomGetRes> findAll();
-	Rooms updateRoom (RoomUpdateReq room);
-	List<RoomGetRes> findbyuser(int userId);
-	void setRoomOnLive(RoomOnLiveReq roomInfo);
+
+  Rooms createRoom(RoomRegisterPostReq room);
+
+  void deleteRoom(int roomId);
+
+  Rooms getRoom(int roomId);
+
+  //void deleteParticipants(String );
+  List<RoomGetRes> findAll();
+
+  Rooms updateRoom(RoomUpdateReq room);
+
+  List<RoomGetRes> findbyuser(int userId);
+
+  void setRoomOnLive(RoomOnLiveReq roomInfo);
 }
