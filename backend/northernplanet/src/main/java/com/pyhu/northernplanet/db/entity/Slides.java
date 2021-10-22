@@ -12,32 +12,29 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.swing.text.html.HTML;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-public class RoomsPresentations {
+public class Slides {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "group_id")
-  int groupId;
-  @Column(name = "file_size")
-  int fileSize;
-
-  @Column(name = "upload_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  Timestamp upload_time;
-
-  @OneToMany(mappedBy = "roomspresentations", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Presentations> presentations = new ArrayList<>();
-
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  Users users;
+  @Column(name = "slide_id")
+  int slideId;
+  @Column(name = "save_name")
+  String saveName;
+  @Column(name = "original_name")
+  String originalName;
+  String directory;
+  @Column(name="script_directory")
+  String scriptDirectory;
+  int sequence;
 
   @ManyToOne
-  @JoinColumn(name = "room_id")
-  Rooms rooms;
+  @JoinColumn(name = "presentation_id")
+  Presentations presentations;
 }

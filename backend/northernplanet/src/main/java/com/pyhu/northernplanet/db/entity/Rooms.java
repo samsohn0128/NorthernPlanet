@@ -15,10 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
+
 public class Rooms {
 
   @Column(name = "room_id")
@@ -38,28 +40,9 @@ public class Rooms {
   @OneToMany(mappedBy = "rooms", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Participants> participant = new ArrayList<>();
 
-  @OneToMany(mappedBy = "rooms", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<RoomsPresentations> presentation = new ArrayList<>();
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   Users users;
 
-  @Override
-  public String toString() {
-    String ret =
-        "Rooms{" + "roomId=" + roomId + ", name='" + name + '\'' + ", description='" + description
-            + '\''
-            + ", startTime=" + startTime + ", endTime=" + endTime + ", onLive=" + onLive
-            + ", participant=";
-    for (Participants p : participant) {
-      ret += p.getUsers().getName() + ", ";
-    }
-    ret += ", presentation=";
-    for (RoomsPresentations rp : presentation) {
-      ret += rp.getGroupId() + ", ";
-    }
-    ret += ", users=" + users + '}';
-    return ret;
-  }
+
 }

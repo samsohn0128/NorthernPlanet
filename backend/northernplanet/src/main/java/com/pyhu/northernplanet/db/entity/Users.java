@@ -23,10 +23,10 @@ public class Users {
   int userId;
   String email;
   String name;
-
-  // @JsonIgnore
-  // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  String password;
+  String image;
+  @Column(name = "oauth_id")
+  String oauthId;
+  String oauth_type;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Participants> participant = new ArrayList<>();
@@ -35,12 +35,7 @@ public class Users {
   private List<Rooms> rooms = new ArrayList<>();
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<RoomsPresentations> presentation = new ArrayList<>();
+  private List<UserPresentation> userPresentations = new ArrayList<>();
 
-  @Override
-  public String toString() {
-    return "Users{" + "userId=" + userId + ", email='" + email + '\'' + ", name='" + name + '\''
-        + ", password='"
-        + password + '\'' + '}';
-  }
+
 }
