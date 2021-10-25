@@ -38,7 +38,7 @@ public class Rooms {
   Boolean onLive;
 
   @OneToMany(mappedBy = "rooms", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Participants> participant = new ArrayList<>();
+  private List<Participants> participants = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
