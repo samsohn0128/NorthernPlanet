@@ -13,12 +13,16 @@
       * 발표자는 미팅룸에서 발표자료를 선택할 수 있습니다.
       * 발표자는 미팅룸에서 발표자료의 __애니메이션__ 을 선택할 수 있습니다.
       * 발표자는 미팅룸에서 발표자료를 __넘길 수__ 있습니다.
+      * 발표자는 미팅룸에서 대본을 사용할 수 있습니다.
   * 대시보드
       * 방은 Now, Future, History로 구분됩니다.
-  
-    * Now 그룹은 __시작시간 < 현재시간__ 인 방 목록을 보여줍니다.
+  * Now 그룹은 __시작시간 < 현재시간__ 인 방 목록을 보여줍니다.
     * Future 그룹은 __현재시간 < 시작시간__ 인 방 목록을 보여줍니다.
     * History 그룹은 __종료시간__ 이 존재하는 방 목록을 보여줍니다.
+* 마이페이지
+     * 자신의 이름을 수정할 수 있습니다.
+     * 발표 자료를 추가하고 수정할 수 있습니다.
+     * 대본을 수정하고, 발표 화면을 미리 보며 연습할 수 있습니다.
 ### 실행화면
 * 발표자료 제어
 ![GOMCAM 20210819_1639400155](https://user-images.githubusercontent.com/39117025/130028175-f3159a36-64ca-41a2-9eae-3da1428061c6.gif)
@@ -111,29 +115,31 @@
 
 
 ## 역할
-### 김민지(BE)
-* Kurento MCU
-* Room API
-* JPQL
-* 문서 정리
-### 김애은(BE)
+### 김민지(FE, BE)
+* 소셜 로그인(구글)
+* 링크로 발표방에 초대하는 기능
+* 대본
+* 마이페이지 - 회원정보 수정
+* 채팅 기능 구현
+* 배포
+### 김애은(FE, BE)
 * JPA, JPQL
-* User, Room, File API
-* Controller, Service
-* 문서 정리
-### 손동우(BE)
-* Kurento MCU
-* Socket Message
-* File API
-* 문서 정리
-### 우만승(FE)
-* Kurento Utils
-* 미팅룸
-* 발표자료 제어
-### 정진주(FE)
-* 회원관리
-* 대시보드
-* 영상제작
+* 발표 자료 수정 
+* 다른 파일 형식 업로드
+* 모션 제어
+### 손동우(FE, BE)
+* 발표 자료 수정 
+* 다른 파일 형식 업로드
+* 모션 제어
+* 배포
+### 서영은(FE, BE)
+* 대본 - 에디터, 백엔드 API 구현
+* 채팅 기능 구현
+* 배포
+### 윤주엽(FE)
+* 마이페이지
+* 대본 페이지, 발표 연습 페이지
+* 채팅 기능 구현
 <br>
 
 ## 프로젝트 명세
@@ -151,7 +157,7 @@
 - Java
 - Spring Boot, Spring MVC, Spring Data JPA
 - JPA, JPQL
-- Maven
+- Gradle
 - MySQL
 - Intellij, Eclipse STS
 
@@ -164,20 +170,20 @@
 - Jira
 - Gitlab, Sourcetree, GithubDesktop
 - Mattermost
-- [Notion](https://www.notion.so/7-FOCUS-a4db4765db0d47059f1a743e2e87347c)
+- [Notion](https://plaid-raja-512.notion.site/Put-your-hands-up-7c7767c9ba724182a6c1618d8536bd89)
 <br>
 
 
 
 ### 시스템 아키텍쳐
-![](https://i.imgur.com/xd2oEs1.png)
+![](https://i.imgur.com/QChANZP.png)
 
 
 
 
 
 ### 데이터베이스
-![](https://i.imgur.com/i5uIiJE.png)
+![](https://i.imgur.com/twgFUFs.png)
 
 ### 핵심 라이브러리
 - __Kurento MCU 서버__
