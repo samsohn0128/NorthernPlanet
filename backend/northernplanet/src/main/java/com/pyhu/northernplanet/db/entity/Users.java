@@ -29,7 +29,7 @@ public class Users {
   String oauth_type;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Participants> participant = new ArrayList<>();
+  private List<Participants> participants = new ArrayList<>();
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Rooms> rooms = new ArrayList<>();
