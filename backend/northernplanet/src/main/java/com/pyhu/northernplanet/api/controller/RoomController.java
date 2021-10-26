@@ -1,4 +1,9 @@
 package com.pyhu.northernplanet.api.controller;
+
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 //
 //import com.fasterxml.jackson.annotation.JsonFormat;
 //import com.pyhu.northernplanet.api.request.RoomOnLiveReq;
@@ -30,9 +35,9 @@ package com.pyhu.northernplanet.api.controller;
 //import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RestController;
 //
-//@Api(value = "방 관련 API", tags = {"Room"})
-//@RestController
-//@RequestMapping("/rooms")
+@Api(value = "방 관련 API", tags = {"Room"})
+@RestController
+@RequestMapping("/rooms")
 public class RoomController {
 //
 //  @Autowired

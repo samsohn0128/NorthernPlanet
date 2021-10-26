@@ -14,6 +14,13 @@ export default {
       //userpwd: '',
     },
     users: [], // 전체 사용자
+    user: {
+      email: '',
+      name: '',
+      image: '',
+      oauthId: '',
+      token: '',
+    },
   }),
   mutations: {
     SET_LOGIN(state, payload) {
@@ -40,6 +47,13 @@ export default {
     },
     SET_NAME(state, payload) {
       state.login.username = payload;
+    },
+    SET_USER(state, payload) {
+      state.user.nickname = payload.email;
+      state.user.description = payload.name;
+      state.user.profile = payload.image;
+      state.user.oauthId = payload.oauthId;
+      state.user.token = payload.token;
     },
   },
   actions: {
@@ -68,6 +82,12 @@ export default {
     },
     users(state) {
       return state.users;
+    },
+    getUser(state) {
+      return state.user;
+    },
+    getToken(state) {
+      return state.user.token;
     },
   },
 };

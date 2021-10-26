@@ -9,24 +9,34 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@ToString
+@DynamicInsert
+@NoArgsConstructor
+@AllArgsConstructor
 public class Users {
 
   @Column(name = "user_id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  int userId;
+  Long userId;
   String email;
   String name;
   String image;
   @Column(name = "oauth_id")
   String oauthId;
-  String oauth_type;
+  String oauthType;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Participants> participants = new ArrayList<>();
