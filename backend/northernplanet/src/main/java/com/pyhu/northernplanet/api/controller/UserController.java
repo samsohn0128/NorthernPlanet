@@ -1,4 +1,22 @@
 package com.pyhu.northernplanet.api.controller;
+
+import com.pyhu.northernplanet.api.service.UserService;
+import com.pyhu.northernplanet.common.dto.UserOauthDto;
+import com.pyhu.northernplanet.common.response.ApiResponseDto;
+import com.pyhu.northernplanet.security.CurrentUser;
+import com.pyhu.northernplanet.security.UserPrincipal;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
+
 //
 //import com.pyhu.northernplanet.api.request.LoginReq;
 //import com.pyhu.northernplanet.api.request.UserRegisterReq;
@@ -31,16 +49,34 @@ package com.pyhu.northernplanet.api.controller;
 ///**
 // * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
 // */
-//@Api(value = "유저 API", tags = {"User"})
-//@RestController
-//@RequestMapping("/users")
+@Slf4j
+@Api(value = "유저 API", tags = {"User"})
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
-//
-//  @Autowired
-//  UserService userService;
-//
-//  private final Logger log = LoggerFactory.getLogger(UserController.class);
-//
+
+  private final UserService userService;
+
+
+  @ApiOperation(value = "사용자 정보", notes = "인증된 사용자의 정보를 반환합니다.", response = ApiResponseDto.class)
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "페이지 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
+  @GetMapping("/oauth2/login")
+  public ApiResponseDto<UserOauthDto> getCurrentUser(
+      @ApiIgnore @CurrentUser UserPrincipal userPrincipal) {
+    log.info("getCurrentUser: userPrincipal - {}", userPrincipal);
+    UserOauthDto user = null;
+    try {
+      user = userService.getOauthUserByOauthId(userPrincipal.getPassword());
+      return ApiResponseDto.success(user);
+    } catch (Exception e) {
+      log.error("[getCurrentUser] ", e);
+    }
+    return ApiResponseDto.fail(user, "사용자 정보를 가져오는데 실패했습니다.");
+  }
 //  @PostMapping("/register")
 //  @ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
 //  @ApiResponses({

@@ -56,17 +56,22 @@
                         v-model="userpwd"
                       />
                     </div>
-                    <!-- ㅎㅇ 아이디 기억-->
-                    <!-- <div class="form-check form-switch">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="rememberMe"
-                      />
-                      <label class="form-check-label" for="rememberMe"
-                        >Remember me</label
-                      >
-                    </div> -->
+
+                    <!-- 구글 로그인 -->
+                    <button
+                      type="button"
+                      class="btn bg-gradient-info"
+                      v-on:click="tryToGoogleLogIn"
+                    >
+                      <img
+                        src="@/assets/img/logos/logo-google-thumbnail.png"
+                        alt
+                        height="30"
+                        class="logo"
+                        style="margin-right: 10%"
+                      />구글 로그인
+                    </button>
+
                     <div class="text-center">
                       <button
                         type="submit"
@@ -117,7 +122,7 @@
 </template>
 <script>
 import Vue from 'vue';
-import { loginUser } from '@/api/users.js';
+import { loginUser, googleLoginUser } from '@/api/users.js';
 import VueAlertify from 'vue-alertify';
 Vue.use(VueAlertify);
 
@@ -160,6 +165,13 @@ export default {
     initForm() {
       this.useremail = '';
       this.userpwd = '';
+    },
+    async tryToGoogleLogIn() {
+      try {
+        await googleLoginUser();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

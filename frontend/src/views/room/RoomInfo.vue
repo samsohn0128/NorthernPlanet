@@ -15,6 +15,9 @@
           >
             <h3 class="text-center">Room Info</h3>
             <RoomContent></RoomContent>
+            <button type="button" class="btn bg-gradient-warning">
+              링크생성
+            </button>
           </div>
         </div>
       </div>
