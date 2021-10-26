@@ -49,11 +49,12 @@ export default {
       state.login.username = payload;
     },
     SET_USER(state, payload) {
-      state.user.nickname = payload.email;
-      state.user.description = payload.name;
-      state.user.profile = payload.image;
+      state.user.email = payload.email;
+      state.user.name = payload.name;
+      state.user.image = payload.image;
       state.user.oauthId = payload.oauthId;
       state.user.token = payload.token;
+      console.log('set user: ', state.user);
     },
   },
   actions: {
