@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { BASE_URL } from '@/constant/index.js';
+import { GOOGLE_OAUTH_URL } from '@/constant/index.js';
 const instance = axios.create({
-  //  baseURL: 'https://i5a107.p.ssafy.io:8446/users/',
-  baseURL: BASE_URL + '/users/',
+  baseURL: BASE_URL + 'users/',
   headers: {
     'Content-type': 'application/json',
   },
@@ -38,6 +38,13 @@ function deleteUser(userId) {
   return instance.delete('delete/' + userId);
 }
 
+function googleLoginUser() {
+  window.location.href = `${GOOGLE_OAUTH_URL}`;
+}
+function getUser() {
+  return instance.get('oauth2/login');
+}
+
 export {
   registerUser,
   loginUser,
@@ -47,4 +54,6 @@ export {
   updateUserName,
   updateUserPwd,
   deleteUser,
+  googleLoginUser,
+  getUser,
 };
