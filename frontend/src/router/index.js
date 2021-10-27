@@ -18,12 +18,13 @@ import MeetingRoom from '@/views/meetingRoom/MeetingRoom.vue';
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyInfo from '@/views/mypage/MyInfo.vue';
 
-import store from '@/store/index.js';
+import Script from '@/views/Script.vue';
+// import store from '@/store/index.js';
 
 Vue.use(VueRouter);
 Vue.use(VueAlertify);
 const router = new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -84,6 +85,11 @@ const router = new VueRouter({
         },
       ],
     },
+    {
+      path: '/script',
+      component: Script,
+      meta: { authRequired: true },
+    },
   ],
   // scrollBehavior(to, from, savedPosition) {
   //   return { x: 0, y: 0 };
@@ -91,23 +97,23 @@ const router = new VueRouter({
 });
 
 // let isLogin =
-router.beforeEach(function (to, from, next) {
-  var authRequired = to.matched.some(routeInfo => {
-    // console.log(routeInfo);
-    return routeInfo.meta.authRequired;
-  });
-  if (!authRequired || (authRequired && store.state.users.login.isLogin)) {
-    // console.log('authRequired : ' + authRequired);
-    // console.log('isLogin : ' + store.state.users.login.isLogin);
-    next();
-  } else {
-    // VueAlertify.error('로그인이 필요합니다');
-    // this.$alertify.error('로그인이 필요합니다');
-    alert('로그인이 필요합니다');
-    router.push('/login');
-    // console.log('authRequired : ' + authRequired);
-    // console.log('isLogin : ' + store.state.users.login.isLogin);
-  }
-});
+// router.beforeEach(function (to, from, next) {
+//   var authRequired = to.matched.some(routeInfo => {
+//     // console.log(routeInfo);
+//     return routeInfo.meta.authRequired;
+//   });
+//   if (!authRequired || (authRequired && store.state.users.login.isLogin)) {
+//     // console.log('authRequired : ' + authRequired);
+//     // console.log('isLogin : ' + store.state.users.login.isLogin);
+//     next();
+//   } else {
+//     // VueAlertify.error('로그인이 필요합니다');
+//     // this.$alertify.error('로그인이 필요합니다');
+//     alert('로그인이 필요합니다');
+//     router.push('/login');
+//     // console.log('authRequired : ' + authRequired);
+//     // console.log('isLogin : ' + store.state.users.login.isLogin);
+//   }
+// });
 
 export default router;
