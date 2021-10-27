@@ -1,5 +1,7 @@
 package com.pyhu.northernplanet.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
@@ -20,6 +23,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 public class Participants {
 
   @Id
@@ -32,10 +36,12 @@ public class Participants {
 
 
   @ManyToOne
+  @JsonBackReference
   @JoinColumn(name = "user_id")
   Users users;
 
   @ManyToOne
+  @JsonBackReference
   @JoinColumn(name = "room_id")
   Rooms rooms;
 

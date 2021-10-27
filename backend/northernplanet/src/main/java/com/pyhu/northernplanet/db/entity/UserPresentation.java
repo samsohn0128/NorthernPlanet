@@ -1,5 +1,7 @@
 package com.pyhu.northernplanet.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +36,7 @@ public class UserPresentation {
   Presentations presentations;
 
   @ManyToOne
+  @JsonBackReference
   @JoinColumn(name = "user_id")
   Users users;
 }
