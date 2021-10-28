@@ -7,11 +7,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import RoomGroup from '@/views/room/components/RoomGroup';
-import VueAlertify from 'vue-alertify';
-
-Vue.use(VueAlertify);
+import store from '@/store';
 
 export default {
   name: 'RoomDashboard',
@@ -24,14 +21,16 @@ export default {
       history: 'History',
     };
   },
+  computed: {
+    user() {
+      return store.getters['users/getUser'];
+    },
+  },
   created() {
-    this.$store.dispatch(
-      'rooms/fetchRooms',
-      this.$store.state.users.login.userid,
-    );
+    store.dispatch('rooms/fetchRooms', this.user.userId);
 
     const url = 'wss://' + location.host + '/groupcall';
-    this.$store.dispatch('meetingRoom/wsInit', url);
+    store.dispatch('meetingRoom/wsInit', url);
   }, //axios
 };
 </script>

@@ -33,83 +33,27 @@
                     Sign In
                   </h1>
                   <h5 class="mb-0 text-gradient text-focus">
-                    Enter your email and password to sign in
+                    Please sign in to continue using the NorthernPlanet.
                   </h5>
                 </div>
                 <div class="card-body">
                   <form role="form" class="mb-4" @submit.prevent="submitForm()">
-                    <div class="mb-3">
-                      <input
-                        type="email"
-                        class="form-control form-control-lg"
-                        placeholder="Email"
-                        aria-label="Email"
-                        v-model="useremail"
-                      />
-                    </div>
-                    <div class="mb-3">
-                      <input
-                        type="password"
-                        class="form-control form-control-lg"
-                        placeholder="Password"
-                        aria-label="Password"
-                        v-model="userpwd"
-                      />
-                    </div>
-
-                    <!-- 구글 로그인 -->
-                    <button
-                      type="button"
-                      class="btn bg-gradient-info"
-                      v-on:click="tryToGoogleLogIn"
-                    >
-                      <img
-                        src="@/assets/img/logos/logo-google-thumbnail.png"
-                        alt
-                        height="30"
-                        class="logo"
-                        style="margin-right: 10%"
-                      />구글 로그인
-                    </button>
-
                     <div class="text-center">
                       <button
-                        type="submit"
-                        class="
-                          btn btn-lg
-                          bg-gradient-dark
-                          btn-lg
-                          w-50
-                          mt-4
-                          mb-0
-                          text-lg
-                        "
+                        type="button"
+                        class="btn btn-lg bg-gradient-dark text-lg w-80"
+                        v-on:click="tryToGoogleLogIn"
                       >
-                        Sign in
+                        <img
+                          src="@/assets/img/logos/logo-google-thumbnail.png"
+                          alt
+                          height="30"
+                          class="logo"
+                          style="margin-right: 5%"
+                        />구글 로그인
                       </button>
                     </div>
                   </form>
-                  <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                    <h3 class="mb-2 text-lg mx-auto">
-                      Don't have an account?
-                      <router-link
-                        v:bind:disabled="!isUseremailValid || password"
-                        to="signup"
-                        class="text-dark text-gradient font-weight-bold"
-                        >Sign Up</router-link
-                      >
-                    </h3>
-                    <!-- <p class="mb-2 text-sm mx-auto">
-                      Did you forget password?
-                      <router-link
-                        to=""
-                        class="text-dark text-gradient font-weight-bold"
-                        data-bs-toggle="modal"
-                        data-bs-target="#ModalChangePasswordByEmail"
-                        >Change password</router-link
-                      >
-                    </p> -->
-                  </div>
                 </div>
                 <div class="card-footer text-left pt-0 px-lg-2 px-1"></div>
               </div>
@@ -122,7 +66,7 @@
 </template>
 <script>
 import Vue from 'vue';
-import { loginUser, googleLoginUser } from '@/api/users.js';
+import { googleLoginUser } from '@/api/users.js';
 import VueAlertify from 'vue-alertify';
 Vue.use(VueAlertify);
 
@@ -130,42 +74,10 @@ export default {
   name: 'IntroLogin',
   components: {},
   data() {
-    return {
-      useremail: '',
-      userpwd: '',
-      logMessage: '',
-    };
+    return {};
   },
   computed: {},
   methods: {
-    async submitForm() {
-      try {
-        const userData = {
-          //보낼때
-          email: this.useremail,
-          password: this.userpwd,
-        };
-        await loginUser(userData).then(({ data }) => {
-          const userInfo = {
-            //받을때
-            id: data.userId,
-            email: data.email,
-            name: data.name,
-            isLogin: true,
-          };
-          this.$store.commit('users/SET_LOGIN', userInfo);
-          // this.$router.push('/dashboard');
-        });
-      } catch (error) {
-        console.log(error);
-        this.$alertify.error('이메일 또는 비밀번호를 확인하세요.');
-        this.initForm();
-      }
-    },
-    initForm() {
-      this.useremail = '';
-      this.userpwd = '';
-    },
     async tryToGoogleLogIn() {
       try {
         await googleLoginUser();

@@ -34,12 +34,19 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(
             () -> new UsernameNotFoundException("User not found with oauthId : " + oauthId));
     UserOauthDto userOauthDto = UserOauthDto.builder()
+        .userId(user.getUserId())
         .email(user.getEmail())
         .name(user.getName())
         .image(user.getImage())
         .oauthId(user.getOauthId())
         .build();
-    log.info("getOauthUserByOauthId: {}", user);
+    log.info("getOauthUserByOauthId: {}", userOauthDto);
     return userOauthDto;
+  }
+
+  @Override
+  public Long getUserIdByOauthId(int oauthId) {
+    Long userId = userRepository.findUserIdByOauthId(oauthId);
+    return userId;
   }
 }

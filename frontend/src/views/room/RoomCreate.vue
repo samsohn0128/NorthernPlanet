@@ -72,7 +72,7 @@
                   </button>
                 </popper>
                 <div class="row">
-                  <div class="col-md-5">
+                  <div class="col-md-10">
                     <input
                       class="form-control"
                       type="text"
@@ -81,18 +81,7 @@
                       @keyup="inputChanged"
                     />
                   </div>
-                  <div class="col-md-5">
-                    <select
-                      name="role"
-                      id="role"
-                      class="form-select"
-                      aria-label="Default select example"
-                      v-model="roleSelected"
-                    >
-                      <option value="100-Presenter">Presenter</option>
-                      <option value="000-Viewer">Viewer</option>
-                    </select>
-                  </div>
+
                   <div class="col-md-2">
                     <button
                       type="button"
@@ -123,7 +112,7 @@
                       <th class="ps-3" scope="row">{{ index + 1 }}</th>
                       <td class="ps-3">{{ participant.name }}</td>
                       <td class="ps-3">{{ participant.email }}</td>
-                      <td class="ps-3">{{ participant.codeId.codeName }}</td>
+                      <td class="ps-3">{{ participant.code.codeName }}</td>
                       <td>
                         <div v-if="index > 0">
                           <button
@@ -158,32 +147,28 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import { createRoom } from '@/api/rooms.js';
 import { findUser } from '@/api/users.js';
-import VueAlertify from 'vue-alertify';
 import moment from 'moment';
-import { mapGetters } from 'vuex';
+import store from '@/store';
 import Popper from 'vue-popperjs';
 import 'vue-popperjs/dist/vue-popper.css';
-Vue.use(VueAlertify);
 
 export default {
   name: 'RoomCreate',
   components: { DatePicker, Popper },
   data() {
     return {
-      user: this.$store.state.users.login,
       datetime: '',
       roomName: '',
       description: '',
       participants: [
         {
-          name: this.$store.state.users.login.username,
-          email: this.$store.state.users.login.useremail,
-          codeId: {
+          name: store.getters['users/getUser'].name,
+          email: store.getters['users/getUser'].email,
+          code: {
             codeId: '001',
             codeName: 'Manager',
           },
@@ -191,7 +176,6 @@ export default {
       ],
       participant: '',
       participantAccount: '',
-      roleSelected: '',
       nowDateTime: moment(new Date()).format('YYYY-MM-DD HH:mm'),
     };
   },
@@ -199,13 +183,15 @@ export default {
     getParticipants() {
       return this.participants;
     },
-    ...mapGetters(['users']),
+    user() {
+      return store.getters['users/getUser'];
+    },
   },
   methods: {
     addParticipant() {
       let msg = '';
-      if (!this.participantAccount || !this.roleSelected) {
-        msg = '추가하려는 사용자 이메일 및 역할을 입력해주세요';
+      if (!this.participantAccount) {
+        msg = '추가하려는 사용자 이메일을 입력해주세요';
         this.$alertify.error(msg);
         return;
       }
@@ -227,7 +213,7 @@ export default {
           this.participants.push({
             name: this.participant.data.name,
             email: this.participantAccount,
-            codeId: {
+            code: {
               codeId: this.roleSelected.split('-')[0],
               codeName: this.roleSelected.split('-')[1],
             },
@@ -264,7 +250,7 @@ export default {
           name: this.roomName,
           description: this.description,
           startTime: this.datetime,
-          email: this.$store.state.users.login.useremail,
+          email: this.user.email,
           participants: this.participants,
         };
 
