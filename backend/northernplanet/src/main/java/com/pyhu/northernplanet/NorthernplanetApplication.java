@@ -11,8 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(AppConfig.class)
 public class NorthernplanetApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(NorthernplanetApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(NorthernplanetApplication.class, args);
+  }
 }

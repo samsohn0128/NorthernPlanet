@@ -1,19 +1,19 @@
 package com.pyhu.northernplanet.api.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.List;
-import org.springframework.stereotype.Service;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.request.SlideRequest;
 import com.pyhu.northernplanet.db.entity.Presentation;
 import com.pyhu.northernplanet.db.entity.Slide;
 import com.pyhu.northernplanet.db.repository.PresentationRepository;
 import com.pyhu.northernplanet.db.repository.SlideRepository;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +72,6 @@ public class PresentationServiceImpl implements PresentationService {
     if (!folder.exists()) {
       folder.mkdirs();
     }
-
 
     for (int i = 0; i < presentationPostReq.getSlides().size(); i++) {
       SlideRequest slideRequest = presentationPostReq.getSlides().get(i);
