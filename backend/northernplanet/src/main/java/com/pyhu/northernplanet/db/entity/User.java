@@ -1,5 +1,6 @@
 package com.pyhu.northernplanet.db.entity;
 
+
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 @Entity
@@ -36,11 +38,14 @@ public class User {
   String oauthType;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Participant> participants;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Room> rooms;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Presentation> presentations;
 }

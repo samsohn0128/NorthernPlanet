@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.DynamicInsert;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Data;
 
@@ -38,6 +39,7 @@ public class Presentation {
   LocalDateTime upload_time;
 
   @OneToMany(mappedBy = "presentations", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Slide> slides;
 
 }

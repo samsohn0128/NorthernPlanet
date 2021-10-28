@@ -36,4 +36,10 @@ public class UserServiceImpl implements UserService {
     log.info("getOauthUserByOauthId: {}", user);
     return userOauthDto;
   }
+
+  @Override
+  public Long getUserIdByOauthId(int oauthId) {
+    Long userId = userRepository.findUserIdByOauthId(oauthId);
+    return userId;
+  }
 }

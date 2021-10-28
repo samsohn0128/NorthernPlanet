@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Data;
 
@@ -38,6 +39,7 @@ public class Slide {
   Integer sequence;
 
   @ManyToOne
+  @JsonBackReference
   @JoinColumn(name = "presentation_id")
   Presentation presentation;
 }

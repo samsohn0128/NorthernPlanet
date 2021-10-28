@@ -1,5 +1,6 @@
 package com.pyhu.northernplanet.db.entity;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -14,10 +15,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
 @Data
+@Builder
 @DynamicInsert
 @DynamicUpdate
 public class Room {
@@ -42,9 +47,11 @@ public class Room {
   Boolean onLive;
 
   @OneToMany(mappedBy = "rooms", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Participant> participants;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JsonBackReference
   @JoinColumn(name = "user_id")
   User user;
 

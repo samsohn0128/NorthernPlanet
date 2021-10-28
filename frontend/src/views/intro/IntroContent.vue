@@ -56,21 +56,6 @@
               >
                 Start
               </router-link>
-              <!--ㅎㅇ isLogin===true?none:show, 테스트 후 meetingroom, dashboard 버튼 삭제-->
-
-              <!-- <router-link
-                to="/meetingroomenter"
-                class="btn btn-outline-dark text-dark shadow-none mt-4"
-              >
-                MeetingRoom
-              </router-link>
-
-              <router-link
-                to="/dashboard"
-                class="btn btn-outline-dark text-dark shadow-none mt-4"
-              >
-                Dashboard
-              </router-link> -->
             </div>
           </div>
         </div>
