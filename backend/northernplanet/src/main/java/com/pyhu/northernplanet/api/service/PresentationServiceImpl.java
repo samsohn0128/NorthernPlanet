@@ -28,7 +28,7 @@ public class PresentationServiceImpl implements PresentationService {
   private final String presentationDirectory = "/Users/dongwoosohn/presentation";
 
   @Override
-  public int createPresentation(PresentationPostReq presentationPostReq) {
+  public int createPresentation(PresentationPostReq presentationPostReq) throws IOException {
     log.info("[createPresentation - service]");
     // save slides
     List<Slide> slides = new LinkedList<>();
@@ -44,13 +44,7 @@ public class PresentationServiceImpl implements PresentationService {
       log.info("[createPresentation - service] Slide : {}", slide);
       slides.add(slide);
     });
-    try {
-      slideRepository.saveAll(slides);
-    } catch (Exception e) {
-      log.error("[createPresentation - service] Save Slide Error");
-      e.printStackTrace();
-      return 1;
-    }
+    slideRepository.saveAll(slides);
 
     // save presentation
     LocalDateTime now = LocalDateTime.now();
@@ -58,13 +52,7 @@ public class PresentationServiceImpl implements PresentationService {
         Presentation.builder().name(presentationPostReq.getPresentationName())
             .size(presentationPostReq.getSlides().size()).upload_time(now).build();
     log.info("[createPresentation - service] Presentation : {}", presentation);
-    try {
-      presentation = presentationRepository.saveAndFlush(presentation);
-    } catch (Exception e) {
-      log.error("[createPresentation - service] Save Presentation Error");
-      e.printStackTrace();
-      return 2;
-    }
+    presentation = presentationRepository.saveAndFlush(presentation);
     // save presentation files
     String folderDirectory = presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
         + presentation.getPresentationId() + "/";
@@ -78,13 +66,7 @@ public class PresentationServiceImpl implements PresentationService {
       String originalFileName = slideRequest.getSlide().getOriginalFilename();
       String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
       File slide = new File(folderDirectory + slideRequest.getSequenceNum() + extensionName);
-      try {
-        slideRequest.getSlide().transferTo(slide);
-      } catch (IllegalStateException | IOException e) {
-        log.error("[createPresentation - service] Save Slide File Error");
-        e.printStackTrace();
-        return 3;
-      }
+      slideRequest.getSlide().transferTo(slide);
     }
 
     return 0;
