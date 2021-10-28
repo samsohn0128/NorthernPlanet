@@ -1,20 +1,20 @@
 package com.pyhu.northernplanet.db.repository;
 
-import com.pyhu.northernplanet.db.entity.Participants;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import com.pyhu.northernplanet.db.entity.Participant;
 
 @Repository
-public interface ParticipantRepository extends JpaRepository<Participants, Integer> {
+public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
   @Transactional
-  List<Participants> findByrooms_roomId(Long room_id);
+  List<Participant> findByRoom_roomId(Long roomId);
 
   @Transactional
-  List<Participants> findByusers_userId(Long user_id);
+  List<Participant> findByUser_userId(Long userId);
 
   @Transactional
-  int deleteAllByRooms_RoomId(Long roomId);
+  int deleteAllByRoom_RoomId(Long roomId);
 }

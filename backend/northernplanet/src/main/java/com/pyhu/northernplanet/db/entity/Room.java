@@ -1,9 +1,7 @@
 package com.pyhu.northernplanet.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.sql.Timestamp;
-import java.util.ArrayList;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,43 +13,46 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.AllArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Rooms {
+@DynamicInsert
+@DynamicUpdate
+public class Room {
+
 
   @Column(name = "room_id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long roomId;
+
   String name;
+
   String description;
+
   @Column(name = "startTime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  Timestamp startTime;
+  LocalDateTime startTime;
+
   @Column(name = "endTime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  Timestamp endTime;
+  LocalDateTime endTime;
 
   @Column(name = "onLive", columnDefinition = "BOOLEAN DEFAULT FALSE")
   Boolean onLive;
 
-  @OneToMany(mappedBy = "rooms", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
-  private List<Participants> participants = new ArrayList<>();
+  private List<Participant> participants;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JsonBackReference
   @JoinColumn(name = "user_id")
-  Users users;
-
+  User user;
 
 }

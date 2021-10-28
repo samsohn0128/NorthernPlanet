@@ -14,5 +14,4 @@ public class NorthernplanetApplication {
   public static void main(String[] args) {
     SpringApplication.run(NorthernplanetApplication.class, args);
   }
-
 }
