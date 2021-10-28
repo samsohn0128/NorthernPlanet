@@ -1,6 +1,7 @@
 package com.pyhu.northernplanet.db.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,10 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Data;
 
 @Entity
 @Data
