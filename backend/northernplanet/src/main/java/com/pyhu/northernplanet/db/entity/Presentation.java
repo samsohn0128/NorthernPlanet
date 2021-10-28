@@ -38,8 +38,7 @@ public class Presentation {
   @Column(name = "upload_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   LocalDateTime upload_time;
 
-  @OneToMany(mappedBy = "presentations", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "presentation", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<Slide> slides;
-
 }

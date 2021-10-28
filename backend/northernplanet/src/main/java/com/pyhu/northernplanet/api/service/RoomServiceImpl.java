@@ -37,7 +37,7 @@ public class RoomServiceImpl implements RoomService {
   @Override
   public List<RoomGetRes> findbyuser(Long userId) {
     List<RoomGetRes> roomres = new ArrayList<>();
-    List<Participant> participants = participantRepository.findByusers_userId(userId);
+    List<Participant> participants = participantRepository.findByUser_userId(userId);
     log.debug("[findbyuser] userId: {}, pa:{}", userId, participants);
     RoomGetRes roomGetRes;
     Room room;

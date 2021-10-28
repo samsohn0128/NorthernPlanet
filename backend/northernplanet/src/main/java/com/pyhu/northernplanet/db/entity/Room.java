@@ -46,7 +46,7 @@ public class Room {
   @Column(name = "onLive", columnDefinition = "BOOLEAN DEFAULT FALSE")
   Boolean onLive;
 
-  @OneToMany(mappedBy = "rooms", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<Participant> participants;
 

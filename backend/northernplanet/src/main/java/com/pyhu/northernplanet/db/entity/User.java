@@ -37,15 +37,15 @@ public class User {
   @Column(name = "oauth_type")
   String oauthType;
 
-  @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<Participant> participants;
 
-  @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<Room> rooms;
 
-  @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<Presentation> presentations;
 }
