@@ -49,11 +49,11 @@ public class RoomController {
       log.info("[register] room register info: {}", registerInfo);
       roomService.createRoom(registerInfo);
 
-      return ApiResponseDto.success("success");
+      return ApiResponseDto.success();
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return ApiResponseDto.fail("fail", "방 생성 실패했습니다.");
+    return ApiResponseDto.fail("방 생성 실패했습니다.");
   }
 
   //
