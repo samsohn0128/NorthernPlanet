@@ -7,8 +7,12 @@ import routes from './routes';
 Vue.use(VueRouter);
 Vue.use(VueAlertify);
 const router = new VueRouter({
-  routes,
   //mode: 'history',
+  mode: 'history',
+  routes,
+  // scrollBehavior(to, from, savedPosition) {
+  //   return { x: 0, y: 0 };
+  // },
 });
 
 // let isLogin =

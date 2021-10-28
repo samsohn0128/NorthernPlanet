@@ -14,6 +14,9 @@ import MeetingRoom from '@/views/meetingRoom/MeetingRoom.vue';
 
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyInfo from '@/views/mypage/MyInfo.vue';
+import MyPPT from '@/views/mypage/MyPPT.vue';
+import ModifyPPT from '@/views/mypage/ModifyPPT.vue';
+
 export default [
   {
     path: '/',
@@ -43,7 +46,8 @@ export default [
   {
     path: '/dashboard',
     component: RoomPage,
-    meta: { authRequired: true },
+    meta: { authRequired: false },
+    // meta: { authRequired: true },
     children: [
       {
         path: '',
@@ -68,7 +72,8 @@ export default [
     path: '/meetingroom',
     name: 'MeetingRoom',
     component: MeetingRoom,
-    meta: { authRequired: true },
+    meta: { authRequired: false },
+    // meta: { authRequired: true },
   },
   {
     path: '/mypage',
@@ -80,5 +85,27 @@ export default [
         component: MyInfo,
       },
     ],
+  },
+  {
+    path: '',
+    component: MyPage,
+    meta: { authRequired: false },
+    // meta: { authRequired: true },
+    children: [
+      {
+        path: '/mypage',
+        component: MyInfo,
+      },
+      {
+        path: '/mypage/myppt',
+        name: 'MyPPT',
+        component: MyPPT,
+      },
+    ],
+  },
+  {
+    path: '/mypage/modifyppt/:id',
+    name: 'ModifyPPT',
+    component: ModifyPPT,
   },
 ];

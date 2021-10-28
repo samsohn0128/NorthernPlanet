@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <span>
     <section>
       <div class="container py-4 mb-3">
         <div class="row">
           <div
+            id="make-margin"
             class="
               col-xl-4 col-lg-6
               mx-auto
@@ -80,7 +81,7 @@
     </section>
     <ChangePasswordModal></ChangePasswordModal>
     <WithdrawModal></WithdrawModal>
-  </div>
+  </span>
 </template>
 <script>
 import Vue from 'vue';
@@ -128,3 +129,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#make-margin {
+  padding-left: 100px !important;
+}
+.left-wing {
+  display: inline-block;
+  flex-direction: column;
+}
+.my-info-box {
+  display: flex;
+  justify-content: center;
+}
+</style>
