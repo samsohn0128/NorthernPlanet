@@ -6,6 +6,7 @@ import com.pyhu.northernplanet.api.response.RoomGetRes;
 import com.pyhu.northernplanet.api.service.ParticipantService;
 import com.pyhu.northernplanet.api.service.RoomService;
 import com.pyhu.northernplanet.api.service.UserService;
+import com.pyhu.northernplanet.common.dto.RoomDto;
 import com.pyhu.northernplanet.common.response.ApiResponseDto;
 import com.pyhu.northernplanet.db.entity.Rooms;
 import io.swagger.annotations.Api;
@@ -42,20 +43,20 @@ public class RoomController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 404, message = "사용자 없음"), @ApiResponse(code = 500, message = "서버 오류")})
-  public ApiResponseDto<Rooms> register(
+  public ApiResponseDto register(
       @RequestBody @ApiParam(value = "방정보", required = true) RoomPostReq registerInfo) {
-    Rooms room=null;
     try {
       log.info("[register] room register info: {}", registerInfo);
-      room = roomService.createRoom(registerInfo);
-      log.info("[register] room : {}", room);
-      return ApiResponseDto.success(room);
+      roomService.createRoom(registerInfo);
+
+      return ApiResponseDto.success("success");
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return ApiResponseDto.fail(room, "방 생성 실패했습니다.");
+    return ApiResponseDto.fail("fail", "방 생성 실패했습니다.");
   }
-//
+
+  //
 //  @PutMapping("/update/{roomId}")
 //  @ApiOperation(value = "방 정보 수정")
 //  @ApiResponses({@ApiResponse(code = 200, message = "성공"),

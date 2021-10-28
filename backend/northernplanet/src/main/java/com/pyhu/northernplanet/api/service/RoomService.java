@@ -3,6 +3,7 @@ package com.pyhu.northernplanet.api.service;
 
 import com.pyhu.northernplanet.api.request.RoomPostReq;
 import com.pyhu.northernplanet.api.response.RoomGetRes;
+import com.pyhu.northernplanet.common.dto.RoomDto;
 import com.pyhu.northernplanet.db.entity.Rooms;
 import java.util.List;
 
@@ -28,7 +29,6 @@ public interface RoomService {
    * 발표 방 생성
    *
    * @param registerInfo
-   * @return {방 아이디, 이름, 설명, 시작시간, 종료시간, 활동상태, 참가자, 매니저 정보}
    */
-  Rooms createRoom(RoomPostReq registerInfo);
+  void createRoom(RoomPostReq registerInfo);
 }

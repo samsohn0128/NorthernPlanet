@@ -3,6 +3,7 @@ package com.pyhu.northernplanet.api.service;
 import com.pyhu.northernplanet.api.request.RoomPostReq;
 import com.pyhu.northernplanet.api.response.RoomGetRes;
 import com.pyhu.northernplanet.common.dto.ParticipantDto;
+import com.pyhu.northernplanet.common.dto.RoomDto;
 import com.pyhu.northernplanet.db.entity.Code;
 import com.pyhu.northernplanet.db.entity.Participants;
 import com.pyhu.northernplanet.db.entity.Rooms;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service("roomSerice")
+@Service("roomService")
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
@@ -64,30 +65,29 @@ public class RoomServiceImpl implements RoomService {
   }
 
   @Override
-  public Rooms createRoom(RoomPostReq roomInfo) {
+  public void createRoom(RoomPostReq roomInfo) {
     log.info("[createRoom] room post req: {}", roomInfo);
-    Rooms room = new Rooms();
+    Rooms room = Rooms.builder()
+        .name(roomInfo.getName())
+        .onLive(false)
+        .description(roomInfo.getDescription())
+        .users(userRepository.findByEmail(roomInfo.getEmail()))
+        .build();
 
-    room.setName(roomInfo.getName());
     if (roomInfo.getStartTime() == null) {
       LocalDateTime datetime = LocalDateTime.now();
       room.setStartTime(Timestamp.valueOf(datetime));
     } else {
       room.setStartTime(Timestamp.valueOf(roomInfo.getStartTime()));
     }
-    room.setOnLive(false);
-    room.setDescription(roomInfo.getDescription());
-    Users user = userRepository.findByEmail(roomInfo.getEmail());
-    room.setUsers(user);
+
     log.info("[createRoom] set users : {}", room);
 
     roomRepository.save(room);
     log.info("[createRoom] save room complete");
-    // Rooms inroom = roomRepository.findByRoomId(room.getRoomId());
 
     saveParticipants(roomInfo.getParticipants(), room);
     log.info("[createRoom] save participants complete");
-    return room;
   }
 
   private void saveParticipants(List<ParticipantDto> person, Rooms room) {
@@ -98,11 +98,10 @@ public class RoomServiceImpl implements RoomService {
     for (int i = 0; i < size; i++) {
       log.info("[saveParticipants] i:{},  person: {}", i, person.get(i));
 
-      code=Code.builder()
+      code = Code.builder()
           .codeId(person.get(i).getCode().getCodeId())
           .codeName(person.get(i).getCode().getCodeName())
           .build();
-
 
       participant = Participants.builder()
           .code(code)
