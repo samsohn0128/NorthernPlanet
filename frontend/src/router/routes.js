@@ -14,6 +14,9 @@ import MeetingRoom from '@/views/meetingRoom/MeetingRoom.vue';
 
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyInfo from '@/views/mypage/MyInfo.vue';
+
+import Script from '@/views/Script.vue';
+
 export default [
   {
     path: '/',
@@ -80,5 +83,10 @@ export default [
         component: MyInfo,
       },
     ],
+  },
+  {
+    path: '/script',
+    component: Script,
+    meta: { authRequired: true },
   },
 ];
