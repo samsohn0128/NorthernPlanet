@@ -1,62 +1,70 @@
 package com.pyhu.northernplanet.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.pyhu.northernplanet.security.TokenAuthenticationFilter;
+import com.pyhu.northernplanet.security.oauth2.CustomOAuth2UserService;
+import com.pyhu.northernplanet.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.pyhu.northernplanet.security.oauth2.OAuth2AuthenticationFailureHandler;
+import com.pyhu.northernplanet.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import lombok.RequiredArgsConstructor;
 
-/**
- * 인증(authentication) 와 인가(authorization) 처리를 위한 스프링 시큐리티 설정 정의.
- */
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
+@EnableWebSecurity // Spring Security 설정 활성화
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-//    @Autowired
-//    private SsafyUserDetailService ssafyUserDetailService;
 
-//	@Autowired
-//	private UserService userService;
+  private final CustomOAuth2UserService customOAuth2UserService;
 
-  // Password 인코딩 방식에 BCrypt 암호화 방식 사용
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+  private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-  // DAO 기반으로 Authentication Provider를 생성
-  // BCrypt Password Encoder와 UserDetailService 구현체를 설정
-//    @Bean
-//    DaoAuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(this.ssafyUserDetailService);
-//        return daoAuthenticationProvider;
-//    }
-
-  // DAO 기반의 Authentication Provider가 적용되도록 설정
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    super.authenticationManagerBean();
-    // auth.authenticationProvider(authenticationProvider());
-  }
+  private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.httpBasic().disable().csrf().disable().sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
-        .and()
-        // .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService))
-        // //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
-        .authorizeRequests()
-        // .antMatchers("/api/v1/users/me").authenticated() //인증이 필요한 URL과 필요하지 않은 URL에
-        // 대하여 설정
-        .anyRequest().permitAll().and().cors();
+    http.cors().and().csrf().disable().headers().frameOptions().disable() // h2-console 화면을 사용하기 위해
+                                                                          // 해당 옵션 disable
+        .and().authorizeRequests()// URL별 권한 권리
+        // .antMatchers("/api/users/detail/**").hasRole("USER") // /api/v1/** 은 USER권한만 접근 가능
+        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/api/**")
+        .permitAll().anyRequest().authenticated() // anyRequest : 설정된 값들 이외 나머지 URL 나타냄,
+                                                  // authenticated : 인증된 사용자
+        .and().oauth2Login().authorizationEndpoint().baseUri("/oauth2/authorize")
+        .authorizationRequestRepository(cookieAuthorizationRequestRepository()).and()
+        .redirectionEndpoint()// 플랫폼(naver)에서 access token을 받아왔을 때 서버에서 처리할 url
+        .baseUri("/oauth2/callback/*").and()
+        // .defaultSuccessUrl("http://localhost:8081/") // 로그인 성공 후 url 이동
+        .userInfoEndpoint()// oauth2 로그인 성공 후 가져올 때의 설정들
+        // 소셜로그인 성공 시 후속 조치를 진행할 UserService 인터페이스 구현체 등록
+        .userService(customOAuth2UserService)// 리소스 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
+        .and().successHandler(oAuth2AuthenticationSuccessHandler)// 토큰을 파라미터로 넘겨줌
+        .failureHandler(oAuth2AuthenticationFailureHandler); // 리다이렉트 하면서 에러메시지 전달
+
+    // Add our custom Token based authentication filter
+    http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+  }
+
+
+  // swagger 관련 리소스 시큐리티 필터 제거
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html",
+        "/webjars/**", "/swagger/**", "/swagger-ui/**");
+  }
+
+  // JWT
+  @Bean
+  public TokenAuthenticationFilter tokenAuthenticationFilter() {
+    return new TokenAuthenticationFilter();
+  }
+
+  @Bean
+  public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+    return new HttpCookieOAuth2AuthorizationRequestRepository();
   }
 }

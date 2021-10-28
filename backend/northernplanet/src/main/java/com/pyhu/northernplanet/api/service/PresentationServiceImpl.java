@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.stereotype.Service;
-import com.pyhu.northernplanet.api.request.PresentationPostRequest;
+import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.request.SlideRequest;
 import com.pyhu.northernplanet.db.entity.Presentation;
 import com.pyhu.northernplanet.db.entity.Slide;
@@ -28,17 +28,17 @@ public class PresentationServiceImpl implements PresentationService {
   private final String presentationDirectory = "/Users/dongwoosohn/presentation";
 
   @Override
-  public int createPresentation(PresentationPostRequest presentationPostRequest) {
+  public int createPresentation(PresentationPostReq presentationPostReq) {
     log.info("[createPresentation - service]");
     // save slides
     List<Slide> slides = new LinkedList<>();
-    presentationPostRequest.getSlides().forEach(slideRequest -> {
+    presentationPostReq.getSlides().forEach(slideRequest -> {
       String originalFileName = slideRequest.getSlide().getOriginalFilename();
       String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
       Slide slide = Slide.builder().saveName(slideRequest.getSequenceNum() + "")
           .originalName(originalFileName)
-          .directory(presentationDirectory + "/" + presentationPostRequest.getUserId() + "/"
-              + presentationPostRequest.getPresentationName() + "/" + slideRequest.getSequenceNum()
+          .directory(presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
+              + presentationPostReq.getPresentationName() + "/" + slideRequest.getSequenceNum()
               + extensionName)
           .build();
       log.info("[createPresentation - service] Slide : {}", slide);
@@ -55,8 +55,8 @@ public class PresentationServiceImpl implements PresentationService {
     // save presentation
     LocalDateTime now = LocalDateTime.now();
     Presentation presentation =
-        Presentation.builder().name(presentationPostRequest.getPresentationName())
-            .size(presentationPostRequest.getSlides().size()).upload_time(now).build();
+        Presentation.builder().name(presentationPostReq.getPresentationName())
+            .size(presentationPostReq.getSlides().size()).upload_time(now).build();
     log.info("[createPresentation - service] Presentation : {}", presentation);
     try {
       presentation = presentationRepository.saveAndFlush(presentation);
@@ -66,7 +66,7 @@ public class PresentationServiceImpl implements PresentationService {
       return 2;
     }
     // save presentation files
-    String folderDirectory = presentationDirectory + "/" + presentationPostRequest.getUserId() + "/"
+    String folderDirectory = presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
         + presentation.getPresentationId() + "/";
     File folder = new File(folderDirectory);
     if (!folder.exists()) {
@@ -74,8 +74,8 @@ public class PresentationServiceImpl implements PresentationService {
     }
 
 
-    for (int i = 0; i < presentationPostRequest.getSlides().size(); i++) {
-      SlideRequest slideRequest = presentationPostRequest.getSlides().get(i);
+    for (int i = 0; i < presentationPostReq.getSlides().size(); i++) {
+      SlideRequest slideRequest = presentationPostReq.getSlides().get(i);
       String originalFileName = slideRequest.getSlide().getOriginalFilename();
       String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
       File slide = new File(folderDirectory + slideRequest.getSequenceNum() + extensionName);

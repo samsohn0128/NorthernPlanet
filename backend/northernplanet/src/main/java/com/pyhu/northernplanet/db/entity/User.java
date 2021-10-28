@@ -8,12 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import lombok.Getter;
-import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
+@Data
+@DynamicInsert
+@DynamicUpdate
 public class User {
 
   @Column(name = "user_id")
@@ -30,7 +32,8 @@ public class User {
   @Column(name = "oauth_id")
   String oauthId;
 
-  String oauth_type;
+  @Column(name = "oauth_type")
+  String oauthType;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Participant> participants;

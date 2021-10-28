@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class PresentationPostRequest {
+public class PresentationPostReq {
   private Long userId;
 
   private String presentationName;

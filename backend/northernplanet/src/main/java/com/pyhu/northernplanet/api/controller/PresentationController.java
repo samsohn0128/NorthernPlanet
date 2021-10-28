@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.pyhu.northernplanet.api.request.PresentationPostRequest;
+import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.service.PresentationService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,8 @@ public class PresentationController {
 
   @PostMapping("/")
   public ResponseEntity<Integer> createPresentation(
-      @ModelAttribute PresentationPostRequest presentationPostRequest) {
-    int status = presentationService.createPresentation(presentationPostRequest);
+      @ModelAttribute PresentationPostReq presentationPostReq) {
+    int status = presentationService.createPresentation(presentationPostReq);
     switch (status) {
       case 0:
         return new ResponseEntity<Integer>(HttpStatus.OK);

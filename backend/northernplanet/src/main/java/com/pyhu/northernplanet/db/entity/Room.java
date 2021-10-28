@@ -12,14 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Getter;
-import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
-
+@Data
+@DynamicInsert
+@DynamicUpdate
 public class Room {
+
 
   @Column(name = "room_id")
   @Id
