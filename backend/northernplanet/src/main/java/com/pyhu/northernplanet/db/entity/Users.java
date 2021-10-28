@@ -1,5 +1,6 @@
 package com.pyhu.northernplanet.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -21,7 +22,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @Setter
 @Builder
-@ToString
 @DynamicInsert
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,12 +39,15 @@ public class Users {
   String oauthType;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Participants> participants = new ArrayList<>();
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Rooms> rooms = new ArrayList<>();
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<UserPresentation> userPresentations = new ArrayList<>();
 
 

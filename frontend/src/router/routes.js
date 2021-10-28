@@ -17,6 +17,8 @@ import MyInfo from '@/views/mypage/MyInfo.vue';
 import MyPPT from '@/views/mypage/MyPPT.vue';
 import ModifyPPT from '@/views/mypage/ModifyPPT.vue';
 
+import Script from '@/views/Script.vue';
+
 export default [
   {
     path: '/',
@@ -107,5 +109,10 @@ export default [
     path: '/mypage/modifyppt/:id',
     name: 'ModifyPPT',
     component: ModifyPPT,
+  },
+  {
+    path: '/script',
+    component: Script,
+    meta: { authRequired: true },
   },
 ];

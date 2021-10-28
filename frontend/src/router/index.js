@@ -1,21 +1,14 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import VueAlertify from 'vue-alertify';
 import routes from './routes';
 //import store from '@/store/index.js';
 
 Vue.use(VueRouter);
-Vue.use(VueAlertify);
 const router = new VueRouter({
-  //mode: 'history',
   mode: 'history',
   routes,
-  // scrollBehavior(to, from, savedPosition) {
-  //   return { x: 0, y: 0 };
-  // },
 });
 
-// let isLogin =
 // router.beforeEach(function (to, from, next) {
 //   var authRequired = to.matched.some(routeInfo => {
 //     // console.log(routeInfo);
@@ -34,5 +27,45 @@ const router = new VueRouter({
 //     // console.log('isLogin : ' + store.state.users.login.isLogin);
 //   }
 // });
+
+router.beforeResolve(async (routeTo, routeFrom, next) => {
+  // Create a `beforeResolve` hook, which fires whenever
+  // `beforeRouteEnter` and `beforeRouteUpdate` would. This
+  // allows us to ensure data is fetched even when params change,
+  // but the resolved route does not. We put it in `meta` to
+  // indicate that it's a hook we created, rather than part of
+  // Vue Router (yet?).
+  try {
+    // For each matched route...
+    for (const route of routeTo.matched) {
+      await new Promise((resolve, reject) => {
+        // If a `beforeResolve` hook is defined, call it with
+        // the same arguments as the `beforeEnter` hook.
+        if (route.meta && route.meta.beforeResolve) {
+          route.meta.beforeResolve(routeTo, routeFrom, (...args) => {
+            // If the user chose to redirect...
+            if (args.length) {
+              // If redirecting to the same route we're coming from...
+              // Complete the redirect.
+              next(...args);
+              reject(new Error('Redirected'));
+            } else {
+              resolve();
+            }
+          });
+        } else {
+          // Otherwise, continue resolving the route.
+          resolve();
+        }
+      });
+    }
+    // If a `beforeResolve` hook chose to redirect, just return.
+  } catch (error) {
+    return;
+  }
+
+  // If we reach this point, continue resolving the route.
+  next();
+});
 
 export default router;

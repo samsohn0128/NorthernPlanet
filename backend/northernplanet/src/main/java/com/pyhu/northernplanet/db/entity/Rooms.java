@@ -1,5 +1,7 @@
 package com.pyhu.northernplanet.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Rooms {
@@ -44,9 +45,11 @@ public class Rooms {
   Boolean onLive;
 
   @OneToMany(mappedBy = "rooms", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Participants> participants = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JsonBackReference
   @JoinColumn(name = "user_id")
   Users users;
 

@@ -44,7 +44,15 @@ public class ApiResponseDto<T> {
     return new ApiResponseDto<>(ApiResponseCode.SUCCESS, data);
   }
 
+  public static <T> ApiResponseDto<T> success() {
+    return new ApiResponseDto<>(ApiResponseCode.SUCCESS);
+  }
+
   public static <T> ApiResponseDto<T> fail(T data, String message) {
     return new ApiResponseDto<>(ApiResponseCode.FAIL, data, message);
+  }
+
+  public static <T> ApiResponseDto<T> fail(String message) {
+    return new ApiResponseDto<>(ApiResponseCode.FAIL, message);
   }
 }

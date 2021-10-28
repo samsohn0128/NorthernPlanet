@@ -15,6 +15,7 @@ export default {
     },
     users: [], // 전체 사용자
     user: {
+      userId: '',
       email: '',
       name: '',
       image: '',
@@ -40,6 +41,12 @@ export default {
       state.login.useremail = '';
       //state.login.userpwd = '';
       // console.log('SET_LOGOUT');
+      state.user.userId = '';
+      state.user.email = '';
+      state.user.name = '';
+      state.user.image = '';
+      state.user.oauthId = '';
+      state.user.token = '';
       router.push('/');
     },
     SET_ALL_USERS(state, payload) {
@@ -49,6 +56,7 @@ export default {
       state.login.username = payload;
     },
     SET_USER(state, payload) {
+      state.user.userId = payload.userId;
       state.user.email = payload.email;
       state.user.name = payload.name;
       state.user.image = payload.image;

@@ -1,5 +1,6 @@
 package com.pyhu.northernplanet.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class Presentations {
   Timestamp upload_time;
 
   @OneToMany(mappedBy = "presentations", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Slides> slides = new ArrayList<>();
 
 }

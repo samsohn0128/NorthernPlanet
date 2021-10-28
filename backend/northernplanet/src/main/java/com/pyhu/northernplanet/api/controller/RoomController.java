@@ -1,72 +1,62 @@
 package com.pyhu.northernplanet.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pyhu.northernplanet.api.request.RoomPostReq;
+import com.pyhu.northernplanet.api.response.RoomGetRes;
+import com.pyhu.northernplanet.api.service.ParticipantService;
+import com.pyhu.northernplanet.api.service.RoomService;
+import com.pyhu.northernplanet.api.service.UserService;
+import com.pyhu.northernplanet.common.dto.RoomDto;
+import com.pyhu.northernplanet.common.response.ApiResponseDto;
+import com.pyhu.northernplanet.db.entity.Rooms;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//
-//import com.fasterxml.jackson.annotation.JsonFormat;
-//import com.pyhu.northernplanet.api.request.RoomOnLiveReq;
-//import com.pyhu.northernplanet.api.request.RoomRegisterPostReq;
-//import com.pyhu.northernplanet.api.request.RoomUpdateReq;
-//import com.pyhu.northernplanet.api.response.BaseResponseBody;
-//import com.pyhu.northernplanet.api.response.ParticipantGetRes;
-//import com.pyhu.northernplanet.api.response.RoomGetRes;
-//import com.pyhu.northernplanet.api.service.ParticipantService;
-//import com.pyhu.northernplanet.api.service.RoomService;
-//import com.pyhu.northernplanet.db.entity.Rooms;
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
-//import io.swagger.annotations.ApiParam;
-//import io.swagger.annotations.ApiResponse;
-//import io.swagger.annotations.ApiResponses;
-//import java.util.List;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//
+
+@Slf4j
 @Api(value = "방 관련 API", tags = {"Room"})
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/rooms")
 public class RoomController {
-//
-//  @Autowired
-//  RoomService roomService;
-//
-//  @Autowired
-//  ParticipantService participantService;
-//
-//  private final Logger log = LoggerFactory.getLogger(RoomController.class);
-//
-//  @PostMapping("/create")
-//  @ApiOperation(value = "방 생성")
-//  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm A", timezone = "Asia/Seoul")
-//  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"), @ApiResponse(code = 500, message = "서버 오류")})
-//  public ResponseEntity<? extends BaseResponseBody> register(
-//      @RequestBody @ApiParam(value = "방정보", required = true) RoomRegisterPostReq registerInfo) {
-//    try {
-//      log.info("[register] room register info: {}", registerInfo);
-//      Rooms room = roomService.createRoom(registerInfo);
-//      log.info("[register] room : {}", room);
-//      return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//    return ResponseEntity.status(500).body(BaseResponseBody.of(500, "fail"));
-//  }
-//
+
+  private final RoomService roomService;
+  private final UserService userService;
+  private final ParticipantService participantService;
+
+
+  @PostMapping("/create")
+  @ApiOperation(value = "방 생성")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm A", timezone = "Asia/Seoul")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "사용자 없음"), @ApiResponse(code = 500, message = "서버 오류")})
+  public ApiResponseDto register(
+      @RequestBody @ApiParam(value = "방정보", required = true) RoomPostReq registerInfo) {
+    try {
+      log.info("[register] room register info: {}", registerInfo);
+      roomService.createRoom(registerInfo);
+
+      return ApiResponseDto.success();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return ApiResponseDto.fail("방 생성 실패했습니다.");
+  }
+
+  //
 //  @PutMapping("/update/{roomId}")
 //  @ApiOperation(value = "방 정보 수정")
 //  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
@@ -117,21 +107,28 @@ public class RoomController {
 //    return new ResponseEntity<List<RoomGetRes>>(rooms, HttpStatus.OK);
 //  }
 //
-//  @GetMapping("/user/{userId}")
-//  @ApiOperation(value = "사용자 아이디가 참가자로 포함된 전체 방 보기")
-//  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"),
-//      @ApiResponse(code = 409, message = "이미 존재하는 유저"),
-//      @ApiResponse(code = 500, message = "서버 오류")})
-//  public ResponseEntity<List<RoomGetRes>> showRoomsbyuser(@PathVariable("userId") int userId) {
-//
-//    List<RoomGetRes> rooms = roomService.findbyuser(userId);
-//    for (RoomGetRes item : rooms) {
-//      item.setParticipants(participantService.getParticipantByRoomId(item.getRoom_id()));
-//    }
-//    return new ResponseEntity<List<RoomGetRes>>(rooms, HttpStatus.OK);
-//  }
+  @GetMapping("/user/{userId}")
+  @ApiOperation(value = "사용자 아이디가 참가자로 포함된 전체 방 보기")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "사용자 없음"),
+      @ApiResponse(code = 409, message = "이미 존재하는 유저"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ApiResponseDto<List<RoomGetRes>> showRoomsByOauthId(@PathVariable("userId") Long userId) {
+    List<RoomGetRes> rooms = null;
+    try {
+      //Long userId = userService.getUserIdByOauthId(oauthId);
+      rooms = roomService.findbyuser(userId);
+      for (RoomGetRes item : rooms) {
+        item.setParticipants(participantService.getParticipantByRoomId(item.getRoomId()));
+      }
+      return ApiResponseDto.success(rooms);
+    } catch (Exception e) {
+      log.error(String.valueOf(e));
+    }
+
+    return ApiResponseDto.fail(rooms, "방 정보를 가져올 수 없습니다.");
+  }
 //
 //  @GetMapping("/onlive/{roomId}")
 //  @ApiOperation(value = "방이 현재 활동중인지 보기")

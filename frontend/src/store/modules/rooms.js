@@ -31,8 +31,8 @@ export default {
     },
   },
   actions: {
-    async fetchRooms({ commit }, userid) {
-      commit('SET_ROOMS', await getRooms(userid));
+    async fetchRooms({ commit }, userId) {
+      commit('SET_ROOMS', await getRooms(userId));
     },
     async fetchRoom({ commit }, roomId) {
       commit('SET_ROOM', await getRoom(roomId));

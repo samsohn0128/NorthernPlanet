@@ -14,6 +14,7 @@ import lombok.ToString;
 @ToString
 public class UserOauthDto implements Serializable {
 
+  private Long userId;
   private String email;
   private String name;
   private String image;

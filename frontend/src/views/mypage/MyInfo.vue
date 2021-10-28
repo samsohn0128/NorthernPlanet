@@ -84,12 +84,10 @@
   </span>
 </template>
 <script>
-import Vue from 'vue';
 import ChangePasswordModal from './components/ChangePasswordModal.vue';
 import WithdrawModal from './components/WithdrawModal.vue';
 import { updateUserName } from '@/api/users.js';
-import VueAlertify from 'vue-alertify';
-Vue.use(VueAlertify);
+import store from '@/store';
 
 export default {
   name: 'MyInfo',
@@ -99,6 +97,11 @@ export default {
       useremail: this.$store.state.users.login.useremail,
       username: this.$store.state.users.login.username,
     };
+  },
+  computed: {
+    user() {
+      return store.getters['users/getUser'];
+    },
   },
   methods: {
     modifyName() {

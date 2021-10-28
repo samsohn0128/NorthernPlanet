@@ -1,5 +1,7 @@
 package com.pyhu.northernplanet.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ public class Slides {
   int sequence;
 
   @ManyToOne
+  @JsonBackReference
   @JoinColumn(name = "presentation_id")
   Presentations presentations;
 }
