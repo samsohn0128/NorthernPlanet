@@ -1,17 +1,16 @@
 package com.pyhu.northernplanet.db.repository;
 
-
-import com.pyhu.northernplanet.db.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import com.pyhu.northernplanet.db.entity.User;
 
 /**
  * 유저 모델 관련 디비 쿼리 생성을 위한 JPA Query Method 인터페이스 정의.
  */
 @Repository
-public interface UserRepository extends JpaRepository<Users, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-  Users findByEmail(String email);
+  User findByEmail(String email);
 
-  Users findByUserId(int user_id);
+  User findByUserId(int user_id);
 }

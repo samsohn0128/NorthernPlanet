@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class NorthernplanetApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(NorthernplanetApplication.class, args);
-  }
+	public static void main(String[] args) {
+		SpringApplication.run(NorthernplanetApplication.class, args);
+	}
 
 }

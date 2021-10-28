@@ -1,6 +1,5 @@
 package com.pyhu.northernplanet.db.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,27 +14,30 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Users {
+public class User {
 
   @Column(name = "user_id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  int userId;
+  Long userId;
+
   String email;
+
   String name;
+
   String image;
+
   @Column(name = "oauth_id")
   String oauthId;
+
   String oauth_type;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Participants> participants = new ArrayList<>();
+  private List<Participant> participants;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Rooms> rooms = new ArrayList<>();
+  private List<Room> rooms;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<UserPresentation> userPresentations = new ArrayList<>();
-
-
+  private List<Presentation> presentations;
 }

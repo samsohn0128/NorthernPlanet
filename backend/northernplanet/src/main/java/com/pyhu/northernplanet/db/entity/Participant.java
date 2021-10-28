@@ -1,7 +1,5 @@
 package com.pyhu.northernplanet.db.entity;
 
-import java.sql.Timestamp;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,17 +12,22 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class UserPresentation {
+public class Participant {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_presentation_id")
-  int userPresentationId;
+  int id;
 
   @ManyToOne
-  @JoinColumn(name = "presentation_id")
-  Presentations presentations;
+  @JoinColumn(name = "code_id")
+  Code code;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
-  Users users;
+  User user;
+
+  @ManyToOne
+  @JoinColumn(name = "room_id")
+  Room room;
+
 }
