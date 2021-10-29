@@ -25,14 +25,14 @@ export default {
   /* background: url('https://ak4.picdn.net/shutterstock/videos/13222694/thumb/3.jpg?ip=x480');
   animation: animate 5s linear infinite; */
 }
-@keyframes animate {
+/* @keyframes animate {
   from {
     background-position: 0% 50%;
   }
   to {
     background-position: 100% 50% 0%;
   }
-}
+} */
 .width-setting {
   width: 100%;
 }
