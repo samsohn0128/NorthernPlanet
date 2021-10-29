@@ -77,7 +77,7 @@ import AddPPTModal from './components/AddPPTModal.vue';
 // import store from '@/store';
 
 export default {
-  name: 'MyPPT',
+  name: 'Presentation',
   components: { AddPPTModal },
   data: () => {
     return {
