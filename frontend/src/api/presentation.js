@@ -9,8 +9,8 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-function getpresentations(userData) {
-  return instance.get('list/' + userData.user_Id);
+function getpresentations(userId) {
+  return instance.get('list/' + userId);
 }
 
 function addpresentation(userData) {
