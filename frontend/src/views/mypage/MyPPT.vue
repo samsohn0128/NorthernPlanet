@@ -6,56 +6,53 @@
           <img
             :src="data.thumbnail"
             class="card-img"
-            style="width: 90px; height: 60px"
+            style="width: 100%"
             alt="thumbnail"
           />
         </div>
-        <div class="text-box">
-          <span>
-            <div id="app" class="text-center" data-app>
-              <v-menu>
-                <template v-slot:activator="{ on: menu, attrs }">
-                  <!-- hover -->
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on: tooltip }">
-                      <v-btn
-                        color="primary"
-                        dark
-                        v-bind="attrs"
-                        v-on="{ ...tooltip, ...menu }"
-                      >
-                        {{ data.presentationName }}
-                      </v-btn>
-                    </template>
-                    <span>설정을 변경하려면 클릭하세요.</span>
-                  </v-tooltip>
+        <div id="app" class="presentation-name-box" data-app>
+          <span>{{ data.presentationName }}</span>
+          <v-menu>
+            <template v-slot:activator="{ on: menu, attrs }">
+              <!-- hover -->
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on: tooltip }">
+                  <button
+                    class="button-setting"
+                    v-bind="attrs"
+                    v-on="{ ...tooltip, ...menu }"
+                  >
+                    <i class="ni ni-bold-down"></i>
+                  </button>
                 </template>
-                <!-- Menu bar -->
-                <v-list>
-                  <v-list-item v-for="(item, index) in items" :key="index">
-                    <!-- 첫 번째 Menu bar일 경우 -->
-                    <div v-if="index == 0">
-                      <router-link
-                        :to="{
-                          name: 'ModifyPPT',
-                          params: {
-                            id: data.presentationId,
-                            name: data.presentationName,
-                          },
-                        }"
-                      >
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                      </router-link>
-                    </div>
-                    <!-- 나머지 Menu bar일 경우 -->
-                    <div v-else>
-                      <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </div>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </span>
+                <span>설정을 변경하려면 클릭하세요.</span>
+              </v-tooltip>
+            </template>
+            <!-- Menu bar -->
+            <v-list>
+              <v-list-item v-for="(item, index) in items" :key="index">
+                <!-- 첫 번째 Menu bar일 경우 -->
+                <div v-if="index == 0">
+                  <router-link
+                    :to="{
+                      name: 'ModifyPPT',
+                      params: {
+                        id: data.presentationId,
+                        name: data.presentationName,
+                      },
+                    }"
+                  >
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  </router-link>
+                </div>
+                <!-- 나머지 Menu bar일 경우 -->
+                <div v-else>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </div>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <span></span>
         </div>
       </div>
     </div>
@@ -76,6 +73,8 @@
 <script>
 // import { getpresentations } from '@/api/presentation.js';
 import AddPPTModal from './components/AddPPTModal.vue';
+// import { getpresentations } from '@/api/presentation.js';
+// import store from '@/store';
 
 export default {
   name: 'MyPPT',
@@ -245,18 +244,17 @@ export default {
   },
   methods: {
     // async getppt() {
-    //    let userData = {
-    //    user_id: this.$store.state.users.login.userid,
-    //    name: this.username,
-    //    };
+    //   let userId = store.getters['users/getUser'].userId;
     //   try {
-    //     const response = await getpresentations(userData);
-    //     this.datas = response.data;
+    //     await getpresentations(userId);
     //   } catch (exp) {
-    //     this.$alertify.error('프레젠테이션을 갖고 오기에 실패했습니다.');
+    //     this.$alertify.error('프레젠테이션 갖고 오기에 실패했습니다.');
     //   }
     // },
   },
+  // created: {
+  //   getppt(),
+  // }
 };
 </script>
 
@@ -279,6 +277,7 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: flex-start;
   height: 90%;
   border: 2px solid black;
   border-radius: 5px;
@@ -288,11 +287,16 @@ export default {
   flex-direction: column;
   text-align: center;
   align-items: center;
-  width: 100px;
-  height: 100px;
+  width: 10vw;
+  height: 10vw;
+  min-width: 100px;
+  min-height: 100px;
+  max-width: 150px;
+  max-height: 150px;
   border: 0px solid black;
   border-radius: 5px;
   margin: 10px;
+  box-shadow: 2px 2px 2px 1px gray; /* x-position, y-position, blur, spread, color */
 }
 .inside-box {
   margin: 2px;
@@ -301,12 +305,14 @@ export default {
   border: 0px solid black;
   border-radius: 5px;
 }
-.text-box {
-  width: 100%;
-  padding-left: 8px; /* 우측 버튼 크기에 맞게 수정하기 */
+.presentation-name-box {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  text-align: center;
+}
+.button-setting {
+  display: flex;
+  align-items: center;
 }
 .bottom-button {
   width: 100%;
