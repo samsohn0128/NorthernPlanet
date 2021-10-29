@@ -1,6 +1,5 @@
 package com.pyhu.northernplanet.security;
 
-import com.pyhu.northernplanet.db.entity.Users;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import com.pyhu.northernplanet.db.entity.User;
 
 public class UserPrincipal implements OAuth2User, UserDetails {
   private final Long id;
@@ -25,14 +25,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     this.authorities = authorities;
   }
 
-  public static UserPrincipal create(Users user) {
+  public static UserPrincipal create(User user) {
     List<GrantedAuthority> authorities =
         Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-    //password: oauthId
+    // password: oauthId
     return new UserPrincipal(user.getUserId(), user.getEmail(), user.getOauthId(), authorities);
   }
 
-  public static UserPrincipal create(Users user, Map<String, Object> attributes) {
+  public static UserPrincipal create(User user, Map<String, Object> attributes) {
     UserPrincipal userPrincipal = UserPrincipal.create(user);
     userPrincipal.setAttributes(attributes);
     return userPrincipal;

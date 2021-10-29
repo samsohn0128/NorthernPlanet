@@ -1,8 +1,6 @@
 package com.pyhu.northernplanet.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,34 +11,34 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.AllArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class Presentations {
+@DynamicInsert
+public class Presentation {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "presentation_id")
   Long presentationId;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  User user;
+
   String name;
+
   int size;
 
   @Column(name = "upload_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  Timestamp upload_time;
+  LocalDateTime upload_time;
 
-  @OneToMany(mappedBy = "presentations", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "presentation", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
-  private List<Slides> slides = new ArrayList<>();
-
+  private List<Slide> slides;
 }

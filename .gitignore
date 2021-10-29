@@ -22,7 +22,7 @@
 /backend/northernplanet/.mvn/
 /backend/northernplanet/src/main/resources/static/
 /backend/northernplanet/target/
-/backend/northernplanet/src/main/resources/application-auth.properties
+# /backend/northernplanet/src/main/resources/application-auth.properties
 
 /S05P13A107.git/
 
