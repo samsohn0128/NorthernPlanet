@@ -37,7 +37,7 @@
                     :to="{
                       name: 'ModifyPPT',
                       params: {
-                        id: data.presentationId,
+                        presentation_id: data.presentationId,
                         name: data.presentationName,
                       },
                     }"

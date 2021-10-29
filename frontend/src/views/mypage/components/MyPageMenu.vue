@@ -5,7 +5,9 @@
         <router-link to="/mypage" class="router">내 정보</router-link>
       </li>
       <li class="list-group-item square">
-        <router-link to="/mypage/myPPT" class="router">내 발표자료</router-link>
+        <router-link to="/mypage/presentation" class="router"
+          >내 발표자료</router-link
+        >
       </li>
       <!-- <li class="list-group-item square">공유된 발표자료</li> -->
     </ul>
