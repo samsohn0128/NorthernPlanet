@@ -37,3 +37,9 @@ export default {
   width: 100%;
 }
 </style>
+<style>
+/* modal open시 우측에 생기는 17px 공백 방지 */
+.modal-open {
+  padding-right: 0 !important;
+}
+</style>
