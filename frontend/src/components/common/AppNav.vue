@@ -16,13 +16,13 @@
           <h5 class="text-white">FOCUS</h5>
         </router-link>
       </div>
-      <div class="col-lg-9 col-6"></div>
-      <div class="col-lg-1 col-2 right-nav">
+      <div class="col-md-6 col-lg-9 col-6"></div>
+      <div class="col-md-2 col-lg-1 col-2 right-nav">
         <router-link to="/mypage">
           <h5 class="text-white">My Page</h5></router-link
         >
       </div>
-      <div class="col-lg-1 col-2 right-nav">
+      <div class="col-md-2 col-lg-1 col-2 right-nav">
         <router-link to="/" @click.native="userLogout()"
           ><h5 class="text-white">Logout</h5></router-link
         >
