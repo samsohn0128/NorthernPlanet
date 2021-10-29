@@ -74,7 +74,7 @@
 import AppNav from '@/components/common/AppNav.vue';
 
 export default {
-  name: 'ModifyPPT',
+  name: 'ModifyPresentation',
   data() {
     return {
       idx: 0,

@@ -15,7 +15,7 @@ import MeetingRoom from '@/views/meetingRoom/MeetingRoom.vue';
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyInfo from '@/views/mypage/MyInfo.vue';
 import Presentation from '@/views/mypage/Presentation.vue';
-import ModifyPPT from '@/views/mypage/ModifyPPT.vue';
+import ModifyPresentation from '@/views/mypage/ModifyPresentation.vue';
 
 import Script from '@/views/Script.vue';
 
@@ -95,9 +95,9 @@ export default [
     ],
   },
   {
-    path: '/mypage/presentation/modifyppt/:presentation_id/:name',
-    name: 'ModifyPPT',
-    component: ModifyPPT,
+    path: '/mypage/presentation/:presentation_id/:name',
+    name: 'ModifyPresentation',
+    component: ModifyPresentation,
   },
   {
     path: '/script',

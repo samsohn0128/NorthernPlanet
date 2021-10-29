@@ -35,7 +35,7 @@
                 <div v-if="index == 0">
                   <router-link
                     :to="{
-                      name: 'ModifyPPT',
+                      name: 'ModifyPresentation',
                       params: {
                         presentation_id: data.presentationId,
                         name: data.presentationName,
