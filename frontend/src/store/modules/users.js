@@ -8,7 +8,7 @@ export default {
     test: 'test',
     login: {
       isLogin: false,
-      userid: '',
+      userId: '',
       useremail: '',
       username: '',
       //userpwd: '',
