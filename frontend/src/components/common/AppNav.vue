@@ -13,7 +13,7 @@
     <div class="navbar-texts mx-0">
       <div class="col-lg-1 col-2 left-nav">
         <router-link to="/dashboard">
-          <h5 class="text-white">FOCUS</h5>
+          <h5 class="text-white">NorthernPlanet</h5>
         </router-link>
       </div>
       <div class="col-md-6 col-lg-9 col-6"></div>
