@@ -14,6 +14,8 @@ import MeetingRoom from '@/views/meetingRoom/MeetingRoom.vue';
 
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyInfo from '@/views/mypage/MyInfo.vue';
+import Presentation from '@/views/mypage/Presentation.vue';
+import ModifyPresentation from '@/views/mypage/ModifyPresentation.vue';
 
 import Script from '@/views/Script.vue';
 
@@ -46,7 +48,8 @@ export default [
   {
     path: '/dashboard',
     component: RoomPage,
-    meta: { authRequired: true },
+    meta: { authRequired: false },
+    // meta: { authRequired: true },
     children: [
       {
         path: '',
@@ -71,18 +74,30 @@ export default [
     path: '/meetingroom',
     name: 'MeetingRoom',
     component: MeetingRoom,
-    meta: { authRequired: true },
+    meta: { authRequired: false },
+    // meta: { authRequired: true },
   },
   {
     path: '/mypage',
     component: MyPage,
-    meta: { authRequired: true },
+    meta: { authRequired: false },
+    // meta: { authRequired: true },
     children: [
       {
         path: '',
         component: MyInfo,
       },
+      {
+        path: '/mypage/presentation',
+        name: 'Presentation',
+        component: Presentation,
+      },
     ],
+  },
+  {
+    path: '/mypage/presentation/:presentation_id/:name',
+    name: 'ModifyPresentation',
+    component: ModifyPresentation,
   },
   {
     path: '/script',

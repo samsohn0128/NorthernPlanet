@@ -8,6 +8,7 @@ module.exports = {
     //'../backend/webrtc/src/main/resources/static', // ubuntu용
   ), //빌드파일을 올릴 곳(디폴트(dist)에서 스프링 부트 static폴더로 )
   devServer: {
+    historyApiFallback: true, // history mode 새로고침시 정상 작동
     port: 3000, //개발하는 동안 프런트엔드 페이지를 띄우는 포트
     proxy: {
       '/api/*': {
