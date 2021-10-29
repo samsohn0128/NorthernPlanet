@@ -58,7 +58,8 @@
 </template>
 
 <script>
-import { addpresentation } from '@/api/presentation.js';
+import { addpresentation, getpresentations } from '@/api/presentation.js';
+import store from '@/store';
 
 export default {
   name: 'AddPPTModal',
@@ -70,17 +71,16 @@ export default {
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
   async addPPT() {
     let userData = {
-      user_id: this.$store.state.users.login.userid,
+      user_id: store.getters['users/getUser'].userId,
       presentationName: this.presentationName,
     };
+    let userId = store.getters['users/getUser'].userId;
     try {
       await addpresentation(userData);
-      this.$router.go();
+      await getpresentations(userId);
     } catch (exp) {
       this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
     }
   },
 };
 </script>
-
-<style scoped></style>
