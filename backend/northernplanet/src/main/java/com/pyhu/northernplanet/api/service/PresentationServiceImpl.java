@@ -2,6 +2,7 @@ package com.pyhu.northernplanet.api.service;
 
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.request.SlideRequest;
+import com.pyhu.northernplanet.common.dto.PresentationDto;
 import com.pyhu.northernplanet.db.entity.Presentation;
 import com.pyhu.northernplanet.db.entity.Slide;
 import com.pyhu.northernplanet.db.repository.PresentationRepository;
@@ -9,6 +10,7 @@ import com.pyhu.northernplanet.db.repository.SlideRepository;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -68,8 +70,27 @@ public class PresentationServiceImpl implements PresentationService {
       File slide = new File(folderDirectory + slideRequest.getSequenceNum() + extensionName);
       slideRequest.getSlide().transferTo(slide);
     }
-
     return 0;
+  }
+
+  @Override
+  public List<PresentationDto> getPresentationList(Long userId) {
+    log.info("[getPresentationList - service] userId : {}", userId);
+    List<Presentation> presentationList = presentationRepository.findByUser_userId(userId);
+    System.out.println(presentationList.size());
+    List<PresentationDto> presentationDtoList = new ArrayList<>();
+    presentationList.forEach(presentation -> {
+      PresentationDto presentationDto = PresentationDto.builder()
+          .presentationId(presentation.getPresentationId())
+          .presentationName(presentation.getName())
+          .size(presentation.getSize())
+          .uploadTime(presentation.getUpload_time())
+          .build();
+      presentationDtoList.add(presentationDto);
+      log.info("[getPresentationList - service] presentationId : {}",
+          presentation.getPresentationId());
+    });
+    return presentationDtoList;
   }
 
 }

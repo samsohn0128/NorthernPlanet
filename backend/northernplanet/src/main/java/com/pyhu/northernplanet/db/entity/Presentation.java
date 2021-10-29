@@ -1,5 +1,6 @@
 package com.pyhu.northernplanet.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -11,15 +12,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import org.hibernate.annotations.DynamicInsert;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Data
 @Builder
 @DynamicInsert
+@DynamicUpdate
+@NoArgsConstructor
+@AllArgsConstructor
 public class Presentation {
 
   @Id
