@@ -106,7 +106,7 @@ export default [
     ],
   },
   {
-    path: '/mypage/modifyppt/:id',
+    path: '/mypage/modifyppt/:id/:name',
     name: 'ModifyPPT',
     component: ModifyPPT,
   },
