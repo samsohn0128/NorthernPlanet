@@ -20,17 +20,17 @@ public class SlideServiceImpl implements SlideService {
 
   @Override
   public ScriptRes getScript(Long slideId) throws IOException {
-    Optional<Slide> currentSlide = slideRepository.findById(slideId);
+    Slide currentSlide = slideRepository.findById(slideId).orElse(null);
 
-    if (currentSlide.get() == null) {
+    if (currentSlide == null) {
       throw new BadRequestException("존재하지 않는 슬라이드 id입니다.");
     }
 
     ScriptRes scriptRes;
-    if (currentSlide.get().getScript() == null) {
+    if (currentSlide.getScript() == null) {
       scriptRes = new ScriptRes(slideId, "");
     } else {
-      scriptRes = new ScriptRes(slideId, currentSlide.get().getScript());
+      scriptRes = new ScriptRes(slideId, currentSlide.getScript());
     }
 
     return scriptRes;
