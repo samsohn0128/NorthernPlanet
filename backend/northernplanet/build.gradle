@@ -58,6 +58,8 @@ dependencies {
 
     implementation group: 'com.google.guava', name: 'guava', version: '21.0'
 
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+
 }
 
 test {

@@ -27,7 +27,6 @@ public class RoomServiceImpl implements RoomService {
 
   private final ParticipantRepository participantRepository;
 
-
   @Override
   public Room getRoom(Long roomId) {
     Room room = roomRepository.getById(roomId);

@@ -26,7 +26,7 @@ public class PresentationServiceImpl implements PresentationService {
   // private final String presentationDirectory = "/home/ubuntu/presentation";
   // mac
   private final String presentationDirectory = "/Users/dongwoosohn/presentation";
-
+  private final String aeeunpath="/Users/gim-aeeun/file";
   @Override
   public int createPresentation(PresentationPostReq presentationPostReq) throws IOException {
     log.info("[createPresentation - service]");
@@ -56,6 +56,49 @@ public class PresentationServiceImpl implements PresentationService {
     // save presentation files
     String folderDirectory = presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
         + presentation.getPresentationId() + "/";
+    File folder = new File(folderDirectory);
+    if (!folder.exists()) {
+      folder.mkdirs();
+    }
+
+    for (int i = 0; i < presentationPostReq.getSlides().size(); i++) {
+      SlideRequest slideRequest = presentationPostReq.getSlides().get(i);
+      String originalFileName = slideRequest.getSlide().getOriginalFilename();
+      String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
+      File slide = new File(folderDirectory + slideRequest.getSequenceNum() + extensionName);
+      slideRequest.getSlide().transferTo(slide);
+    }
+
+    return 0;
+  }
+
+  @Override
+  public int createPPt(PresentationPostReq presentationPostReq) throws IOException {
+    List<Slide> slides = new LinkedList<>();
+    presentationPostReq.getSlides().forEach(slideRequest -> {
+      String originalFileName = slideRequest.getSlide().getOriginalFilename();
+      String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
+      Slide slide = Slide.builder().saveName(slideRequest.getSequenceNum() + "")
+              .originalName(originalFileName)
+              .directory(presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
+                      + presentationPostReq.getPresentationName() + "/" + slideRequest.getSequenceNum()
+                      + extensionName)
+              .build();
+      log.info("[createPresentation - service] Slide : {}", slide);
+      slides.add(slide);
+    });
+    slideRepository.saveAll(slides);
+
+    // save presentation
+    LocalDateTime now = LocalDateTime.now();
+    Presentation presentation =
+            Presentation.builder().name(presentationPostReq.getPresentationName())
+                    .size(presentationPostReq.getSlides().size()).upload_time(now).build();
+    log.info("[createPresentation - service] Presentation : {}", presentation);
+    presentation = presentationRepository.saveAndFlush(presentation);
+    // save presentation files
+    String folderDirectory = presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
+            + presentation.getPresentationId() + "/";
     File folder = new File(folderDirectory);
     if (!folder.exists()) {
       folder.mkdirs();
