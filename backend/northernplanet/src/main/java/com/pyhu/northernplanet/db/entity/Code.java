@@ -21,8 +21,8 @@ public class Code {
 
   @Column(name = "code_id")
   @Id
-  String codeId;
+  private String codeId;
 
-  String codeName;
+  private String codeName;
 
 }

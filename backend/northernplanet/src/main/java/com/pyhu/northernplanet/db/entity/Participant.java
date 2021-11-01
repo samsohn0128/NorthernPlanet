@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -17,24 +19,26 @@ import lombok.Data;
 @Builder
 @DynamicInsert
 @DynamicUpdate
+@NoArgsConstructor
+@AllArgsConstructor
 public class Participant {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long participantId;
+  private Long participantId;
 
   @ManyToOne
   @JoinColumn(name = "code_id")
-  Code code;
+  private Code code;
 
   @ManyToOne
   @JsonBackReference
   @JoinColumn(name = "user_id")
-  User user;
+  private User user;
 
   @ManyToOne
   @JsonBackReference
   @JoinColumn(name = "room_id")
-  Room room;
+  private Room room;
 
 }
