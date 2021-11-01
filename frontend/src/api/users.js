@@ -2,7 +2,7 @@ import axios from 'axios';
 import { BASE_URL } from '@/constant/index.js';
 import { GOOGLE_OAUTH_URL } from '@/constant/index.js';
 const instance = axios.create({
-  baseURL: BASE_URL + 'users/',
+  baseURL: BASE_URL + 'user/',
   headers: {
     'Content-type': 'application/json',
   },

@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Api(value = "방 관련 API", tags = {"Room"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/rooms")
+@RequestMapping("/room")
 public class RoomController {
 
   private final RoomService roomService;
@@ -35,7 +35,7 @@ public class RoomController {
   private final ParticipantService participantService;
 
 
-  @PostMapping("/create")
+  @PostMapping("")
   @ApiOperation(value = "방 생성")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm A",
       timezone = "Asia/Seoul")

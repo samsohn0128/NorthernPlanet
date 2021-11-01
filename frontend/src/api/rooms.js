@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BASE_URL } from '@/constant/index.js';
 const instance = axios.create({
-  baseURL: BASE_URL + 'rooms/',
+  baseURL: BASE_URL + 'room/',
   headers: {
     'Content-type': 'application/json',
   },
@@ -9,7 +9,7 @@ const instance = axios.create({
 });
 
 function createRoom(roomData) {
-  return instance.post('create', roomData);
+  return instance.post(roomData);
 }
 
 function updateRoom(roomData) {
