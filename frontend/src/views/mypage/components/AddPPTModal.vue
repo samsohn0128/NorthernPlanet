@@ -49,7 +49,7 @@
             @click="addPPT()"
             data-bs-dismiss="modal"
           >
-            Change
+            Add
           </button>
         </div>
       </div>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { addpresentation, getpresentations } from '@/api/presentation.js';
+import { addPresentation, getPresentations } from '@/api/presentation.js';
 import store from '@/store';
 
 export default {
@@ -69,18 +69,24 @@ export default {
     };
   },
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
-  async addPPT() {
-    let userData = {
-      user_id: store.getters['users/getUser'].userId,
-      presentationName: this.presentationName,
-    };
-    let userId = store.getters['users/getUser'].userId;
-    try {
-      await addpresentation(userData);
-      await getpresentations(userId);
-    } catch (exp) {
-      this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
-    }
+  methods: {
+    async addPPT() {
+      let userData = {
+        user_id: store.getters['users/getUser'].userId,
+        presentationName: this.presentationName,
+      };
+      // 제목이 비어있을 경우 튕겨내기
+      if (userData.presentationName === '') {
+        this.$alertify.error('제목을 입력해주세요.');
+        return;
+      }
+      try {
+        await addPresentation(userData);
+        await getPresentations(userData.user_id);
+      } catch (exp) {
+        this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
+      }
+    },
   },
 };
 </script>
