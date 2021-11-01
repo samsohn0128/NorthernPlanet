@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api
 @RestController
 @CrossOrigin
-@RequestMapping("/presentaion")
+@RequestMapping("/api/presentaion")
 @RequiredArgsConstructor
 @Slf4j
 public class PresentationController {

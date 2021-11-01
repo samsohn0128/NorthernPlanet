@@ -4,6 +4,7 @@ import com.pyhu.northernplanet.common.dto.ParticipantDto;
 import com.pyhu.northernplanet.common.dto.RoomDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
