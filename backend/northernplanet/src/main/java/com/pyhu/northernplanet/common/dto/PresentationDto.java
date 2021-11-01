@@ -1,6 +1,7 @@
 package com.pyhu.northernplanet.common.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,6 @@ public class PresentationDto {
   private Integer size;
 
   private LocalDateTime uploadTime;
+
+  private List<SlideDto> slideList;
 }

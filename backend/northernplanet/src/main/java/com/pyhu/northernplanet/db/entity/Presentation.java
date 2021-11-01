@@ -42,7 +42,7 @@ public class Presentation {
   int size;
 
   @Column(name = "upload_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  LocalDateTime upload_time;
+  LocalDateTime uploadTime;
 
   @OneToMany(mappedBy = "presentation", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference

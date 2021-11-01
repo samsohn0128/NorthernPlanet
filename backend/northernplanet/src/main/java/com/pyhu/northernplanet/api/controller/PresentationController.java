@@ -65,4 +65,12 @@ public class PresentationController {
     }
     return new ResponseEntity<>(presentationDtoList, HttpStatus.OK);
   }
+
+  @GetMapping("/{userId}/{presentationId}")
+  public ResponseEntity<PresentationDto> getPresentation(@PathVariable Long userId,
+      @PathVariable Long presentationId) {
+    PresentationDto presentationDto = presentationService
+        .getPresentationDetail(userId, presentationId);
+    return new ResponseEntity<>(presentationDto, HttpStatus.OK);
+  }
 }

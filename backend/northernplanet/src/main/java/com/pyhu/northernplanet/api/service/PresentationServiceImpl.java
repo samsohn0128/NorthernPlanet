@@ -3,6 +3,7 @@ package com.pyhu.northernplanet.api.service;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.request.SlideRequest;
 import com.pyhu.northernplanet.common.dto.PresentationDto;
+import com.pyhu.northernplanet.common.dto.SlideDto;
 import com.pyhu.northernplanet.db.entity.Presentation;
 import com.pyhu.northernplanet.db.entity.Slide;
 import com.pyhu.northernplanet.db.repository.PresentationRepository;
@@ -52,7 +53,7 @@ public class PresentationServiceImpl implements PresentationService {
     LocalDateTime now = LocalDateTime.now();
     Presentation presentation =
         Presentation.builder().name(presentationPostReq.getPresentationName())
-            .size(presentationPostReq.getSlides().size()).upload_time(now).build();
+            .size(presentationPostReq.getSlides().size()).uploadTime(now).build();
     log.info("[createPresentation - service] Presentation : {}", presentation);
     presentation = presentationRepository.saveAndFlush(presentation);
     // save presentation files
@@ -76,7 +77,8 @@ public class PresentationServiceImpl implements PresentationService {
   @Override
   public List<PresentationDto> getPresentationList(Long userId) {
     log.info("[getPresentationList - service] userId : {}", userId);
-    List<Presentation> presentationList = presentationRepository.findByUser_userId(userId);
+    List<Presentation> presentationList = presentationRepository.findByUser_userId(userId)
+        .orElseThrow(() -> new RuntimeException());
     System.out.println(presentationList.size());
     List<PresentationDto> presentationDtoList = new ArrayList<>();
     presentationList.forEach(presentation -> {
@@ -84,7 +86,7 @@ public class PresentationServiceImpl implements PresentationService {
           .presentationId(presentation.getPresentationId())
           .presentationName(presentation.getName())
           .size(presentation.getSize())
-          .uploadTime(presentation.getUpload_time())
+          .uploadTime(presentation.getUploadTime())
           .build();
       presentationDtoList.add(presentationDto);
       log.info("[getPresentationList - service] presentationId : {}",
@@ -93,4 +95,39 @@ public class PresentationServiceImpl implements PresentationService {
     return presentationDtoList;
   }
 
+  @Override
+  public PresentationDto getPresentationDetail(Long userId, Long presentationId) {
+    log.info("[getPresentation - service] userId : {}, presentationId : {}", userId,
+        presentationId);
+    Presentation presentation = presentationRepository.findById(presentationId)
+        .orElseThrow(() -> new NullPointerException());
+    List<Slide> slideList = slideRepository.findByPresentation_presentationId(presentationId)
+        .orElseThrow(() -> new NullPointerException());
+    List<SlideDto> slideDtoList = new ArrayList<>();
+    slideList.forEach(slide -> {
+      File slideFile = new File(slide.getDirectory());
+      if (slideFile.exists()) {
+        try {
+        } catch (Exception e) {
+          log.error("getPresentation - service] Failed slideResource");
+          e.printStackTrace();
+        }
+      } else {
+        log.error("[getPresentation - service] no such file \"{}\"", slide.getDirectory());
+      }
+      SlideDto slideDto = SlideDto.builder()
+          .sequence(slide.getSequence())
+          .script(slide.getScript())
+          .build();
+      slideDtoList.add(slideDto);
+    });
+
+    PresentationDto presentationDto = PresentationDto.builder()
+        .presentationId(presentationId)
+        .presentationName(presentation.getName())
+        .uploadTime(presentation.getUploadTime())
+        .size(presentation.getSize())
+        .build();
+    return presentationDto;
+  }
 }

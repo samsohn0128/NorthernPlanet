@@ -10,4 +10,6 @@ public interface PresentationService {
   int createPresentation(PresentationPostReq presentationPostReq) throws IOException;
 
   List<PresentationDto> getPresentationList(Long userId);
+
+  PresentationDto getPresentationDetail(Long userId, Long presentationId);
 }
