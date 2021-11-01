@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -18,28 +20,30 @@ import lombok.Data;
 @Builder
 @DynamicInsert
 @DynamicUpdate
+@NoArgsConstructor
+@AllArgsConstructor
 public class Slide {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "slide_id")
-  Long slideId;
+  private Long slideId;
 
   @Column(name = "save_name")
-  String saveName;
+  private String saveName;
 
   @Column(name = "original_name")
-  String originalName;
+  private String originalName;
 
-  String directory;
+  private String directory;
 
-  @Column(name = "script_directory")
-  String scriptDirectory;
+  @Column(columnDefinition = "TEXT", name = "script")
+  private String script;
 
-  Integer sequence;
+  private Integer sequence;
 
   @ManyToOne
   @JsonBackReference
   @JoinColumn(name = "presentation_id")
-  Presentation presentation;
+  private Presentation presentation;
 }
