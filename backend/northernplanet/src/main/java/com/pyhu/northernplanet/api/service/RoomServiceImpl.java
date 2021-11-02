@@ -31,7 +31,6 @@ public class RoomServiceImpl implements RoomService {
 
   private final ParticipantRepository participantRepository;
 
-
   @Override
   public RoomGetRes getRoom(Long roomId, List<ParticipantDto> participants) {
     Room room = roomRepository.getById(roomId);

@@ -9,12 +9,30 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-function getpresentations(userId) {
+function getPresentations(userId) {
   return instance.get('list/' + userId);
 }
 
-function addpresentation(userData) {
+function addPresentation(userData) {
   return instance.post('', userData);
 }
 
-export { getpresentations, addpresentation };
+function modifyPresentation(presentationId, userData) {
+  return instance.put(presentationId, userData);
+}
+
+function deletePresentation(presentationId) {
+  return instance.delete(presentationId);
+}
+
+function getPresentationDetail(presentationId) {
+  return instance.get(presentationId);
+}
+
+export {
+  getPresentations,
+  addPresentation,
+  modifyPresentation,
+  deletePresentation,
+  getPresentationDetail,
+};
