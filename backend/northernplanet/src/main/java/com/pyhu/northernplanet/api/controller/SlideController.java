@@ -32,7 +32,7 @@ public class SlideController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
-  public ResponseEntity getScript(@RequestParam(required = true) Long slideId) {
+  public ResponseEntity getSlide(@RequestParam(required = true) Long slideId) {
     log.info("[getSlide - controller]");
     try {
       return new ResponseEntity<SlideRes>(scriptService.getScript(slideId), HttpStatus.OK);
