@@ -1,12 +1,41 @@
 export default {
   namespaced: true,
   state: () => ({
-    currentPage: null,
-    location: null,
+    // cuttentPPT: {
+    //   Id: null,
+    //   Title: null,
+    // },
+    currentPPTID: null,
+    currentPPTTitle: null,
     size: null,
     transition: null,
   }),
-  mutations: {},
-  actions: {},
-  getters: {},
+  mutations: {
+    SET_CURRENT_PRESENTATION_INFO: function (state, data) {
+      state.currentPPTID = data.presentationId;
+      state.currentPPTTitle = data.presentationName;
+      console.log(state, 'get');
+    },
+    // INIT_CURRENT_PRESENTATION_INFO: function (state) {
+    //   state.currentPPTID = null;
+    //   state.currentPPTTitle = null;
+    // },
+  },
+  actions: {
+    setCurrentPresenatationInfo: function ({ commit }, data) {
+      commit('SET_CURRENT_PRESENTATION_INFO', data);
+    },
+    // initPresentationInfo: function ({ commit }) {
+    //   commit('INIT_CURRENT_PRESENTATION_INFO');
+    // },
+  },
+  getters: {
+    // getCurrentId, getCurrentTitle 묶을 수 있을 듯.
+    getCurrentId(state) {
+      return state.currentPPTID;
+    },
+    getCurrentTitle(state) {
+      return state.currentPPTTitle;
+    },
+  },
 };

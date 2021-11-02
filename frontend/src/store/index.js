@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import meetingRoom from './modules/meetingRoom.js';
 import users from './modules/users.js';
 import rooms from './modules/rooms.js';
+import mypage from './modules/mypage.js';
 import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex);
@@ -16,10 +17,11 @@ const store = new Vuex.Store({
     meetingRoom,
     users,
     rooms,
+    mypage,
   },
   plugins: [
     createPersistedState({
-      paths: ['users', 'rooms'],
+      paths: ['users', 'rooms', 'mypage'],
     }),
   ],
 });
