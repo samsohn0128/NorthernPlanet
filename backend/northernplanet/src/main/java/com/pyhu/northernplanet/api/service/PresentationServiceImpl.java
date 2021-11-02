@@ -1,5 +1,6 @@
 package com.pyhu.northernplanet.api.service;
 
+import com.pyhu.northernplanet.api.request.PptToPngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.common.dto.PresentationDto;
 import com.pyhu.northernplanet.common.dto.SlideDto;
@@ -9,8 +10,14 @@ import com.pyhu.northernplanet.db.entity.User;
 import com.pyhu.northernplanet.db.repository.PresentationRepository;
 import com.pyhu.northernplanet.db.repository.SlideRepository;
 import com.pyhu.northernplanet.db.repository.UserRepository;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -20,11 +27,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.core.io.ResourceLoader;
+import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
+@Service("PresentationService")
 @RequiredArgsConstructor
 @Slf4j
 public class PresentationServiceImpl implements PresentationService {
@@ -33,11 +41,12 @@ public class PresentationServiceImpl implements PresentationService {
   private final PresentationRepository presentationRepository;
   private final SlideRepository slideRepository;
 
-  private final ResourceLoader resourceLoader;
   // ubuntu
-  // private final String presentationDirectory = "/home/ubuntu/presentation";
-  // mac
+//  private final String presentationDirectory = "/home/ubuntu/presentation";
+  // dongwoo
   private final String presentationDirectory = "/Users/dongwoosohn/presentation";
+  //aeeun
+//  private final String presentationDirectory = "/Users/gim-aeeun/file";
 
   @Override
   public int createPresentation(PresentationPostReq presentationPostReq) throws IOException {
@@ -81,7 +90,7 @@ public class PresentationServiceImpl implements PresentationService {
 
     // save presentation files
     String folderDirectory = presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
-        + presentation.getPresentationId() + "/";
+        + presentation.getPresentationId();
     File folder = new File(folderDirectory);
     if (!folder.exists()) {
       folder.mkdirs();
@@ -115,16 +124,6 @@ public class PresentationServiceImpl implements PresentationService {
           presentation.getPresentationId());
     });
     return presentationDtoList;
-  }
-
-  public byte[] getImage(int roomId, int userId, int currentPage) throws IOException {
-    InputStream imageStream = new FileInputStream(
-        "/home/ubuntu/presentations/" + roomId + "/" + userId + "/" + currentPage + ".jpg");
-//		InputStream imageStream = new FileInputStream(
-//				"C:\\Users\\multicampus\\presentations\\" + roomId + "\\" + userId + "\\" + currentPage + ".jpg");
-    byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-    imageStream.close();
-    return imageByteArray;
   }
 
   @Override
@@ -164,5 +163,79 @@ public class PresentationServiceImpl implements PresentationService {
         .slideList(slideDtoList)
         .build();
     return presentationDto;
+  }
+
+  public int createPpt(PptToPngReq pptToPngReq) throws IOException {
+    log.info("[createPpt - service]");
+    List<Slide> slides = new LinkedList<>();
+    MultipartFile convFile = pptToPngReq.getPpt();
+    String originalFileName = convFile.getOriginalFilename();
+    String pptFolderDirectory = presentationDirectory + "/" + pptToPngReq.getUserId() + "/ppt";
+    File pptFolder = new File(pptFolderDirectory);
+    if (!pptFolder.exists()) {
+      pptFolder.mkdirs();
+    }
+
+    File pptFile = new File(pptFolderDirectory + "/" + originalFileName);
+    convFile.transferTo(pptFile);
+    XMLSlideShow ppt = new XMLSlideShow(new FileInputStream(pptFile));
+    log.info("[createPpt - service] file successfully created");
+
+    //getting the dimensions and size of the slide
+    Dimension pgSize = ppt.getPageSize();
+    List<XSLFSlide> xslfSlideList = ppt.getSlides();
+
+    // save presentation
+    User user = userRepository.findById(pptToPngReq.getUserId())
+        .orElseThrow(() -> new NullPointerException());
+    LocalDateTime now = LocalDateTime.now();
+    String presentationName = pptToPngReq.getPpt().getOriginalFilename()
+        .substring(0, pptToPngReq.getPpt().getOriginalFilename().lastIndexOf('.'));
+    Presentation presentation = Presentation.builder()
+        .user(user)
+        .name(presentationName)
+        .size(xslfSlideList.size())
+        .uploadTime(now)
+        .build();
+    log.info("[createPresentation - service] Presentation : {}", presentation);
+    presentation = presentationRepository.saveAndFlush(presentation);
+
+    for (int i = 0; i < xslfSlideList.size(); i++) {
+      BufferedImage img = new BufferedImage(pgSize.width, pgSize.height,
+          BufferedImage.TYPE_INT_RGB);
+      Graphics2D graphics = img.createGraphics();
+
+      //clear the drawing area
+      graphics.setPaint(Color.white);
+      graphics.fill(new Rectangle2D.Float(0, 0, pgSize.width, pgSize.height));
+
+      //render
+      xslfSlideList.get(i).draw(graphics);
+
+      //creating an image file as output
+      String folderDirectory = presentationDirectory + "/" + pptToPngReq.getUserId() + "/"
+          + presentation.getPresentationId();
+      File folder = new File(folderDirectory);
+      if (!folder.exists()) {
+        folder.mkdirs();
+      }
+      String saveName = i + ".png";
+      FileOutputStream out = new FileOutputStream(folderDirectory + "/" + saveName);
+      javax.imageio.ImageIO.write(img, "png", out);
+      log.info("[createPpt - service] image successfully created");
+      Slide slide = Slide.builder()
+          .saveName(saveName)
+          .originalName(pptFile.getName().substring(0, pptFile.getName().lastIndexOf('.')))
+          .directory(folderDirectory + "/" + saveName)
+          .sequence(i)
+          .presentation(presentation)
+          .build();
+      slides.add(slide);
+      log.info("[createPpt - service] Slide : {}", slide);
+      out.close();
+    }
+    slideRepository.saveAll(slides);
+
+    return 0;
   }
 }

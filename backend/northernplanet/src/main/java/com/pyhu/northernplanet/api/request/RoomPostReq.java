@@ -18,7 +18,7 @@ import lombok.ToString;
 @ApiModel("RoomRegisterPostRequest")
 public class RoomPostReq extends RoomDto {
 	@ApiModelProperty(name="방장 이메일", example = "방장 이메일")
-	String email;
+	private String email;
 
 	@Builder
 	public RoomPostReq(String name, String description, LocalDateTime startTime,

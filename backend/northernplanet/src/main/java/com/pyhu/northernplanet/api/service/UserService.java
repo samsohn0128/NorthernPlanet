@@ -1,6 +1,7 @@
 package com.pyhu.northernplanet.api.service;
 
 import com.pyhu.northernplanet.common.dto.UserOauthDto;
+import org.apache.catalina.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserService {
@@ -28,4 +29,11 @@ public interface UserService {
    * @return 사용자 아이디
    */
   Long getUserIdByOauthId(int oauthId);
+
+  /**
+   * email로 사용자 정보 가져오기
+   * @param email
+   * @return { 사용자 아이디, 이메일, 사용자 이름, 프로필 사진, oAuthId }
+   */
+  UserOauthDto getUserByEmail(String email);
 }

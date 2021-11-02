@@ -1,5 +1,6 @@
 package com.pyhu.northernplanet.api.controller;
 
+import com.pyhu.northernplanet.api.request.PptToPngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.response.PresentationDetailGetRes;
 import com.pyhu.northernplanet.api.response.PresentationListGetRes;
@@ -108,4 +109,22 @@ public class PresentationController {
     httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
     return new ResponseEntity<>(presentationDetailGetRes, httpHeaders, HttpStatus.OK);
   }
+
+  @PostMapping("/ppt")
+  @ApiOperation(value = "ppt")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<Integer> createPpt(@ModelAttribute PptToPngReq pptToPngReq) {
+    log.info("[createPpt - controller]");
+    try {
+      presentationService.createPpt(pptToPngReq);
+    } catch (Exception e) {
+      log.error("[createPpt - controller] Failed to create presentation");
+      e.printStackTrace();
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
 }

@@ -46,4 +46,17 @@ public class UserServiceImpl implements UserService {
     Long userId = userRepository.findUserIdByOauthId(oauthId);
     return userId;
   }
+
+  @Override
+  public UserOauthDto getUserByEmail(String email) {
+    User user = userRepository.findByEmail(email).orElseThrow(
+        () -> new UsernameNotFoundException("User not found with Email : " + email));
+    UserOauthDto userOauthDto = UserOauthDto.builder()
+        .userId(user.getUserId())
+        .email(user.getEmail())
+        .name(user.getName())
+        .image(user.getImage())
+        .oauthId(user.getOauthId()).build();
+    return userOauthDto;
+  }
 }

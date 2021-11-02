@@ -14,11 +14,11 @@ function createRoom(roomData) {
 }
 
 function updateRoom(roomData) {
-  return instance.put('update/' + roomData.room_id, roomData);
+  return instance.put('/' + roomData.roomId, roomData);
 }
 
 function deleteRoom(roomId) {
-  return instance.delete('delete/' + roomId);
+  return instance.delete('/' + roomId);
 }
 
 function getRooms(userId) {
