@@ -10,32 +10,39 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Data
+@Getter
+@Setter
 @DynamicInsert
 @DynamicUpdate
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
   @Column(name = "user_id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long userId;
+  private Long userId;
 
-  String email;
+  private String email;
 
-  String name;
+  private String name;
 
-  String image;
+  private String image;
 
   @Column(name = "oauth_id")
-  String oauthId;
+  private String oauthId;
 
   @Column(name = "oauth_type")
-  String oauthType;
+  private String oauthType;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference

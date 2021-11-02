@@ -31,18 +31,18 @@ public class Presentation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "presentation_id")
-  Long presentationId;
+  private Long presentationId;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
-  User user;
+  private User user;
 
-  String name;
+  private String name;
 
-  int size;
+  private int size;
 
   @Column(name = "upload_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  LocalDateTime uploadTime;
+  private LocalDateTime uploadTime;
 
   @OneToMany(mappedBy = "presentation", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference

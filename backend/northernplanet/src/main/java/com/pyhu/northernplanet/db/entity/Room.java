@@ -13,6 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -21,30 +25,33 @@ import lombok.Builder;
 import lombok.Data;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @DynamicInsert
 @DynamicUpdate
+@NoArgsConstructor
+@AllArgsConstructor
 public class Room {
 
 
   @Column(name = "room_id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long roomId;
+  private Long roomId;
 
-  String name;
+  private String name;
 
-  String description;
+  private String description;
 
   @Column(name = "startTime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  LocalDateTime startTime;
+  private LocalDateTime startTime;
 
-  @Column(name = "endTime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  LocalDateTime endTime;
+  @Column(name = "endTime")
+  private LocalDateTime endTime;
 
   @Column(name = "onLive", columnDefinition = "BOOLEAN DEFAULT FALSE")
-  Boolean onLive;
+  private Boolean onLive;
 
   @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
@@ -53,6 +60,6 @@ public class Room {
   @ManyToOne(fetch = FetchType.LAZY)
   @JsonBackReference
   @JoinColumn(name = "user_id")
-  User user;
+  private User user;
 
 }

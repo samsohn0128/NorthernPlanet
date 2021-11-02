@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BASE_URL } from '@/constant/index.js';
 const instance = axios.create({
-  baseURL: BASE_URL + 'rooms/',
+  baseURL: BASE_URL + '/room',
   headers: {
     'Content-type': 'application/json',
   },
@@ -9,7 +9,8 @@ const instance = axios.create({
 });
 
 function createRoom(roomData) {
-  return instance.post('create', roomData);
+  console.log('create room: ', roomData);
+  return instance.post('', roomData);
 }
 
 function updateRoom(roomData) {
@@ -21,7 +22,8 @@ function deleteRoom(roomId) {
 }
 
 function getRooms(userId) {
-  return instance.get('user/' + userId);
+  console.log('get rooms- userId: ', userId);
+  return instance.get('list/' + userId);
 }
 
 function getRoom(roomId) {

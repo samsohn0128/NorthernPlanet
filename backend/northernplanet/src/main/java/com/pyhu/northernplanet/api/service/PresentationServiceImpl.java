@@ -65,6 +65,8 @@ public class PresentationServiceImpl implements PresentationService {
           .originalName(originalFileName)
           .directory(presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
               + presentation.getPresentationId() + "/" + saveName)
+          .sequence(i)
+          .presentation(presentation)
           .build();
       log.info("[createPresentation - service] Slide : {}", slide);
       slides.add(slide);
@@ -94,7 +96,6 @@ public class PresentationServiceImpl implements PresentationService {
     log.info("[getPresentationList - service] userId : {}", userId);
     List<Presentation> presentationList = presentationRepository.findByUser_userId(userId)
         .orElseThrow(() -> new RuntimeException());
-    System.out.println(presentationList.size());
     List<PresentationDto> presentationDtoList = new ArrayList<>();
     presentationList.forEach(presentation -> {
       PresentationDto presentationDto = PresentationDto.builder()
