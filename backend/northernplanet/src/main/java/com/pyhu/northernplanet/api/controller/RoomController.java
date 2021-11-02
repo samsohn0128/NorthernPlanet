@@ -107,16 +107,17 @@ public class RoomController {
   // return new ResponseEntity<List<RoomGetRes>>(rooms, HttpStatus.OK);
   // }
   //
-  @GetMapping("/user/{userId}")
+  @GetMapping("/list/{userId}")
   @ApiOperation(value = "사용자 아이디가 참가자로 포함된 전체 방 보기")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "사용자 없음"),
       @ApiResponse(code = 409, message = "이미 존재하는 유저"),
       @ApiResponse(code = 500, message = "서버 오류")})
-  public ApiResponseDto<List<RoomGetRes>> showRoomsByOauthId(@PathVariable("userId") Long userId) {
+  public ApiResponseDto<List<RoomGetRes>> showRoomsByUserId(@PathVariable("userId") Long userId) {
     List<RoomGetRes> rooms = null;
     try {
       // Long userId = userService.getUserIdByOauthId(oauthId);
+      log.info("[showRoomsByUserId] userId: {}", userId);
       rooms = roomService.findbyuser(userId);
       for (RoomGetRes item : rooms) {
         item.setParticipants(participantService.getParticipantByRoomId(item.getRoomId()));

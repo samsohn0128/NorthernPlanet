@@ -22,7 +22,8 @@ function deleteRoom(roomId) {
 }
 
 function getRooms(userId) {
-  return instance.get('user/' + userId);
+  console.log('get rooms- userId: ', userId);
+  return instance.get('list/' + userId);
 }
 
 function getRoom(roomId) {

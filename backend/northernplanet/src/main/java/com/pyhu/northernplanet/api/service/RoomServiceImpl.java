@@ -90,8 +90,10 @@ public class RoomServiceImpl implements RoomService {
       code = Code.builder().codeId(person.get(i).getCode().getCodeId())
           .codeName(person.get(i).getCode().getCodeName()).build();
 
-      participant = Participant.builder().code(code)
-          .user(userRepository.findByEmail(person.get(i).getEmail())).room(room).build();
+      participant = Participant.builder()
+          .code(code)
+          .user(userRepository.findByEmail(person.get(i).getEmail()))
+          .room(room).build();
       log.info("[saveParticipants] participant: {}", participant);
       participantRepository.save(participant);
     }
