@@ -50,7 +50,7 @@
                   <a
                     href="#ModifyPPTNameModal"
                     data-bs-toggle="modal"
-                    @click="getCurrentPresenatationInfo(data)"
+                    @click="setCurrentPresenatationInfo(data)"
                     >{{ item.title }}</a
                   >
                 </div>
@@ -59,7 +59,7 @@
                   <a
                     href="#DeletePPTModal"
                     data-bs-toggle="modal"
-                    @click="getCurrentPresenatationInfo(data)"
+                    @click="setCurrentPresenatationInfo(data)"
                     >{{ item.title }}</a
                   >
                 </div>
@@ -265,7 +265,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions('mypage', ['getCurrentPresenatationInfo']),
+    ...mapActions('mypage', ['setCurrentPresenatationInfo']),
     async getppt() {
       let userId = store.getters['users/getUser'].userId;
       try {
