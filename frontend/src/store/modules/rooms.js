@@ -13,7 +13,7 @@ export default {
     SET_ROOMS(state, payload) {
       console.log('payload: ', payload);
 
-      state.rooms = payload.data;
+      state.rooms = payload;
       console.log('state.rooms: ', state.rooms);
       let now = moment(new Date()).format('YYYY-MM-DD HH:mm');
       state.now = [];

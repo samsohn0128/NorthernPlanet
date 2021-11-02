@@ -29,9 +29,24 @@ public class RoomServiceImpl implements RoomService {
 
 
   @Override
-  public Room getRoom(Long roomId) {
+  public RoomGetRes getRoom(Long roomId, List<ParticipantDto> participants) {
     Room room = roomRepository.getById(roomId);
-    return room;
+
+    RoomGetRes roomget = RoomGetRes.builder()
+        .roomId(room.getRoomId())
+        .name(room.getName())
+        .description(room.getDescription())
+        .startTime(room.getStartTime())
+        .managerId(room.getUser().getUserId())
+        .managerName(room.getUser().getName())
+        .participants(participants)
+        .build();
+    if (room.getEndTime() == null) {
+      roomget.setEndTime(null);
+    } else {
+      roomget.setEndTime(room.getEndTime());
+    }
+    return roomget;
   }
 
   @Override

@@ -1,5 +1,7 @@
 package com.pyhu.northernplanet.api.controller;
 
+import com.pyhu.northernplanet.common.dto.ParticipantDto;
+import com.pyhu.northernplanet.db.entity.Room;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +58,47 @@ public class RoomController {
     return new ResponseEntity(HttpStatus.BAD_REQUEST);
   }
 
+  @GetMapping("/list/{userId}")
+  @ApiOperation(value = "사용자 아이디가 참가자로 포함된 전체 방 보기")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "사용자 없음"),
+      @ApiResponse(code = 409, message = "이미 존재하는 유저"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<List<RoomGetRes>> getRoomListByUserId(@PathVariable("userId") Long userId) {
+    List<RoomGetRes> rooms = null;
+    try {
+      // Long userId = userService.getUserIdByOauthId(oauthId);
+      log.info("[showRoomsByUserId] userId: {}", userId);
+      rooms = roomService.findbyuser(userId);
+      for (RoomGetRes item : rooms) {
+        item.setParticipants(participantService.getParticipantByRoomId(item.getRoomId()));
+      }
+      return new ResponseEntity<>(rooms, HttpStatus.OK);
+    } catch (Exception e) {
+      log.error(String.valueOf(e));
+    }
+
+    return new ResponseEntity<>(rooms, HttpStatus.BAD_REQUEST);
+  }
+
+  @GetMapping("/{roomId}")
+  @ApiOperation(value = "방 하나의 정보 보기")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "사용자 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<RoomGetRes> getRoomByRoomId(@PathVariable("roomId") Long roomId) {
+    RoomGetRes room = null;
+    try {
+      List<ParticipantDto> participants = participantService.getParticipantByRoomId(roomId);
+      room = roomService.getRoom(roomId, participants);
+      return new ResponseEntity<>(room, HttpStatus.OK);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return new ResponseEntity<>(room, HttpStatus.BAD_REQUEST);
+  }
+
   //
   // @PutMapping("/update/{roomId}")
   // @ApiOperation(value = "방 정보 수정")
@@ -108,28 +151,7 @@ public class RoomController {
   // return new ResponseEntity<List<RoomGetRes>>(rooms, HttpStatus.OK);
   // }
   //
-  @GetMapping("/list/{userId}")
-  @ApiOperation(value = "사용자 아이디가 참가자로 포함된 전체 방 보기")
-  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
-      @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "사용자 없음"),
-      @ApiResponse(code = 409, message = "이미 존재하는 유저"),
-      @ApiResponse(code = 500, message = "서버 오류")})
-  public ResponseEntity<List<RoomGetRes>> showRoomsByUserId(@PathVariable("userId") Long userId) {
-    List<RoomGetRes> rooms = null;
-    try {
-      // Long userId = userService.getUserIdByOauthId(oauthId);
-      log.info("[showRoomsByUserId] userId: {}", userId);
-      rooms = roomService.findbyuser(userId);
-      for (RoomGetRes item : rooms) {
-        item.setParticipants(participantService.getParticipantByRoomId(item.getRoomId()));
-      }
-      return new ResponseEntity<>(rooms, HttpStatus.OK);
-    } catch (Exception e) {
-      log.error(String.valueOf(e));
-    }
 
-    return new ResponseEntity<>(rooms, HttpStatus.BAD_REQUEST);
-  }
   //
   // @GetMapping("/onlive/{roomId}")
   // @ApiOperation(value = "방이 현재 활동중인지 보기")
@@ -175,27 +197,5 @@ public class RoomController {
   // }
   // }
   //
-  // @GetMapping("/{roomId}")
-  // @ApiOperation(value = "방 하나의 정보 보기")
-  // @ApiResponses({@ApiResponse(code = 200, message = "성공"),
-  // @ApiResponse(code = 401, message = "인증 실패"),
-  // @ApiResponse(code = 404, message = "사용자 없음"),
-  // @ApiResponse(code = 409, message = "이미 존재하는 유저"),
-  // @ApiResponse(code = 500, message = "서버 오류")})
-  // public ResponseEntity<RoomGetRes> showRoomone(@PathVariable("roomId") int roomId) {
-  // Rooms room = roomService.getRoom(roomId);
-  // List<ParticipantGetRes> participants = participantService.getParticipantByRoomId(roomId);
-  // RoomGetRes roomget = new RoomGetRes(room.getName(), room.getDescription(),
-  // room.getStartTime().toLocalDateTime(), room.getUsers().getUserId(),
-  // room.getUsers().getName(),
-  // room.getRoomId());
-  // if (room.getEndTime() == null) {
-  // roomget.setEndTime(null);
-  // } else {
-  // roomget.setEndTime(room.getEndTime().toLocalDateTime());
-  // }
-  // roomget.setParticipants(participants);
-  //
-  // return new ResponseEntity<RoomGetRes>(roomget, HttpStatus.OK);
-  // }
+
 }

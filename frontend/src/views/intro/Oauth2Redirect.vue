@@ -22,11 +22,11 @@ export default {
         .then(({ status, data }) => {
           if (status == 200) {
             let user = {
-              userId: data.data.userId,
-              email: data.data.email,
-              name: data.data.name,
-              image: data.data.image,
-              oauthId: data.data.oauthId,
+              userId: data.userId,
+              email: data.email,
+              name: data.name,
+              image: data.image,
+              oauthId: data.oauthId,
               token: token,
             };
 
