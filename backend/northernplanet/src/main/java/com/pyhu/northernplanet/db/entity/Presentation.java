@@ -39,7 +39,7 @@ public class Presentation {
 
   private String name;
 
-  private int size;
+  private Integer size;
 
   @Column(name = "upload_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime uploadTime;

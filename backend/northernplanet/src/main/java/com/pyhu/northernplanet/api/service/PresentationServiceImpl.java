@@ -10,13 +10,17 @@ import com.pyhu.northernplanet.db.repository.PresentationRepository;
 import com.pyhu.northernplanet.db.repository.SlideRepository;
 import com.pyhu.northernplanet.db.repository.UserRepository;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +32,8 @@ public class PresentationServiceImpl implements PresentationService {
   private final UserRepository userRepository;
   private final PresentationRepository presentationRepository;
   private final SlideRepository slideRepository;
+
+  private final ResourceLoader resourceLoader;
   // ubuntu
   // private final String presentationDirectory = "/home/ubuntu/presentation";
   // mac
@@ -111,9 +117,19 @@ public class PresentationServiceImpl implements PresentationService {
     return presentationDtoList;
   }
 
+  public byte[] getImage(int roomId, int userId, int currentPage) throws IOException {
+    InputStream imageStream = new FileInputStream(
+        "/home/ubuntu/presentations/" + roomId + "/" + userId + "/" + currentPage + ".jpg");
+//		InputStream imageStream = new FileInputStream(
+//				"C:\\Users\\multicampus\\presentations\\" + roomId + "\\" + userId + "\\" + currentPage + ".jpg");
+    byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+    imageStream.close();
+    return imageByteArray;
+  }
+
   @Override
   public PresentationDto getPresentationDetail(Long userId, Long presentationId) {
-    log.info("[getPresentation - service] userId : {}, presentationId : {}", userId,
+    log.info("[getPresentationDetail - service] userId : {}, presentationId : {}", userId,
         presentationId);
     Presentation presentation = presentationRepository.findById(presentationId)
         .orElseThrow(() -> new NullPointerException());
@@ -121,19 +137,21 @@ public class PresentationServiceImpl implements PresentationService {
         .orElseThrow(() -> new NullPointerException());
     List<SlideDto> slideDtoList = new ArrayList<>();
     slideList.forEach(slide -> {
-      File slideFile = new File(slide.getDirectory());
-      if (slideFile.exists()) {
-        try {
-        } catch (Exception e) {
-          log.error("getPresentation - service] Failed slideResource");
-          e.printStackTrace();
-        }
-      } else {
-        log.error("[getPresentation - service] no such file \"{}\"", slide.getDirectory());
+      byte[] slideByteArray = null;
+      try {
+        InputStream inputStream = new FileInputStream(slide.getDirectory());
+        slideByteArray = IOUtils.toByteArray(inputStream);
+      } catch (Exception e) {
+        log.error(
+            "[getPresentationDetail - service] Failed to get inputStream. slideDirectory : {}",
+            slide.getDirectory());
+        e.printStackTrace();
       }
       SlideDto slideDto = SlideDto.builder()
+          .slideId(slide.getSlideId())
           .sequence(slide.getSequence())
           .script(slide.getScript())
+          .slideFile(slideByteArray)
           .build();
       slideDtoList.add(slideDto);
     });
@@ -141,8 +159,9 @@ public class PresentationServiceImpl implements PresentationService {
     PresentationDto presentationDto = PresentationDto.builder()
         .presentationId(presentationId)
         .presentationName(presentation.getName())
-        .uploadTime(presentation.getUploadTime())
         .size(presentation.getSize())
+        .uploadTime(presentation.getUploadTime())
+        .slideList(slideDtoList)
         .build();
     return presentationDto;
   }
