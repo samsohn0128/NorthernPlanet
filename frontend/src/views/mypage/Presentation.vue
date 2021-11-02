@@ -31,7 +31,7 @@
             <!-- Menu bar -->
             <v-list>
               <v-list-item v-for="(item, index) in items" :key="index">
-                <!-- 첫 번째 Menu bar일 경우 -->
+                <!-- 발표자료 수정 -->
                 <div v-if="index == 0">
                   <router-link
                     :to="{
@@ -44,6 +44,24 @@
                   >
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </router-link>
+                </div>
+                <!-- 이름 수정하기 -->
+                <div v-else-if="index == 2">
+                  <a
+                    href="#ModifyPPTNameModal"
+                    data-bs-toggle="modal"
+                    @click="getCurrentPresenatationInfo(data)"
+                    >{{ item.title }}</a
+                  >
+                </div>
+                <!-- 발표자료 삭제하기 -->
+                <div v-else-if="index == 3">
+                  <a
+                    href="#DeletePPTModal"
+                    data-bs-toggle="modal"
+                    @click="getCurrentPresenatationInfo(data)"
+                    >{{ item.title }}</a
+                  >
                 </div>
                 <!-- 나머지 Menu bar일 경우 -->
                 <div v-else>
@@ -67,18 +85,22 @@
       </button>
     </div>
     <AddPPTModal></AddPPTModal>
+    <ModifyPPTNameModal></ModifyPPTNameModal>
+    <DeletePPTModal></DeletePPTModal>
   </div>
 </template>
 
 <script>
-// import { getpresentations } from '@/api/presentation.js';
+import { getPresentations } from '@/api/presentation.js';
 import AddPPTModal from './components/AddPPTModal.vue';
-// import { getpresentations } from '@/api/presentation.js';
-// import store from '@/store';
+import ModifyPPTNameModal from './components/ModifyPPTNameModal.vue';
+import DeletePPTModal from './components/DeletePPTModal.vue';
+import { mapActions } from 'vuex';
+import store from '@/store';
 
 export default {
   name: 'Presentation',
-  components: { AddPPTModal },
+  components: { AddPPTModal, ModifyPPTNameModal, DeletePPTModal },
   data: () => {
     return {
       datas: [
@@ -243,14 +265,15 @@ export default {
     };
   },
   methods: {
-    // async getppt() {
-    //   let userId = store.getters['users/getUser'].userId;
-    //   try {
-    //     await getpresentations(userId);
-    //   } catch (exp) {
-    //     this.$alertify.error('프레젠테이션 갖고 오기에 실패했습니다.');
-    //   }
-    // },
+    ...mapActions('mypage', ['getCurrentPresenatationInfo']),
+    async getppt() {
+      let userId = store.getters['users/getUser'].userId;
+      try {
+        this.datas = await getPresentations(userId);
+      } catch (exp) {
+        this.$alertify.error('프레젠테이션 갖고 오기에 실패했습니다.');
+      }
+    },
   },
   // created: {
   //   getppt(),
