@@ -127,7 +127,7 @@
             </span>
           </div>
         </div>
-        <h3 class="text-center">Presentation Files</h3>
+        <!-- <h3 class="text-center">Presentation Files</h3>
 
         <div v-if="files.length == 0 && !this.$store.state.rooms.room.endTime">
           <UploadDialog />
@@ -144,7 +144,7 @@
               발표 자료 삭제
             </button>
           </div>
-        </div>
+        </div> -->
       </div>
     </form>
     <RoomDeleteModal v-bind:roomId="this.room.roomId"></RoomDeleteModal>
@@ -156,20 +156,19 @@ import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import { updateRoom } from '@/api/rooms.js';
 import { findUser } from '@/api/users.js';
-import { deletetot } from '@/api/file.js';
+//import { deletetot, showfiledetail } from '@/api/file.js';
 import moment from 'moment';
 import RoomDeleteModal from './RoomDeleteModal.vue';
-import UploadDialog from './UploadDialog';
-import RoomFiledetail from './RoomFiledetail.vue';
-import { showfiledetail } from '@/api/file.js';
+// import UploadDialog from './UploadDialog';
+// import RoomFiledetail from './RoomFiledetail.vue';
 import store from '@/store';
 export default {
   name: 'RoomContent',
   components: {
     DatePicker,
     RoomDeleteModal,
-    UploadDialog,
-    RoomFiledetail,
+    // UploadDialog,
+    // RoomFiledetail,
   },
   data() {
     return {
@@ -191,17 +190,17 @@ export default {
       this.isManager = true;
     }
     console.log('am I manager? ', this.isManager);
-    const formData = new FormData();
-    formData.append('userId', this.user.userId);
-    formData.append('roomId', this.room.roomId);
-    showfiledetail(formData)
-      .then(data => {
-        this.files = data.data;
-      })
-      .catch(() => {
-        console.log('error');
-        this.$alertify.error('파일을 가져오지 못했습니다.');
-      });
+    // const formData = new FormData();
+    // formData.append('userId', this.user.userId);
+    // formData.append('roomId', this.room.roomId);
+    // showfiledetail(formData)
+    //   .then(data => {
+    //     this.files = data.data;
+    //   })
+    //   .catch(() => {
+    //     console.log('error');
+    //     this.$alertify.error('파일을 가져오지 못했습니다.');
+    //   });
   },
   computed: {
     getParticipants() {
@@ -215,19 +214,19 @@ export default {
     },
   },
   methods: {
-    deletefile() {
-      const formDa = new FormData();
-      formDa.append('userId', this.user.userId);
-      formDa.append('roomId', this.room.roomId);
-      deletetot(formDa)
-        .then(data => {
-          console.log(data);
-          this.$router.go();
-        })
-        .catch(() => {
-          this.$alertify.error('error! catch');
-        });
-    },
+    // deletefile() {
+    //   const formDa = new FormData();
+    //   formDa.append('userId', this.user.userId);
+    //   formDa.append('roomId', this.room.roomId);
+    //   deletetot(formDa)
+    //     .then(data => {
+    //       console.log(data);
+    //       this.$router.go();
+    //     })
+    //     .catch(() => {
+    //       this.$alertify.error('error! catch');
+    //     });
+    // },
     addParticipant() {
       let msg = '';
       if (!this.participantAccount) {
