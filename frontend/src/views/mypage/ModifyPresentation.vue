@@ -56,15 +56,14 @@
           </div>
           <div class="buttons-setting">
             <div>
-              <button @click="goBack()">뒤로 가기</button>
+              <button @click="goBack()">목록 보기</button>
             </div>
             <div>
               <button class="buttons-detail" @click="showAllPPT()">
                 전체 미리보기
               </button>
-              <button class="buttons-detail">목록보기</button>
               <button class="buttons-detail" @click="savePPT()">
-                전체 저장
+                슬라이드 저장
               </button>
             </div>
           </div>
@@ -267,7 +266,7 @@ export default {
   },
   methods: {
     goBack: function () {
-      this.$router.go(-1);
+      this.$router.push({ name: 'Presentation' });
     },
     showExample(effect) {
       const el = document.getElementById(effect);
