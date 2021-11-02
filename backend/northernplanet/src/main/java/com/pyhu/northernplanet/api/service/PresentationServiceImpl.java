@@ -140,6 +140,7 @@ public class PresentationServiceImpl implements PresentationService {
       try {
         InputStream inputStream = new FileInputStream(slide.getDirectory());
         slideByteArray = IOUtils.toByteArray(inputStream);
+        inputStream.close();
       } catch (Exception e) {
         log.error(
             "[getPresentationDetail - service] Failed to get inputStream. slideDirectory : {}",
@@ -170,7 +171,7 @@ public class PresentationServiceImpl implements PresentationService {
     List<Slide> slides = new LinkedList<>();
     MultipartFile convFile = pptToPngReq.getPpt();
     String originalFileName = convFile.getOriginalFilename();
-    String pptFolderDirectory = presentationDirectory + "/" + pptToPngReq.getUserId() + "/ppt";
+    String pptFolderDirectory = presentationDirectory + "/" + pptToPngReq.getUserId();
     File pptFolder = new File(pptFolderDirectory);
     if (!pptFolder.exists()) {
       pptFolder.mkdirs();
@@ -178,8 +179,9 @@ public class PresentationServiceImpl implements PresentationService {
 
     File pptFile = new File(pptFolderDirectory + "/" + originalFileName);
     convFile.transferTo(pptFile);
-    XMLSlideShow ppt = new XMLSlideShow(new FileInputStream(pptFile));
     log.info("[createPpt - service] file successfully created");
+    XMLSlideShow ppt = new XMLSlideShow(new FileInputStream(pptFile));
+    pptFile.delete();
 
     //getting the dimensions and size of the slide
     Dimension pgSize = ppt.getPageSize();
@@ -220,9 +222,13 @@ public class PresentationServiceImpl implements PresentationService {
         folder.mkdirs();
       }
       String saveName = i + ".png";
+      // save images
       FileOutputStream out = new FileOutputStream(folderDirectory + "/" + saveName);
       javax.imageio.ImageIO.write(img, "png", out);
+      out.close();
       log.info("[createPpt - service] image successfully created");
+
+      // save slides
       Slide slide = Slide.builder()
           .saveName(saveName)
           .originalName(pptFile.getName().substring(0, pptFile.getName().lastIndexOf('.')))

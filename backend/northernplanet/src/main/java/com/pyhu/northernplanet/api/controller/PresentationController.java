@@ -15,9 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -105,9 +103,9 @@ public class PresentationController {
       e.printStackTrace();
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-    return new ResponseEntity<>(presentationDetailGetRes, httpHeaders, HttpStatus.OK);
+//    HttpHeaders httpHeaders = new HttpHeaders();
+//    httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+    return new ResponseEntity<>(presentationDetailGetRes, HttpStatus.OK);
   }
 
   @PostMapping("/ppt")
