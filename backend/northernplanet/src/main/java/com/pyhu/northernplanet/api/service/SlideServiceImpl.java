@@ -1,12 +1,11 @@
 package com.pyhu.northernplanet.api.service;
 
 import com.pyhu.northernplanet.api.request.ScriptReq;
-import com.pyhu.northernplanet.api.response.ScriptRes;
+import com.pyhu.northernplanet.api.response.SlideRes;
 import com.pyhu.northernplanet.common.exception.BadRequestException;
 import com.pyhu.northernplanet.db.entity.Slide;
 import com.pyhu.northernplanet.db.repository.SlideRepository;
 import java.io.IOException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,18 +18,20 @@ public class SlideServiceImpl implements SlideService {
   private final SlideRepository slideRepository;
 
   @Override
-  public ScriptRes getScript(Long slideId) throws IOException {
-    Slide currentSlide = slideRepository.findById(slideId).orElse(null);
+  public SlideRes getScript(Long slideId) throws IOException {
+    Slide slide = slideRepository.findById(slideId).orElse(null);
 
-    if (currentSlide == null) {
+    if (slide == null) {
       throw new BadRequestException("존재하지 않는 슬라이드 id입니다.");
     }
 
-    ScriptRes scriptRes;
-    if (currentSlide.getScript() == null) {
-      scriptRes = new ScriptRes(slideId, "");
+    SlideRes scriptRes;
+    if (slide.getScript() == null) {
+      scriptRes = new SlideRes(slide.getSlideId(), slide.getSaveName(),
+          slide.getOriginalName(), slide.getDirectory(), "", slide.getSequence());
     } else {
-      scriptRes = new ScriptRes(slideId, currentSlide.getScript());
+      scriptRes = new SlideRes(slide.getSlideId(), slide.getSaveName(),
+          slide.getOriginalName(), slide.getDirectory(), slide.getScript(), slide.getSequence());
     }
 
     return scriptRes;

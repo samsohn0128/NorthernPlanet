@@ -1,7 +1,7 @@
 package com.pyhu.northernplanet.api.controller;
 
 import com.pyhu.northernplanet.api.request.ScriptReq;
-import com.pyhu.northernplanet.api.response.ScriptRes;
+import com.pyhu.northernplanet.api.response.SlideRes;
 import com.pyhu.northernplanet.api.service.SlideService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,17 +27,17 @@ public class SlideController {
 
   private final SlideService scriptService;
 
-  @GetMapping("/script")
-  @ApiOperation(value = "대본 조회")
+  @GetMapping("")
+  @ApiOperation(value = "슬라이드(대본 포함) 조회")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity getScript(@RequestParam(required = true) Long slideId) {
-    log.info("[getScript - controller]");
+    log.info("[getSlide - controller]");
     try {
-      return new ResponseEntity<ScriptRes>(scriptService.getScript(slideId), HttpStatus.OK);
+      return new ResponseEntity<SlideRes>(scriptService.getScript(slideId), HttpStatus.OK);
     } catch (Exception e) {
-      log.error("[getScript - controller] Failed to get script");
+      log.error("[getSlide - controller] Failed to get slide");
       e.printStackTrace();
       return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
