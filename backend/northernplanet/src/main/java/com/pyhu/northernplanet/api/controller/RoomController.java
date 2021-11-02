@@ -1,6 +1,8 @@
 package com.pyhu.northernplanet.api.controller;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,17 +44,17 @@ public class RoomController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "사용자 없음"),
       @ApiResponse(code = 500, message = "서버 오류")})
-  public ApiResponseDto createRoom(
+  public ResponseEntity createRoom(
       @RequestBody @ApiParam(value = "방정보", required = true) RoomPostReq roomInfo) {
     try {
       log.info("[register] room register info: {}", roomInfo);
       roomService.createRoom(roomInfo);
 
-      return ApiResponseDto.success();
+      return new ResponseEntity(HttpStatus.OK);
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return ApiResponseDto.fail("방 생성 실패했습니다.");
+    return new ResponseEntity(HttpStatus.BAD_REQUEST);
   }
 
   //
@@ -113,7 +115,7 @@ public class RoomController {
       @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "사용자 없음"),
       @ApiResponse(code = 409, message = "이미 존재하는 유저"),
       @ApiResponse(code = 500, message = "서버 오류")})
-  public ApiResponseDto<List<RoomGetRes>> showRoomsByUserId(@PathVariable("userId") Long userId) {
+  public ResponseEntity<List<RoomGetRes>> showRoomsByUserId(@PathVariable("userId") Long userId) {
     List<RoomGetRes> rooms = null;
     try {
       // Long userId = userService.getUserIdByOauthId(oauthId);
@@ -122,12 +124,12 @@ public class RoomController {
       for (RoomGetRes item : rooms) {
         item.setParticipants(participantService.getParticipantByRoomId(item.getRoomId()));
       }
-      return ApiResponseDto.success(rooms);
+      return new ResponseEntity<>(rooms, HttpStatus.OK);
     } catch (Exception e) {
       log.error(String.valueOf(e));
     }
 
-    return ApiResponseDto.fail(rooms, "방 정보를 가져올 수 없습니다.");
+    return new ResponseEntity<>(rooms, HttpStatus.BAD_REQUEST);
   }
   //
   // @GetMapping("/onlive/{roomId}")

@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,17 +67,17 @@ public class UserController {
       @ApiResponse(code = 500, message = "서버 오류")})
   @PreAuthorize("hasRole('USER')")
   @GetMapping("/oauth2/login")
-  public ApiResponseDto<UserOauthDto> getCurrentUser(
+  public ResponseEntity<UserOauthDto> getCurrentUser(
       @ApiIgnore @CurrentUser UserPrincipal userPrincipal) {
     log.info("getCurrentUser: userPrincipal - {}", userPrincipal);
     UserOauthDto user = null;
     try {
       user = userService.getOauthUserByOauthId(userPrincipal.getPassword());
-      return ApiResponseDto.success(user);
+      return new ResponseEntity<>(user, HttpStatus.OK);
     } catch (Exception e) {
       log.error("[getCurrentUser] ", e);
     }
-    return ApiResponseDto.fail(user, "사용자 정보를 가져오는데 실패했습니다.");
+    return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
   }
 //  @PostMapping("/register")
 //  @ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
