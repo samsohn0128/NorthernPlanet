@@ -101,7 +101,7 @@
                 <th scope="row" class="ps-3">{{ index + 1 }}</th>
                 <td class="ps-3">{{ participant.name }}</td>
                 <td class="ps-3">{{ participant.email }}</td>
-                <td class="ps-3">{{ participant.codeId.codeName }}</td>
+                <td class="ps-3">{{ participant.code.codeName }}</td>
                 <td>
                   <div v-if="index > 0 && isManager">
                     <button
@@ -192,7 +192,7 @@ export default {
   },
   data() {
     return {
-      user: this.$store.state.users.login,
+      user: this.$store.state.users.user,
       datetime: this.$store.state.rooms.room.startTime,
       roomName: this.$store.state.rooms.room.name,
       description: this.$store.state.rooms.room.description,
@@ -273,7 +273,7 @@ export default {
           this.participants.push({
             name: this.participant.data.name,
             email: this.participantAccount,
-            codeId: {
+            code: {
               codeId: this.roleSelected.split('-')[0],
               codeName: this.roleSelected.split('-')[1],
             },

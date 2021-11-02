@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
@@ -21,8 +23,8 @@ public class Code {
 
   @Column(name = "code_id")
   @Id
-  String codeId;
+  private String codeId;
 
-  String codeName;
+  private String codeName;
 
 }

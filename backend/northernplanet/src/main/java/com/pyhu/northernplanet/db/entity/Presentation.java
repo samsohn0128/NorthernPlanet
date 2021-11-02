@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
@@ -20,23 +22,25 @@ import lombok.Data;
 @Data
 @Builder
 @DynamicInsert
+@NoArgsConstructor
+@AllArgsConstructor
 public class Presentation {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "presentation_id")
-  Long presentationId;
+  private Long presentationId;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
-  User user;
+  private User user;
 
-  String name;
+  private String name;
 
-  int size;
+  private int size;
 
   @Column(name = "upload_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  LocalDateTime upload_time;
+  private LocalDateTime upload_time;
 
   @OneToMany(mappedBy = "presentation", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference

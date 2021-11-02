@@ -31,8 +31,12 @@ public class UserServiceImpl implements UserService {
   public UserOauthDto getOauthUserByOauthId(String oauthId) {
     User user = userRepository.findByOauthId(oauthId).orElseThrow(
         () -> new UsernameNotFoundException("User not found with oauthId : " + oauthId));
-    UserOauthDto userOauthDto = UserOauthDto.builder().email(user.getEmail()).name(user.getName())
-        .image(user.getImage()).oauthId(user.getOauthId()).build();
+    UserOauthDto userOauthDto = UserOauthDto.builder()
+        .userId(user.getUserId())
+        .email(user.getEmail())
+        .name(user.getName())
+        .image(user.getImage())
+        .oauthId(user.getOauthId()).build();
     log.info("getOauthUserByOauthId: {}", user);
     return userOauthDto;
   }

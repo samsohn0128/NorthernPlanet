@@ -14,12 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Api
 @RestController
 @CrossOrigin
 @RequestMapping("/api/presentaion")
 @RequiredArgsConstructor
-@Slf4j
 public class PresentationController {
 
   private PresentationService presentationService;

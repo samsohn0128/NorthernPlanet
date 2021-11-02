@@ -208,7 +208,7 @@ export default {
 
       this.getUsername().then(() => {
         if (!this.participants) {
-          this.$alertify.error('사용자 게정이 없습니다.');
+          this.$alertify.error('사용자 계정이 없습니다.');
         } else {
           this.participants.push({
             name: this.participant.data.name,

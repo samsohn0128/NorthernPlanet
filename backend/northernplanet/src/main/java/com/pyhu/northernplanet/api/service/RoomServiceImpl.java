@@ -28,9 +28,24 @@ public class RoomServiceImpl implements RoomService {
   private final ParticipantRepository participantRepository;
 
   @Override
-  public Room getRoom(Long roomId) {
+  public RoomGetRes getRoom(Long roomId, List<ParticipantDto> participants) {
     Room room = roomRepository.getById(roomId);
-    return room;
+
+    RoomGetRes roomget = RoomGetRes.builder()
+        .roomId(room.getRoomId())
+        .name(room.getName())
+        .description(room.getDescription())
+        .startTime(room.getStartTime())
+        .managerId(room.getUser().getUserId())
+        .managerName(room.getUser().getName())
+        .participants(participants)
+        .build();
+    if (room.getEndTime() == null) {
+      roomget.setEndTime(null);
+    } else {
+      roomget.setEndTime(room.getEndTime());
+    }
+    return roomget;
   }
 
   @Override
@@ -89,8 +104,10 @@ public class RoomServiceImpl implements RoomService {
       code = Code.builder().codeId(person.get(i).getCode().getCodeId())
           .codeName(person.get(i).getCode().getCodeName()).build();
 
-      participant = Participant.builder().code(code)
-          .user(userRepository.findByEmail(person.get(i).getEmail())).room(room).build();
+      participant = Participant.builder()
+          .code(code)
+          .user(userRepository.findByEmail(person.get(i).getEmail()))
+          .room(room).build();
       log.info("[saveParticipants] participant: {}", participant);
       participantRepository.save(participant);
     }
