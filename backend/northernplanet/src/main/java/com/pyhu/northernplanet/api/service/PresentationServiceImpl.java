@@ -86,8 +86,9 @@ public class PresentationServiceImpl implements PresentationService {
   public int createPPt(PPTtoPngReq ppTtoPngReq) throws IOException {
     List<Slide> slides = new LinkedList<>();
     int cnt = 1;
-    File file= ppTtoPngReq.getPpt();
-
+    MultipartFile convfile= ppTtoPngReq.getPpt();
+    File file = new File(aeeunpath+"/"+convfile.getOriginalFilename());
+    file.createNewFile();
     XMLSlideShow ppt = new XMLSlideShow(new FileInputStream(file));
     System.out.println("file successfully created");
 
@@ -109,7 +110,7 @@ public class PresentationServiceImpl implements PresentationService {
       //creating an image file as output
       FileOutputStream out = new FileOutputStream(aeeunpath+"/ppt_image_" + i + ".png");
       javax.imageio.ImageIO.write(img, "png", out);
-      Slide slid = Slide.builder().saveName("ppt_image_" + i + ".png")
+      Slide slid = Slide.builder().saveName(i + ".png")
                       .originalName(file.getName())
                               .directory(aeeunpath+"/ppt_image_" + i + ".png").build();
       slides.add(slid);

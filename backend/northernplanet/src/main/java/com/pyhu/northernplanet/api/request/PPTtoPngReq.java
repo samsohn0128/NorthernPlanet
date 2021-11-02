@@ -9,6 +9,6 @@ import java.io.File;
 
 public class PPTtoPngReq {
     private Long userId;
-    private File ppt;
+    private MultipartFile ppt;
 
 }

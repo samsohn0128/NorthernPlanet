@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PresentationController {
 
-  private PresentationService presentationService;
+  private final PresentationService presentationService;
 
   @PostMapping("/")
   @ApiOperation(value = "발표자료 업로드")
@@ -47,7 +47,7 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
           @ApiResponse(code = 401, message = "인증 실패"),
           @ApiResponse(code = 500, message = "서버 오류")})
-  public ResponseEntity<Integer> createPpt(PPTtoPngReq ppTtoPngReq) {
+  public ResponseEntity<Integer> createPpt(@ModelAttribute PPTtoPngReq ppTtoPngReq) {
     log.info("[createPpt - controller]");
     try {
       presentationService.createPPt(ppTtoPngReq);
