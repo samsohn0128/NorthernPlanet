@@ -18,7 +18,7 @@ function loginUser(userData) {
 }
 
 function findUser(email) {
-  return instance.get(email);
+  return instance.get('search/' + email);
 }
 
 function checkUser(email) {

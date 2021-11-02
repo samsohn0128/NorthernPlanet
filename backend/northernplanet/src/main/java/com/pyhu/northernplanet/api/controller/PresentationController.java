@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Api
+@Api(value = "프레젠테이션 관련 API", tags = {"Presentation"})
 @RestController
 @CrossOrigin
 @RequestMapping("/api/presentaion")

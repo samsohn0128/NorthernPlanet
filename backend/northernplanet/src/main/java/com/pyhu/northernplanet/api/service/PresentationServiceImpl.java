@@ -25,7 +25,7 @@ import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
+@Service("PresentationService")
 @RequiredArgsConstructor
 @Slf4j
 public class PresentationServiceImpl implements PresentationService {

@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 
 @RequiredArgsConstructor
-@Service("participantService")
+@Service("ParticipantService")
 public class ParticipantServiceImpl implements ParticipantService {
 
   private final ParticipantRepository participantRepository;

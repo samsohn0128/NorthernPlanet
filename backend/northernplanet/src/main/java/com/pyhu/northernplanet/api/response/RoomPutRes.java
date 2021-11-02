@@ -14,8 +14,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@ApiModel("RoomGetResponse")
-public class RoomGetRes extends RoomDto {
+@ApiModel("RoomPutResponse")
+public class RoomPutRes extends RoomDto {
 
   @ApiModelProperty(example = "방 아이디")
   private Long roomId;
@@ -26,15 +26,13 @@ public class RoomGetRes extends RoomDto {
   @ApiModelProperty(example = "방장 이름")
   private String managerName;
 
-
   @Builder
-  public RoomGetRes(String name, String description, LocalDateTime startTime,
-      List<ParticipantDto> participants, LocalDateTime endTime, Long managerId,
-      String managerName, Long roomId) {
+  public RoomPutRes(String name, String description, LocalDateTime startTime,
+      List<ParticipantDto> participants, Long roomId, LocalDateTime endTime, Long managerId, String managerName) {
     super(name, description, startTime, participants);
-    this.roomId = roomId;
-    this.endTime = endTime;
-    this.managerId = managerId;
-    this.managerName = managerName;
+    this.roomId=roomId;
+    this.endTime=endTime;
+    this.managerId=managerId;
+    this.managerName=managerName;
   }
 }

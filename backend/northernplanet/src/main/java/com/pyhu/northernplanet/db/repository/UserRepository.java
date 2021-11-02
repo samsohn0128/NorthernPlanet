@@ -11,7 +11,7 @@ import com.pyhu.northernplanet.db.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-  User findByEmail(String email);
+  Optional<User> findByEmail(String email);
 
   User findByUserId(int user_id);
 
