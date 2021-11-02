@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Api
+@Api(value = "프레젠테이션 관련 API", tags = {"Presentation"})
 @RestController
 @CrossOrigin
 @RequestMapping("/api/presentaion")
 @RequiredArgsConstructor
 public class PresentationController {
 
-  private PresentationService presentationService;
+  private final PresentationService presentationService;
 
   @PostMapping("/")
   @ApiOperation(value = "발표자료 업로드")

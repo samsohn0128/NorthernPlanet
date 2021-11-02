@@ -1,13 +1,17 @@
 package com.pyhu.northernplanet.api.controller;
 
+import com.pyhu.northernplanet.api.request.RoomPutReq;
+import com.pyhu.northernplanet.api.response.RoomPutRes;
 import com.pyhu.northernplanet.common.dto.ParticipantDto;
 import com.pyhu.northernplanet.db.entity.Room;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,15 +65,15 @@ public class RoomController {
   @GetMapping("/list/{userId}")
   @ApiOperation(value = "사용자 아이디가 참가자로 포함된 전체 방 보기")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
-      @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "사용자 없음"),
-      @ApiResponse(code = 409, message = "이미 존재하는 유저"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "사용자 없음"),
       @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity<List<RoomGetRes>> getRoomListByUserId(@PathVariable("userId") Long userId) {
     List<RoomGetRes> rooms = null;
     try {
       // Long userId = userService.getUserIdByOauthId(oauthId);
       log.info("[showRoomsByUserId] userId: {}", userId);
-      rooms = roomService.findbyuser(userId);
+      rooms = roomService.getRoomListByUserId(userId);
       for (RoomGetRes item : rooms) {
         item.setParticipants(participantService.getParticipantByRoomId(item.getRoomId()));
       }
@@ -85,7 +89,7 @@ public class RoomController {
   @ApiOperation(value = "방 하나의 정보 보기")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
-      @ApiResponse(code = 404, message = "사용자 없음"),
+      @ApiResponse(code = 404, message = "방 정보 없음"),
       @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity<RoomGetRes> getRoomByRoomId(@PathVariable("roomId") Long roomId) {
     RoomGetRes room = null;
@@ -99,41 +103,47 @@ public class RoomController {
     return new ResponseEntity<>(room, HttpStatus.BAD_REQUEST);
   }
 
-  //
-  // @PutMapping("/update/{roomId}")
-  // @ApiOperation(value = "방 정보 수정")
-  // @ApiResponses({@ApiResponse(code = 200, message = "성공"),
-  // @ApiResponse(code = 401, message = "인증 실패"),
-  // @ApiResponse(code = 404, message = "사용자 없음"), @ApiResponse(code = 500, message = "서버 오류")})
-  // public ResponseEntity<? extends BaseResponseBody> update(
-  // @RequestBody @ApiParam(value = "방업데이트", required = true) RoomUpdateReq roomInfo) {
-  // try {
-  // log.info("[update] roomUpdateReq: {}", roomInfo);
-  // Rooms room = roomService.updateRoom(roomInfo);
-  // log.info("[update] room: {}", room);
-  // return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // }
-  // return ResponseEntity.status(500).body(BaseResponseBody.of(500, "fail"));
-  // }
-  //
-  // @DeleteMapping("/delete/{roomId}")
-  // @ApiOperation(value = "방 삭제")
-  // @ApiResponses({@ApiResponse(code = 200, message = "성공"),
-  // @ApiResponse(code = 401, message = "인증 실패"),
-  // @ApiResponse(code = 404, message = "사용자 없음"), @ApiResponse(code = 500, message = "서버 오류")})
-  // public ResponseEntity<? extends BaseResponseBody> deleteRoom(@PathVariable("roomId") int
-  // roomId) {
-  // log.info("[DeleteRoom] room {} is deleted - controller", roomId);
-  // Rooms room = roomService.getRoom(roomId);
-  // roomService.deleteRoom(roomId);
-  //
-  // if (room == null) {
-  // return ResponseEntity.status(500).body(BaseResponseBody.of(404, "방이 없습니다."));
-  // }
-  // return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
-  // }
+
+  @PutMapping("/{roomId}")
+  @ApiOperation(value = "방 정보 수정")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "방 정보 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<?> updateRoom(
+      @RequestBody @ApiParam(value = "방업데이트", required = true) RoomPutReq roomInfo) {
+    RoomPutRes room=null;
+    try {
+      log.info("[update] roomUpdateReq: {}", roomInfo);
+      room = roomService.updateRoom(roomInfo);
+      log.info("[update] room: {}", room);
+      return new ResponseEntity<>(room, HttpStatus.OK);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return new ResponseEntity<>(room, HttpStatus.BAD_REQUEST);
+  }
+
+  @DeleteMapping("/{roomId}")
+  @ApiOperation(value = "방 삭제")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "방 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<?> deleteRoom(@PathVariable("roomId") Long roomId) {
+    log.info("[DeleteRoom] room {} is deleted - controller", roomId);
+    try {
+      Room room = roomService.getRoom(roomId);
+      if (room == null) {
+        return ResponseEntity.status(404).body(roomId);
+      }
+      roomService.deleteRoom(roomId);
+      return ResponseEntity.status(200).body(roomId);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
   //
   // @GetMapping("/")
   // @ApiOperation(value = "전체 방 보기")

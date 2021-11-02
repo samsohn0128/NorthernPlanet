@@ -52,7 +52,7 @@
         </label>
         <div class="form-group mb-4" v-if="isManager">
           <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-10">
               <input
                 class="form-control"
                 type="text"
@@ -60,18 +60,6 @@
                 v-model="participantAccount"
                 @keyup="inputChanged"
               />
-            </div>
-            <div class="col-md-5">
-              <select
-                name="role"
-                id="role"
-                class="form-select"
-                aria-label="Default select example"
-                v-model="roleSelected"
-              >
-                <option value="100-Presenter">Presenter</option>
-                <option value="000-Viewer">Viewer</option>
-              </select>
             </div>
             <div class="col-md-2">
               <button
@@ -159,29 +147,22 @@
         </div>
       </div>
     </form>
-    <RoomDeleteModal
-      v-bind:roomId="this.$store.state.rooms.room.room_id"
-    ></RoomDeleteModal>
+    <RoomDeleteModal v-bind:roomId="this.room.roomId"></RoomDeleteModal>
   </section>
 </template>
 
 <script>
-import Vue from 'vue';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import { updateRoom } from '@/api/rooms.js';
 import { findUser } from '@/api/users.js';
 import { deletetot } from '@/api/file.js';
-import VueAlertify from 'vue-alertify';
 import moment from 'moment';
-import { mapGetters } from 'vuex';
 import RoomDeleteModal from './RoomDeleteModal.vue';
 import UploadDialog from './UploadDialog';
 import RoomFiledetail from './RoomFiledetail.vue';
 import { showfiledetail } from '@/api/file.js';
-
-Vue.use(VueAlertify);
-
+import store from '@/store';
 export default {
   name: 'RoomContent',
   components: {
@@ -192,33 +173,27 @@ export default {
   },
   data() {
     return {
-      user: this.$store.state.users.user,
-      datetime: this.$store.state.rooms.room.startTime,
-      roomName: this.$store.state.rooms.room.name,
-      description: this.$store.state.rooms.room.description,
-      participants: this.$store.state.rooms.room.participants,
+      datetime: store.getters['rooms/room'].startTime,
+      roomName: store.getters['rooms/room'].name,
+      description: store.getters['rooms/room'].description,
+      participants: store.getters['rooms/room'].participants,
       participant: '',
       participantAccount: '',
-      roleSelected: '',
       nowDateTime: moment(new Date()).format('YYYY-MM-DD HH:mm'),
       isManager: false,
-      userid: this.$store.state.users.login.userid,
-      roomid: this.$store.state.rooms.room.room_id,
       files: [],
     };
   },
   created() {
     window.scrollTo(0, 0);
-    if (
-      this.$store.state.rooms.room.manager_id ==
-        this.$store.state.users.login.userid &&
-      !this.$store.state.rooms.room.endTime
-    ) {
+    //사용자가 방장이고 방이 종료되지 않았을 때
+    if (this.room.managerId == this.user.userId && !this.room.endTime) {
       this.isManager = true;
     }
+    console.log('am I manager? ', this.isManager);
     const formData = new FormData();
-    formData.append('user_id', this.userid);
-    formData.append('room_id', this.roomid);
+    formData.append('userId', this.user.userId);
+    formData.append('roomId', this.room.roomId);
     showfiledetail(formData)
       .then(data => {
         this.files = data.data;
@@ -229,16 +204,21 @@ export default {
       });
   },
   computed: {
-    ...mapGetters(['users', 'room']),
     getParticipants() {
       return this.participants;
+    },
+    user() {
+      return store.getters['users/getUser'];
+    },
+    room() {
+      return store.getters['rooms/room'];
     },
   },
   methods: {
     deletefile() {
       const formDa = new FormData();
-      formDa.append('user_id', this.userid);
-      formDa.append('room_id', this.roomid);
+      formDa.append('userId', this.user.userId);
+      formDa.append('roomId', this.room.roomId);
       deletetot(formDa)
         .then(data => {
           console.log(data);
@@ -250,7 +230,7 @@ export default {
     },
     addParticipant() {
       let msg = '';
-      if (!this.participantAccount || !this.roleSelected) {
+      if (!this.participantAccount) {
         msg = '추가하려는 사용자 이메일 및 역할을 입력해주세요';
         this.$alertify.error(msg);
         return;
@@ -274,8 +254,8 @@ export default {
             name: this.participant.data.name,
             email: this.participantAccount,
             code: {
-              codeId: this.roleSelected.split('-')[0],
-              codeName: this.roleSelected.split('-')[1],
+              codeId: '002',
+              codeName: 'Presenter',
             },
           });
         }
@@ -305,8 +285,8 @@ export default {
         return;
       } else {
         let roomData = {
-          user_id: this.user.userid,
-          room_id: this.$store.state.rooms.room.room_id,
+          userId: this.user.userId,
+          roomId: this.room.roomId,
           name: this.roomName,
           description: this.description,
           startTime: this.datetime,
@@ -320,8 +300,7 @@ export default {
               return;
             } else {
               this.$alertify.success('방 정보가 수정됐습니다.');
-              this.$store.dispatch('rooms/setRoom', roomData);
-              //this.$router.push('/dashboard/info');
+              store.dispatch('rooms/setRoom', roomData);
             }
           })
           .catch(() => {
@@ -359,7 +338,7 @@ export default {
       );
     },
     inputChanged() {
-      this.$store.dispatch('GET_ALL_USERS', this.participantAccount);
+      store.dispatch('GET_ALL_USERS', this.participantAccount);
     },
   },
 };

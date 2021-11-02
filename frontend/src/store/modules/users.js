@@ -6,13 +6,6 @@ export default {
   namespaced: true,
   state: () => ({
     test: 'test',
-    login: {
-      isLogin: false,
-      userId: '',
-      useremail: '',
-      username: '',
-      //userpwd: '',
-    },
     users: [], // 전체 사용자
     user: {
       userId: '',
@@ -25,22 +18,13 @@ export default {
   }),
   mutations: {
     SET_LOGIN(state, payload) {
-      // Vue.set(state.login, 'isLogin', true);
-      // console.log('login: ', payload);
       state.login.isLogin = true;
       state.login.userid = payload.id;
       state.login.username = payload.name;
       state.login.useremail = payload.email;
-      //state.login.userpwd = payload.password;
       router.push('/dashboard');
     },
     SET_LOGOUT(state) {
-      state.login.isLogin = false;
-      state.login.userid = '';
-      state.login.username = '';
-      state.login.useremail = '';
-      //state.login.userpwd = '';
-      // console.log('SET_LOGOUT');
       state.user.userId = '';
       state.user.email = '';
       state.user.name = '';
@@ -62,7 +46,6 @@ export default {
       state.user.image = payload.image;
       state.user.oauthId = payload.oauthId;
       state.user.token = payload.token;
-      console.log('set user: ', state.user);
     },
   },
   actions: {
@@ -84,7 +67,7 @@ export default {
       return state.login.isLogin;
     },
     getUserid(state) {
-      return state.login.userid;
+      return state.user.userId;
     },
     userInfo(state) {
       return state.login;
