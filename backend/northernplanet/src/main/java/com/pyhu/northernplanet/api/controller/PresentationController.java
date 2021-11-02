@@ -1,5 +1,6 @@
 package com.pyhu.northernplanet.api.controller;
 
+import com.pyhu.northernplanet.api.request.PPTtoPngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.service.PresentationService;
 import com.pyhu.northernplanet.api.service.Transcoder;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class PresentationController {
 
   private PresentationService presentationService;
-  private Transcoder trans;
+
   @PostMapping("/")
   @ApiOperation(value = "발표자료 업로드")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
@@ -46,10 +47,10 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
           @ApiResponse(code = 401, message = "인증 실패"),
           @ApiResponse(code = 500, message = "서버 오류")})
-  public ResponseEntity<Integer> createPpt() {
+  public ResponseEntity<Integer> createPpt(PPTtoPngReq ppTtoPngReq) {
     log.info("[createPpt - controller]");
     try {
-      trans.file();
+      presentationService.createPPt(ppTtoPngReq);
     } catch (Exception e) {
       log.error("[createPresentation - controller] Failed to created presentation");
       e.printStackTrace();
