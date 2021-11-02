@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public interface PresentationService {
 
-  public int createPresentation(PresentationPostReq presentationPostReq) throws IOException;
-  public int createPPt(PPTtoPngReq ppTtoPngReq) throws IOException;
+  int createPresentation(PresentationPostReq presentationPostReq) throws IOException;
+  int createPPt(PPTtoPngReq ppTtoPngReq) throws IOException;
 
 }
