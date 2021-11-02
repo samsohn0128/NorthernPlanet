@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SlideDto {
 
+  private Long slideId;
+
   private Integer sequence;
 
   private String script;

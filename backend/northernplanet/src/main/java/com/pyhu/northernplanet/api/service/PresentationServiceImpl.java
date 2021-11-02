@@ -1,13 +1,14 @@
 package com.pyhu.northernplanet.api.service;
 
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
-import com.pyhu.northernplanet.api.request.SlideRequest;
 import com.pyhu.northernplanet.common.dto.PresentationDto;
 import com.pyhu.northernplanet.common.dto.SlideDto;
 import com.pyhu.northernplanet.db.entity.Presentation;
 import com.pyhu.northernplanet.db.entity.Slide;
+import com.pyhu.northernplanet.db.entity.User;
 import com.pyhu.northernplanet.db.repository.PresentationRepository;
 import com.pyhu.northernplanet.db.repository.SlideRepository;
+import com.pyhu.northernplanet.db.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -17,12 +18,14 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PresentationServiceImpl implements PresentationService {
 
+  private final UserRepository userRepository;
   private final PresentationRepository presentationRepository;
   private final SlideRepository slideRepository;
   // ubuntu
@@ -33,29 +36,41 @@ public class PresentationServiceImpl implements PresentationService {
   @Override
   public int createPresentation(PresentationPostReq presentationPostReq) throws IOException {
     log.info("[createPresentation - service]");
+
+    // save presentation
+    User user = userRepository.findById(presentationPostReq.getUserId())
+        .orElseThrow(() -> new NullPointerException());
+    LocalDateTime now = LocalDateTime.now();
+    String presentationName = presentationPostReq.getSlides().get(0).getOriginalFilename()
+        .substring(0,
+            presentationPostReq.getSlides().get(0).getOriginalFilename().lastIndexOf('.'));
+    Presentation presentation = Presentation.builder()
+        .user(user)
+        .name(presentationName)
+        .size(presentationPostReq.getSlides().size())
+        .uploadTime(now)
+        .build();
+    log.info("[createPresentation - service] Presentation : {}", presentation);
+    presentation = presentationRepository.saveAndFlush(presentation);
+
     // save slides
     List<Slide> slides = new LinkedList<>();
-    presentationPostReq.getSlides().forEach(slideRequest -> {
-      String originalFileName = slideRequest.getSlide().getOriginalFilename();
+    for (int i = 0; i < presentationPostReq.getSlides().size(); i++) {
+      MultipartFile slideFile = presentationPostReq.getSlides().get(i);
+      String originalFileName = slideFile.getOriginalFilename();
       String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
-      Slide slide = Slide.builder().saveName(slideRequest.getSequenceNum() + "")
+      String saveName = i + extensionName;
+      Slide slide = Slide.builder()
+          .saveName(saveName)
           .originalName(originalFileName)
           .directory(presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
-              + presentationPostReq.getPresentationName() + "/" + slideRequest.getSequenceNum()
-              + extensionName)
+              + presentation.getPresentationId() + "/" + saveName)
           .build();
       log.info("[createPresentation - service] Slide : {}", slide);
       slides.add(slide);
-    });
+    }
     slideRepository.saveAll(slides);
 
-    // save presentation
-    LocalDateTime now = LocalDateTime.now();
-    Presentation presentation =
-        Presentation.builder().name(presentationPostReq.getPresentationName())
-            .size(presentationPostReq.getSlides().size()).uploadTime(now).build();
-    log.info("[createPresentation - service] Presentation : {}", presentation);
-    presentation = presentationRepository.saveAndFlush(presentation);
     // save presentation files
     String folderDirectory = presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
         + presentation.getPresentationId() + "/";
@@ -65,11 +80,11 @@ public class PresentationServiceImpl implements PresentationService {
     }
 
     for (int i = 0; i < presentationPostReq.getSlides().size(); i++) {
-      SlideRequest slideRequest = presentationPostReq.getSlides().get(i);
-      String originalFileName = slideRequest.getSlide().getOriginalFilename();
+      MultipartFile slideFile = presentationPostReq.getSlides().get(i);
+      String originalFileName = slideFile.getOriginalFilename();
       String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
-      File slide = new File(folderDirectory + slideRequest.getSequenceNum() + extensionName);
-      slideRequest.getSlide().transferTo(slide);
+      File slide = new File(folderDirectory + "/" + i + extensionName);
+      slideFile.transferTo(slide);
     }
     return 0;
   }
