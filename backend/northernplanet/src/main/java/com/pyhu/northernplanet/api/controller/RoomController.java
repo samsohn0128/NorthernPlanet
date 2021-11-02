@@ -71,7 +71,6 @@ public class RoomController {
   public ResponseEntity<List<RoomGetRes>> getRoomListByUserId(@PathVariable("userId") Long userId) {
     List<RoomGetRes> rooms = null;
     try {
-      // Long userId = userService.getUserIdByOauthId(oauthId);
       log.info("[showRoomsByUserId] userId: {}", userId);
       rooms = roomService.getRoomListByUserId(userId);
       for (RoomGetRes item : rooms) {

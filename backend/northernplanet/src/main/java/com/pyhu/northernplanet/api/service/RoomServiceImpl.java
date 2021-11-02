@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.pyhu.northernplanet.api.request.RoomPostReq;
 import com.pyhu.northernplanet.api.response.RoomGetRes;
@@ -84,8 +85,13 @@ public class RoomServiceImpl implements RoomService {
   public void createRoom(RoomPostReq roomInfo) {
     log.info("[createRoom] room post req: {}", roomInfo);
     Room room =
-        Room.builder().name(roomInfo.getName()).onLive(false).description(roomInfo.getDescription())
-            .user(userRepository.findByEmail(roomInfo.getEmail())).build();
+        Room.builder()
+            .name(roomInfo.getName())
+            .onLive(false)
+            .description(roomInfo.getDescription())
+            .user(userRepository.findByEmail(roomInfo.getEmail())
+                .orElseThrow( () -> new UsernameNotFoundException("User not found with Email : " + roomInfo.getEmail())))
+            .build();
 
     if (roomInfo.getStartTime() == null) {
       LocalDateTime datetime = LocalDateTime.now();
@@ -146,7 +152,8 @@ public class RoomServiceImpl implements RoomService {
 
       participant = Participant.builder()
           .code(code)
-          .user(userRepository.findByEmail(person.get(i).getEmail()))
+          .user(userRepository.findByEmail(person.get(i).getEmail())
+              .orElseThrow( () -> new UsernameNotFoundException("User not found with Email")))
           .room(room).build();
       log.info("[saveParticipants] participant: {}", participant);
       participantRepository.save(participant);
