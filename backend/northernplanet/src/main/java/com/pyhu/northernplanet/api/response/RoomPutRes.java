@@ -18,13 +18,13 @@ import lombok.ToString;
 public class RoomPutRes extends RoomDto {
 
   @ApiModelProperty(example = "방 아이디")
-  Long roomId;
+  private Long roomId;
   @ApiModelProperty(example = "방 종료 시간")
-  LocalDateTime endTime;
+  private LocalDateTime endTime;
   @ApiModelProperty(example = "방장 아이디")
-  Long managerId;
+  private Long managerId;
   @ApiModelProperty(example = "방장 이름")
-  String managerName;
+  private String managerName;
 
   @Builder
   public RoomPutRes(String name, String description, LocalDateTime startTime,
