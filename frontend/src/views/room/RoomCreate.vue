@@ -78,7 +78,6 @@
                       type="text"
                       placeholder="이메일을 검색하세요."
                       v-model="participantAccount"
-                      @keyup="inputChanged"
                     />
                   </div>
 
@@ -298,9 +297,9 @@ export default {
         )
       );
     },
-    inputChanged() {
-      this.$store.dispatch('users/GET_ALL_USERS', this.participantAccount);
-    },
+    // inputChanged() {
+    //   this.$store.dispatch('users/GET_ALL_USERS', this.participantAccount);
+    // },
   },
 };
 </script>
