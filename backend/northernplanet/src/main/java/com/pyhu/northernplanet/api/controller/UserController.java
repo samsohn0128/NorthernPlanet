@@ -2,7 +2,6 @@ package com.pyhu.northernplanet.api.controller;
 
 import com.pyhu.northernplanet.api.service.UserService;
 import com.pyhu.northernplanet.common.dto.UserOauthDto;
-import com.pyhu.northernplanet.common.response.ApiResponseDto;
 import com.pyhu.northernplanet.security.CurrentUser;
 import com.pyhu.northernplanet.security.UserPrincipal;
 import io.swagger.annotations.Api;
@@ -61,7 +60,7 @@ public class UserController {
   private final UserService userService;
 
 
-  @ApiOperation(value = "사용자 정보", notes = "인증된 사용자의 정보를 반환합니다.", response = ApiResponseDto.class)
+  @ApiOperation(value = "사용자 정보", notes = "인증된 사용자의 정보를 반환합니다.")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "페이지 없음"),
       @ApiResponse(code = 500, message = "서버 오류")})

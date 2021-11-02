@@ -15,7 +15,6 @@ import com.pyhu.northernplanet.api.response.RoomGetRes;
 import com.pyhu.northernplanet.api.service.ParticipantService;
 import com.pyhu.northernplanet.api.service.RoomService;
 import com.pyhu.northernplanet.api.service.UserService;
-import com.pyhu.northernplanet.common.response.ApiResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
