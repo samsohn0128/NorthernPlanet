@@ -20,21 +20,20 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">
-          <form role="form text-left">
-            <label>제목을 입력하세요.</label>
-            <div class="input-group mb-3">
-              <input
-                type="title"
-                class="form-control"
-                placeholder="Title"
-                aria-label="Title"
-                aria-describedby="title-addon"
-                v-model="presentationName"
-              />
-            </div>
-          </form>
-        </div>
+        <label class="input-file-button" for="input-file">파일 추가하기</label>
+        <input
+          type="file"
+          multiple="multiple"
+          id="input-file"
+          style="display: none"
+          @change="selectFile"
+        />
+        <img
+          class="image"
+          :src="imgUrl.first"
+          alt=""
+          @click="dialogVisible.first = true"
+        />
         <div class="modal-footer">
           <button
             type="button"
@@ -65,28 +64,53 @@ export default {
   name: 'AddPPTModal',
   data() {
     return {
-      presentationName: '',
+      dialogVisible: { first: false },
+      imgUrl: { first: '' },
     };
   },
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
   methods: {
     async addPPT() {
-      let userData = {
-        user_id: store.getters['users/getUser'].userId,
-        presentationName: this.presentationName,
-      };
-      // 제목이 비어있을 경우 튕겨내기
-      if (userData.presentationName === '') {
-        this.$alertify.error('제목을 입력해주세요.');
-        return;
-      }
+      let formData = new FormData();
+      let imgFile = document.getElementById('input-file').files;
+      formData.append('file', imgFile);
+      formData.append('user_id', store.getters['users/getUser'].userId);
+      // let userData = {
+      //   user_id: store.getters['users/getUser'].userId,
+      //   formData,
+      // };
       try {
-        await addPresentation(userData);
-        await getPresentations(userData.user_id);
+        await addPresentation(formData);
+        await getPresentations(formData.user_id);
       } catch (exp) {
         this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
       }
     },
+    selectFile(e) {
+      const file = e.target.files[0];
+      document.getElementsByClassName('image')[0].src =
+        URL.createObjectURL(file);
+      this.imageChanged = true;
+      this.imgUrl.first = URL.createObjectURL(file);
+    },
   },
 };
 </script>
+
+<style scoped>
+.input-file-button {
+  display: flex;
+  justify-content: center;
+  width: 30%;
+  height: 10%;
+  /* height: 40px; */
+  background-color: purple;
+  /* border-radius: 50%; */
+  color: white;
+  margin-right: 35px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
