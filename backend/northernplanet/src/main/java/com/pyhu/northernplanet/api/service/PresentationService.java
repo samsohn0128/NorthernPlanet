@@ -5,5 +5,5 @@ import java.io.IOException;
 
 public interface PresentationService {
 
-  public int createPresentation(PresentationPostReq presentationPostReq) throws IOException;
+  int createPresentation(PresentationPostReq presentationPostReq) throws IOException;
 }

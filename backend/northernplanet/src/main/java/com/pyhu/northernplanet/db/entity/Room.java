@@ -14,7 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -23,7 +25,8 @@ import lombok.Builder;
 import lombok.Data;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @DynamicInsert
 @DynamicUpdate
@@ -44,7 +47,7 @@ public class Room {
   @Column(name = "startTime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime startTime;
 
-  @Column(name = "endTime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+  @Column(name = "endTime")
   private LocalDateTime endTime;
 
   @Column(name = "onLive", columnDefinition = "BOOLEAN DEFAULT FALSE")
