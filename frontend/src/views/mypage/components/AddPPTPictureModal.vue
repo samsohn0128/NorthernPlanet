@@ -97,10 +97,12 @@ export default {
       this.imgUrl.first = URL.createObjectURL(file);
 
       let imgFile = document.getElementById('input-file').files;
-      let fileList = imgFile[0].name;
+      let fileList = '';
+      for (let i = 0; i < imgFile.length; i++) {
+        fileList += imgFile[i].name + '<br>';
+      }
       let target2 = document.getElementById('showFileName');
       target2.innerHTML = fileList;
-      console.log(fileList);
     },
   },
 };
