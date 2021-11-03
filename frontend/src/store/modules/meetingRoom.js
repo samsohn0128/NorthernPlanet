@@ -2,12 +2,12 @@ import Participant from './js/participant.js';
 import Vue from 'vue';
 import router from '../../router';
 import { setRoomOnLive } from '@/api/rooms.js';
-import { BASE_URL2 } from '@/constant/index.js';
+import { BASE_URL } from '@/constant/index.js';
 import kurentoUtils from 'kurento-utils';
 import axios from 'axios';
 import _ from 'lodash';
 
-const API_SERVER_URL = BASE_URL2;
+const API_SERVER_URL = BASE_URL;
 
 export default {
   namespaced: true,

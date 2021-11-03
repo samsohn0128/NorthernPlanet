@@ -86,7 +86,7 @@
           <button
             type="button"
             class="btn bg-gradient-primary"
-            @click="join"
+            @click="sendMsgToKurento"
             data-bs-dismiss="modal"
           >
             Join
@@ -98,11 +98,9 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VueAlertify from 'vue-alertify';
-import { getRoomIsOnLive, setRoomOnLive } from '@/api/rooms.js';
+//import { getRoomIsOnLive, setRoomOnLive } from '@/api/rooms.js';
 import { mapGetters } from 'vuex';
-Vue.use(VueAlertify);
+
 export default {
   name: 'RoomReadyModal',
   props: { roomInfo: Object },
@@ -143,34 +141,34 @@ export default {
     },
     join: function () {
       if (this.isManager) {
-        const roomData = {
-          room_id: this.roomId,
-          on_live: true,
-        };
-        setRoomOnLive(roomData)
-          .then(({ status }) => {
-            if (status != 200) {
-              this.$alertify.error('방 상태변경에 실패했습니다.');
-              return;
-            }
-            // this.$alertify.success('방 상태를 활동중으로 변경했습니다.');
-            this.sendMsgToKurento();
-          })
-          .catch(() => {
-            this.$alertify.error('setRoomOnLive error!');
-          });
+        // const roomData = {
+        //   room_id: this.roomId,
+        //   on_live: true,
+        // };
+        // setRoomOnLive(roomData)
+        //   .then(({ status }) => {
+        //     if (status != 200) {
+        //       this.$alertify.error('방 상태변경에 실패했습니다.');
+        //       return;
+        //     }
+        //     // this.$alertify.success('방 상태를 활동중으로 변경했습니다.');
+        //     this.sendMsgToKurento();
+        //   })
+        //   .catch(() => {
+        //     this.$alertify.error('setRoomOnLive error!');
+        //   });
       } else {
-        getRoomIsOnLive(this.roomId)
-          .then(({ status }) => {
-            if (status != 200) {
-              this.$alertify.error('Manager 가 아직 방을 시작하지 않았습니다.');
-              return;
-            }
-            this.sendMsgToKurento();
-          })
-          .catch(() => {
-            this.$alertify.error('get room is on live error!');
-          });
+        // getRoomIsOnLive(this.roomId)
+        //   .then(({ status }) => {
+        //     if (status != 200) {
+        //       this.$alertify.error('Manager 가 아직 방을 시작하지 않았습니다.');
+        //       return;
+        //     }
+        //     this.sendMsgToKurento();
+        //   })
+        //   .catch(() => {
+        //     this.$alertify.error('get room is on live error!');
+        //   });
       }
     },
 
