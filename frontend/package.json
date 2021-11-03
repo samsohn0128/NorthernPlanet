@@ -32,7 +32,7 @@
     "vue-datetime": "^1.0.0-beta.14",
     "vue-popperjs": "^2.3.0",
     "vue-router": "^3.2.0",
-    "vue-toast-notification": "^2.0.1",
+    "vue-toastification": "^1.7.14",
     "vue-upload-component": "^2.8.20",
     "vue2-datepicker": "^3.9.2",
     "vue2-timepicker": "^1.1.6",
