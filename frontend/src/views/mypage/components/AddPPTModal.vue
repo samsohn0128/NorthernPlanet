@@ -20,21 +20,34 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <label class="input-file-button" for="input-file">파일 추가하기</label>
-        <div id="showFileName"></div>
-        <input
-          type="file"
-          multiple="multiple"
-          id="input-file"
-          style="display: none"
-          @change="selectFile"
-        />
-        <img
-          class="image"
-          :src="imgUrl.first"
-          alt=""
-          @click="dialogVisible.first = true"
-        />
+        <div>
+          <label class="input-file-button" for="input-picture"
+            >사진 추가하기</label
+          >
+          <label class="input-file-button" for="input-file"
+            >파일 추가하기</label
+          >
+          <div id="showFileName"></div>
+          <input
+            type="file"
+            multiple="multiple"
+            id="input-picture"
+            style="display: none"
+            @change="selectFile"
+          />
+          <input
+            type="file"
+            id="input-file"
+            style="display: none"
+            @change="selectFile"
+          />
+          <img
+            class="image"
+            :src="imgUrl.first"
+            alt=""
+            @click="dialogVisible.first = true"
+          />
+        </div>
         <div class="modal-footer">
           <button
             type="button"
@@ -74,6 +87,9 @@ export default {
     async addPPT() {
       let formData = new FormData();
       let imgFile = document.getElementById('input-file').files;
+      if (!imgFile) {
+        imgFile = document.getElementById('input-picture').files;
+      }
       formData.append('file', imgFile);
       formData.append('user_id', store.getters['users/getUser'].userId);
       // let userData = {
@@ -95,6 +111,9 @@ export default {
       this.imgUrl.first = URL.createObjectURL(file);
 
       let imgFile = document.getElementById('input-file').files;
+      if (!imgFile) {
+        imgFile = document.getElementById('input-picture').files;
+      }
       let fileList = '';
       for (let i = 0; i < imgFile.length; i++) {
         fileList += imgFile[i].name + '<br>';
