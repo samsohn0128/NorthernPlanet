@@ -58,21 +58,27 @@
 </template>
 
 <script>
-import { modifyPresentation } from '@/api/presentation.js';
+import { modifyPresentationName } from '@/api/presentation.js';
 import store from '@/store';
 // import { mapState } from 'vuex';
 
 export default {
   name: 'ModifyPPTNameModal',
+  props: { data: Object },
   data() {
     return {
-      presentationId: null,
-      presentationName: null,
+      // presentationId: store.state.mypage.currentPPTID,
+      // presentationName: store.state.mypage.currentPPTTitle,
+      presentationId: this.data.currentPPTID,
+      presentationName: this.data.currentPPTTitle,
     };
   },
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
   methods: {
     async modifyPPT() {
+      // console.log(this.data);
+      // console.log(this.presentationId);
+      // console.log(this.presentationName);
       // Error: modal 열 때마다 새로고침하지 않으면 아래 아이디, Name 맨 처음에 고른 값이 들어가는 에러 발생
       let userData = {
         presentationId: this.presentationId,
@@ -85,7 +91,7 @@ export default {
       }
       try {
         console.log(userData);
-        await modifyPresentation(this.presentationId, userData);
+        await modifyPresentationName(this.presentationId, userData);
       } catch (exp) {
         this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
       }
