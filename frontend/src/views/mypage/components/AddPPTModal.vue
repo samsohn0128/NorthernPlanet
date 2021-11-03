@@ -21,6 +21,7 @@
           </button>
         </div>
         <label class="input-file-button" for="input-file">파일 추가하기</label>
+        <div id="showFileName"></div>
         <input
           type="file"
           multiple="multiple"
@@ -92,6 +93,12 @@ export default {
         URL.createObjectURL(file);
       this.imageChanged = true;
       this.imgUrl.first = URL.createObjectURL(file);
+
+      let imgFile = document.getElementById('input-file').files;
+      let fileList = imgFile[0].name;
+      let target2 = document.getElementById('showFileName');
+      target2.innerHTML = fileList;
+      console.log(fileList);
     },
   },
 };
