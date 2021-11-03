@@ -17,8 +17,8 @@ function addPresentation(userData) {
   return instance.post('', userData);
 }
 
-function modifyPresentation(presentationId, userData) {
-  return instance.put(presentationId, userData);
+function modifyPresentationName(presentationId, userData) {
+  return instance.patch(presentationId, userData);
 }
 
 function deletePresentation(presentationId) {
@@ -29,10 +29,21 @@ function getPresentationDetail(presentationId) {
   return instance.get(presentationId);
 }
 
+function presentationAddDelete(presentationId, data) {
+  return instance.put(presentationId, data);
+}
+
+function savePresentation(data) {
+  let presentationId = data.slides[0].slideId;
+  return instance.put(presentationId, data);
+}
+
 export {
   getPresentations,
   addPresentation,
-  modifyPresentation,
+  modifyPresentationName,
   deletePresentation,
   getPresentationDetail,
+  presentationAddDelete,
+  savePresentation,
 };
