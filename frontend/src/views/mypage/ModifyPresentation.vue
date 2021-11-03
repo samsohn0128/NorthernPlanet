@@ -52,7 +52,17 @@
                 alt="animations"
               />
             </div>
-            <textarea name="text" id="" cols="30" rows="10"></textarea>
+            <!-- <textarea name="text" id="" cols="30" rows="10"></textarea> -->
+            <div>
+              <Editor
+                ref="toastuiEditor"
+                :options="editorOptions"
+                height="300px"
+                initialEditType="wysiwyg"
+                previewStyle="vertical"
+                @blur="saveEditorText"
+              />
+            </div>
           </div>
           <div class="buttons-setting">
             <div>
@@ -67,6 +77,24 @@
               </button>
             </div>
           </div>
+          <div
+            class="alert alert-success alert-dismissible fade show"
+            role="alert"
+          >
+            <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+            <span class="alert-text"
+              ><strong>Success!</strong> This is a success alert—check it
+              out!</span
+            >
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -75,6 +103,10 @@
 
 <script>
 import AppNav from '@/components/common/AppNav.vue';
+import { getSlide, updateScript } from '@/api/slide.js';
+import '@toast-ui/editor/dist/toastui-editor.css';
+
+import { Editor } from '@toast-ui/vue-editor';
 
 export default {
   name: 'ModifyPresentation',
@@ -247,9 +279,21 @@ export default {
           script: 'ppt29',
         },
       ],
+      editorOptions: {
+        minHeight: '200px',
+        hideModeSwitch: true,
+        toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['scrollSync'],
+        ],
+      },
+      slideId: 1, // 슬라이드 번호를 가져올 수 있게 되면 변경 예정
+      editorText: '',
     };
   },
-  components: { AppNav },
+  components: { AppNav, Editor },
   computed: {
     messageData() {
       const data = {
@@ -292,6 +336,37 @@ export default {
     setIdx(num) {
       this.idx = num - 1;
     },
+    // onEditorChange() {
+    //   console.log(this.$refs.toastuiEditor.invoke('getHTML'));
+
+    // },
+    saveEditorText() {
+      let updateScriptReq = {
+        slideId: 1,
+        script: this.$refs.toastuiEditor.invoke('getHTML'),
+      };
+
+      updateScript(updateScriptReq).then(res => {
+        if (res.status != 200) {
+          this.$alertify.error(
+            '대본을 저장하던 중에 오류가 발생했습니다. 대본이 유실될 수 있습니다.',
+          );
+          return;
+        }
+      });
+    },
+  },
+  created() {
+    getSlide(this.slideId).then(res => {
+      if (res.status != 200) {
+        this.$alertify.error(
+          '슬라이드 정보를 가져오는 중에 오류가 발생했습니다.',
+        );
+        return;
+      } else {
+        this.$refs.toastuiEditor.invoke('setHTML', res.data.script);
+      }
+    });
   },
 };
 </script>
