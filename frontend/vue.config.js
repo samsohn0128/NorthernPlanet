@@ -10,9 +10,10 @@ module.exports = {
   devServer: {
     historyApiFallback: true, // history mode 새로고침시 정상 작동
     port: 3000, //개발하는 동안 프런트엔드 페이지를 띄우는 포트
+    https: true,
     proxy: {
       '/api/*': {
-        target: 'http://localhost:8446', // /api 요청을 할때 백엔드 호출
+        target: 'https://localhost:8446', // /api 요청을 할때 백엔드 호출
       },
     },
   },
