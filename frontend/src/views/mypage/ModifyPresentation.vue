@@ -3,10 +3,10 @@
     <AppNav />
     <div id="modify-ppt">
       <div class="head-ppt">
-        <div class="col-2">{{ $route.params.name }}</div>
-        <div class="head-ppt-center">
+        <div class="col-3 title-css">{{ $route.params.name }}</div>
+        <div class="col-9 head-ppt-center">
           <div>효과 미리보기</div>
-          <div class="col-10 head-animation">
+          <div class="head-animation">
             <div
               v-for="effect in effects"
               :class="['effect-container']"
@@ -36,11 +36,48 @@
             :key="idx"
             @click="setIdx(slide.sequenceNum)"
           >
-            <img
-              :src="slides[idx].formdata"
-              style="max-width: 20vw; height: 70px"
-              alt="thumbnail"
-            />
+            <div class="PPTbox" data-app>
+              <div style="width: 15px"></div>
+              <img
+                :src="slides[idx].formdata"
+                style="max-width: 20vw; height: 70px"
+                alt="thumbnail"
+              />
+              <div style="width: 15px">
+                <v-menu>
+                  <template v-slot:activator="{ on: menu, attrs }">
+                    <!-- hover -->
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on: tooltip }">
+                        <button v-bind="attrs" v-on="{ ...tooltip, ...menu }">
+                          <i class="ni ni-settings-gear-65"></i>
+                        </button>
+                      </template>
+                      <span>PPT를 추가하거나 삭제하려면 클릭하세요.</span>
+                    </v-tooltip>
+                  </template>
+                  <!-- Menu bar -->
+                  <v-list>
+                    <v-list-item v-for="(item, index) in items" :key="index">
+                      <!-- PPT 추가 -->
+                      <div v-if="index == 0">
+                        <v-list-item-title @click="addPPT(slide.sequenceNum)">{{
+                          item.title
+                        }}</v-list-item-title>
+                      </div>
+                      <!-- PPT 삭제 -->
+                      <div v-else>
+                        <v-list-item-title
+                          @click="deletePPT(slide.sequenceNum)"
+                          >{{ item.title }}</v-list-item-title
+                        >
+                      </div>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+                <div v-if="slide.effect != 0" class="effect-mark-box"></div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-9 body-margin-top">
@@ -56,31 +93,52 @@
           </div>
           <div class="buttons-setting">
             <div>
-              <button @click="goBack()">목록 보기</button>
+              <button @click="goBackPresentation()">목록 보기</button>
+              <!-- <button class="buttons-detail">대본 저장</button> -->
             </div>
             <div>
+              <button
+                class="buttons-detail"
+                data-bs-toggle="modal"
+                data-bs-target="#AddPPTPictureModal"
+                style="margin: 0px"
+                @click="setSequenceNum(idx)"
+              >
+                사진 등록하기
+              </button>
+              <button class="buttons-detail" @click="savePPT(idx)">
+                슬라이드 저장
+              </button>
               <button class="buttons-detail" @click="showAllPPT()">
                 전체 미리보기
-              </button>
-              <button class="buttons-detail" @click="savePPT()">
-                슬라이드 저장
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <AddPPTPictureModal></AddPPTPictureModal>
   </div>
 </template>
 
 <script>
 import AppNav from '@/components/common/AppNav.vue';
+import AddPPTPictureModal from './components/AddPPTPictureModal.vue';
+import {
+  // getPresentationDetail,
+  presentationAddDelete,
+  savePresentation,
+} from '@/api/presentation.js';
+import { mapActions } from 'vuex';
+import store from '@/store';
 
 export default {
   name: 'ModifyPresentation',
+  components: { AppNav, AddPPTPictureModal },
   data() {
     return {
       idx: 0,
+      presentationId: this.$route.params.presentation_id,
       effects: [
         'basic',
         'fadein',
@@ -97,175 +155,103 @@ export default {
       slides: [
         {
           formdata:
+            'https://import.cdn.thinkific.com/292401/PuGMXOphTKWoVdN3FOd6_D__6___1__png',
+          sequenceNum: 0,
+          script: 'ppt1',
+          effect: 0,
+        },
+        {
+          formdata:
             'http://designbase.co.kr/wp-content/uploads/2020/12/webcoding-06-overview.jpg',
           sequenceNum: 1,
           script: 'ppt1',
+          effect: 0,
         },
         {
           formdata:
             'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
           sequenceNum: 2,
           script: 'ppt2',
+          effect: 1,
         },
         {
           formdata: 'https://d2gd6pc034wcta.cloudfront.net/images/logo@2x.png',
           sequenceNum: 3,
           script: 'ppt3',
+          effect: 1,
         },
         {
           formdata:
             'https://upload.acmicpc.net/54146fb3-bcf1-4f78-9caa-8e2c6440d7aa/',
           sequenceNum: 4,
           script: 'ppt4',
+          effect: 0,
         },
         {
           formdata:
             'https://papago.naver.com/97ec80a681e94540414daf2fb855ba3b.svg',
           sequenceNum: 5,
           script: 'ppt5',
+          effect: 0,
         },
         {
           formdata: 'https://edu.ssafy.com/asset/images/header-logo.jpg',
           sequenceNum: 6,
           script: 'ppt6',
+          effect: 0,
         },
         {
           formdata:
             'https://www.samsung.com/sec/static/_images/common/logo_samsung_black.svg',
           sequenceNum: 7,
           script: 'ppt7',
+          effect: 0,
         },
         {
           formdata:
             'https://image7.coupangcdn.com/image/coupang/common/logo_coupang_w350.png',
           sequenceNum: 8,
           script: 'ppt8',
+          effect: 0,
         },
         {
           formdata: 'data9',
           sequenceNum: 9,
           script: 'ppt9',
+          effect: 0,
         },
         {
           formdata: 'data10',
           sequenceNum: 10,
           script: 'ppt10',
-        },
-        {
-          formdata: 'data11',
-          sequenceNum: 11,
-          script: 'ppt11',
-        },
-        {
-          formdata: 'data12',
-          sequenceNum: 12,
-          script: 'ppt12',
-        },
-        {
-          formdata: 'data13',
-          sequenceNum: 13,
-          script: 'ppt13',
-        },
-        {
-          formdata: 'data14',
-          sequenceNum: 14,
-          script: 'ppt14',
-        },
-        {
-          formdata: 'data15',
-          sequenceNum: 15,
-          script: 'ppt15',
-        },
-        {
-          formdata: 'data16',
-          sequenceNum: 16,
-          script: 'ppt16',
-        },
-        {
-          formdata: 'data17',
-          sequenceNum: 17,
-          script: 'ppt17',
-        },
-        {
-          formdata: 'data18',
-          sequenceNum: 18,
-          script: 'ppt18',
-        },
-        {
-          formdata: 'data19',
-          sequenceNum: 19,
-          script: 'ppt19',
-        },
-        {
-          formdata: 'data20',
-          sequenceNum: 20,
-          script: 'ppt20',
-        },
-        {
-          formdata: 'data21',
-          sequenceNum: 21,
-          script: 'ppt21',
-        },
-        {
-          formdata: 'data22',
-          sequenceNum: 22,
-          script: 'ppt22',
-        },
-        {
-          formdata: 'data23',
-          sequenceNum: 23,
-          script: 'ppt23',
-        },
-        {
-          formdata: 'data24',
-          sequenceNum: 24,
-          script: 'ppt24',
-        },
-        {
-          formdata: 'data25',
-          sequenceNum: 25,
-          script: 'ppt25',
-        },
-        {
-          formdata: 'data26',
-          sequenceNum: 26,
-          script: 'ppt26',
-        },
-        {
-          formdata: 'data27',
-          sequenceNum: 27,
-          script: 'ppt27',
-        },
-        {
-          formdata: 'data28',
-          sequenceNum: 28,
-          script: 'ppt28',
-        },
-        {
-          formdata: 'data29',
-          sequenceNum: 29,
-          script: 'ppt29',
+          effect: 0,
         },
       ],
+      items: [{ title: 'PPT 추가' }, { title: 'PPT 삭제' }],
     };
   },
-  components: { AppNav },
   computed: {
     messageData() {
       const data = {
         id: 'changePresentation',
-        currentPage: this.$store.state.mypage.currentPage,
-        location: this.$store.state.mypage.location,
-        size: this.$store.state.mypage.size,
+        currentPage: store.state.mypage.currentPage,
+        location: store.state.mypage.location,
+        size: store.state.mypage.size,
       };
       return data;
     },
     currentEffect() {
-      return this.$store.state.mypage.transition;
+      return store.state.mypage.transition;
     },
   },
   methods: {
-    goBack: function () {
+    ...mapActions('mypage', ['setSequenceNum']),
+    // 백엔드 연결 뒤에 주석 해제, 아래 mounted도!
+    // getPresentationData() {
+    //   getPresentationDetail(this.presentationId);
+    //   // this.slides = getPresentationDetail(this.presentationId);
+    // },
+    goBackPresentation() {
       this.$router.push({ name: 'Presentation' });
     },
     showExample(effect) {
@@ -274,25 +260,88 @@ export default {
       setTimeout(function () {
         el.classList.remove(effect);
       }, 1000);
-      // this.selectEffect(effect);
+      this.selectEffect(effect);
     },
-    // selectEffect(effect) {
-    //   const message = {
-    //     ...this.messageData,
-    //     transition: effect,
-    //   };
-    //   this.$store.dispatch('mypage/sendMessage', message);
-    // },
+    selectEffect(effect) {
+      store.dispatch('mypage/setEffect', effect);
+    },
     showAllPPT() {
       console.log('showAllPPT');
     },
-    savePPT() {
-      console.log('savePPT');
+    // 사진을 등록한다.
+    selectPicture() {},
+    // 사진 먼저 등록받고나서 여기로 이동
+    setPicture(sequenceNum) {
+      let userId = store.getters['users/getUser'];
+      let slideId = this.presentationId;
+      let data = {
+        userId,
+        slides: [
+          {
+            slideId, //(추가했을 경우 -1)
+            'multipart/form-data': 'picture', // 사진 등록 후 변경
+            sequenceNum, //(삭제했을 경우 -1)
+            // effect,
+          },
+        ],
+      };
+      savePresentation(data);
+    },
+    // 슬라이드를 저장한다.
+    savePPT(sequenceNum) {
+      let userId = store.getters['users/getUser'];
+      let slideId = this.presentationId;
+      // let effect = store.getters['mypage/getEffect']; // effect DB, API에 등록 후 사용하기
+      let data = {
+        userId,
+        slides: [
+          {
+            slideId, //(추가했을 경우 -1)
+            sequenceNum, //(삭제했을 경우 -1)
+            // effect,
+          },
+        ],
+      };
+      savePresentation(data);
     },
     setIdx(num) {
-      this.idx = num - 1;
+      this.idx = num;
+    },
+    // PPT를 새로 추가한다.
+    addPPT(sequenceNum) {
+      let presentationId = this.presentationId;
+      let userId = store.getters['users/getUser'];
+      let data = {
+        userId,
+        slides: [
+          {
+            slideId: -1, //(추가했을 경우 -1)
+            sequenceNum, //(삭제했을 경우 -1)
+          },
+        ],
+      };
+      presentationAddDelete(presentationId, data);
+    },
+    // PPT를 제거한다.
+    deletePPT(slideId) {
+      let presentationId = this.presentationId;
+      let userId = store.getters['users/getUser'];
+      let data = {
+        userId,
+        slides: [
+          {
+            slideId, //(추가했을 경우 -1)
+            sequenceNum: -1, //(삭제했을 경우 -1)
+          },
+        ],
+      };
+      presentationAddDelete(presentationId, data);
     },
   },
+  // 백엔드 연결 뒤에 주석 해제
+  // mounted() {
+  //   this.getPresentationData();
+  // },
 };
 </script>
 
@@ -304,11 +353,26 @@ export default {
   display: flex;
   flex-direction: row;
 }
+.title-css {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  font-weight: bold;
+  color: black;
+}
 .choose-ppt {
   margin: 10px 0px;
 }
 .choose-ppt:hover {
   cursor: pointer;
+}
+.PPTbox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: top;
+  border: 0.5px solid black;
 }
 .head-ppt-center {
   flex-direction: column;
@@ -330,6 +394,13 @@ export default {
 }
 .body-margin-top {
   margin-top: 2vh;
+}
+.effect-mark-box {
+  display: flex;
+  align-items: center;
+  width: 10px;
+  height: 10px;
+  background: rgb(110, 185, 255);
 }
 .body-main {
   flex-direction: column;
