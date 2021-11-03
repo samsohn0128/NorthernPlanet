@@ -52,7 +52,17 @@
                 alt="animations"
               />
             </div>
-            <textarea name="text" id="" cols="30" rows="10"></textarea>
+            <!-- <textarea name="text" id="" cols="30" rows="10"></textarea> -->
+            <div>
+              <Editor
+                ref="toastuiEditor"
+                :options="editorOptions"
+                height="300px"
+                initialEditType="wysiwyg"
+                previewStyle="vertical"
+                @blur="saveEditorText"
+              />
+            </div>
           </div>
           <div class="buttons-setting">
             <div>
@@ -75,6 +85,9 @@
 
 <script>
 import AppNav from '@/components/common/AppNav.vue';
+import { getSlide, updateScript } from '@/api/slide.js';
+
+import { Editor } from '@toast-ui/vue-editor';
 
 export default {
   name: 'ModifyPresentation',
@@ -247,9 +260,21 @@ export default {
           script: 'ppt29',
         },
       ],
+      editorOptions: {
+        minHeight: '200px',
+        hideModeSwitch: true,
+        toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['scrollSync'],
+        ],
+      },
+      slideId: 1, // 슬라이드 번호를 가져올 수 있게 되면 변경 예정 (임시로 넣어둔 값)
+      editorText: '',
     };
   },
-  components: { AppNav },
+  components: { AppNav, Editor },
   computed: {
     messageData() {
       const data = {
@@ -292,6 +317,47 @@ export default {
     setIdx(num) {
       this.idx = num - 1;
     },
+    saveEditorText() {
+      let curEditorText = this.$refs.toastuiEditor.invoke('getHTML');
+      if (this.editorText === curEditorText) return;
+
+      let updateScriptReq = {
+        slideId: 1,
+        script: this.$refs.toastuiEditor.invoke('getHTML'),
+      };
+
+      updateScript(updateScriptReq).then(res => {
+        if (res.status != 200) {
+          this.$alertify.error(
+            '대본을 저장하던 중에 오류가 발생했습니다. 대본이 유실될 수 있습니다.',
+          );
+          return;
+        } else {
+          this.$toast.success('대본이 수정되었습니다.', {
+            timeout: 2000,
+            draggable: false,
+            position: 'bottom-right',
+            pauseOnFocusLoss: false,
+            pauseOnHover: false,
+          });
+
+          this.editorText = curEditorText;
+        }
+      });
+    },
+  },
+  created() {
+    getSlide(this.slideId).then(res => {
+      if (res.status != 200) {
+        this.$alertify.error(
+          '슬라이드 정보를 가져오는 중에 오류가 발생했습니다.',
+        );
+        return;
+      } else {
+        this.editorText = res.data.script;
+        this.$refs.toastuiEditor.invoke('setHTML', res.data.script);
+      }
+    });
   },
 };
 </script>
