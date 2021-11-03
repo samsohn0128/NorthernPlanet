@@ -23,11 +23,12 @@ function deleteRoom(roomId) {
 
 function getRooms(userId) {
   console.log('get rooms- userId: ', userId);
-  return instance.get('list/' + userId);
+  return instance.get('/list/' + userId);
 }
 
 function getRoom(roomId) {
-  return instance.get(roomId);
+  console.log('get room- roomId: ', roomId);
+  return instance.get('/' + roomId);
 }
 
 function getRoomIsOnLive(roomId) {

@@ -9,6 +9,7 @@ import RoomDashboard from '@/views/room/RoomDashboard';
 import RoomCreate from '@/views/room/RoomCreate';
 import RoomInfo from '@/views/room/RoomInfo';
 import RoomTutorial from '@/views/room/RoomTutorial';
+import RoomReady from '@/views/room/RoomReady';
 
 import MeetingRoom from '@/views/meetingRoom/MeetingRoom.vue';
 
@@ -68,6 +69,10 @@ export default [
         path: '/dashboard/tutorial',
         component: RoomTutorial,
       },
+      {
+        path: '/dashboard/:room_id',
+        component: RoomReady,
+      },
     ],
   },
   {
@@ -75,7 +80,6 @@ export default [
     name: 'MeetingRoom',
     component: MeetingRoom,
     meta: { authRequired: false },
-    // meta: { authRequired: true },
   },
   {
     path: '/mypage',
