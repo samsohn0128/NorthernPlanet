@@ -1,7 +1,7 @@
 <template>
   <div
     class="modal fade"
-    :id="'RoomReadyModal' + roomInfo.room_id"
+    :id="'RoomReadyModal' + roomInfo.roomId"
     tabindex="-1"
     role="dialog"
     aria-labelledby="exampleModalMessageTitle"
@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-dialog-centered text-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" :id="'RoomReadyModal' + roomInfo.room_id">
+          <h5 class="modal-title" :id="'RoomReadyModal' + roomInfo.roomId">
             {{ roomName }}
           </h5>
           <button
@@ -108,16 +108,16 @@ export default {
   data() {
     return {
       roomName: this.roomInfo.name,
-      roomId: this.roomInfo.room_id,
-      manager: this.roomInfo.manager_name + '-' + this.roomInfo.manager_id,
-      userName: this.$store.state.users.login.username,
-      userId: this.$store.state.users.login.userid,
+      roomId: this.roomInfo.roomId,
+      manager: this.roomInfo.managerName + '-' + this.roomInfo.managerId,
+      userName: this.$store.state.users.user.name,
+      userId: this.$store.state.users.user.userId,
       roomDescription: this.roomInfo.description,
       isMicOn: false,
       isVideoOn: false,
       srcObject: {},
-      isManager: (this.roomInfo.manager_id =
-        this.$store.state.users.login.userid),
+      isManager: (this.roomInfo.managerId =
+        this.$store.state.users.user.userId),
     };
   },
   computed: { ...mapGetters(['room']) },
