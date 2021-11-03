@@ -14,42 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-//
-//import com.pyhu.northernplanet.api.request.LoginReq;
-//import com.pyhu.northernplanet.api.request.UserRegisterReq;
-//import com.pyhu.northernplanet.api.request.UserUpdateNameReq;
-//import com.pyhu.northernplanet.api.request.UserUpdatePwdReq;
-//import com.pyhu.northernplanet.api.response.BaseResponseBody;
-//import com.pyhu.northernplanet.api.response.UserGetRes;
-//import com.pyhu.northernplanet.api.service.UserService;
-//import com.pyhu.northernplanet.db.entity.Users;
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
-//import io.swagger.annotations.ApiParam;
-//import io.swagger.annotations.ApiResponse;
-//import io.swagger.annotations.ApiResponses;
-//import java.util.List;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//
-///**
-// * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
-// */
 @Slf4j
 @Api(value = "유저 API", tags = {"User"})
 @RestController
@@ -185,24 +154,25 @@ public class UserController {
 //  }
 //
 //
-//  @GetMapping("/{email}")
-//  @ApiOperation(value = "이메일로 사용자 검색", notes = "계정이 존재하면 true")
-//  @ApiResponses({
-//      @ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"),
-//      @ApiResponse(code = 500, message = "서버 오류")
-//  })
-//  public ResponseEntity<UserGetRes> getUserByEmail(@PathVariable("email") String email) {
-//    Users user = userService.getUserByEmail(email);
-//    UserGetRes userGetRes = null;
-//    if (user != null) {
-//      userGetRes = new UserGetRes(user.getUserId(), user.getEmail(), user.getName());
-//      return new ResponseEntity<UserGetRes>(userGetRes, HttpStatus.OK);
-//    } else {
-//      return new ResponseEntity<UserGetRes>(userGetRes, HttpStatus.NOT_FOUND);
-//    }
-//  }
+  @GetMapping("/search/{email}")
+  @ApiOperation(value = "이메일로 사용자 검색")
+  @ApiResponses({
+      @ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "사용자 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")
+  })
+  public ResponseEntity<UserOauthDto> getUserByEmail(@PathVariable("email") String email) {
+    UserOauthDto userOauthDto=null;
+    try{
+      userOauthDto = userService.getUserByEmail(email);
+      return new ResponseEntity<>(userOauthDto, HttpStatus.OK);
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    return new ResponseEntity<>(userOauthDto, HttpStatus.NOT_FOUND);
+
+  }
 //
 //  @GetMapping("check/{email}")
 //  @ApiOperation(value = "회원가입 - 이메일로 사용자 검색", notes = "회원가입 시 사용됨 - 계정이 없어야 true")

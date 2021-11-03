@@ -1,8 +1,12 @@
 package com.pyhu.northernplanet.api.service;
 
+import com.pyhu.northernplanet.api.request.RoomPutReq;
+import com.pyhu.northernplanet.api.response.RoomPutRes;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.pyhu.northernplanet.api.request.RoomPostReq;
 import com.pyhu.northernplanet.api.response.RoomGetRes;
@@ -17,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service("roomService")
+@Service("RoomService")
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
@@ -26,7 +30,6 @@ public class RoomServiceImpl implements RoomService {
   private final UserRepository userRepository;
 
   private final ParticipantRepository participantRepository;
-
 
   @Override
   public RoomGetRes getRoom(Long roomId, List<ParticipantDto> participants) {
@@ -50,7 +53,13 @@ public class RoomServiceImpl implements RoomService {
   }
 
   @Override
-  public List<RoomGetRes> findbyuser(Long userId) {
+  public Room getRoom(Long roomId) {
+    Room room = roomRepository.getById(roomId);
+    return room;
+  }
+
+  @Override
+  public List<RoomGetRes> getRoomListByUserId(Long userId) {
     List<RoomGetRes> roomres = new ArrayList<>();
     List<Participant> participants = participantRepository.findByUser_userId(userId);
     log.debug("[findbyuser] userId: {}, pa:{}", userId, participants);
@@ -75,8 +84,13 @@ public class RoomServiceImpl implements RoomService {
   public void createRoom(RoomPostReq roomInfo) {
     log.info("[createRoom] room post req: {}", roomInfo);
     Room room =
-        Room.builder().name(roomInfo.getName()).onLive(false).description(roomInfo.getDescription())
-            .user(userRepository.findByEmail(roomInfo.getEmail())).build();
+        Room.builder()
+            .name(roomInfo.getName())
+            .onLive(false)
+            .description(roomInfo.getDescription())
+            .user(userRepository.findByEmail(roomInfo.getEmail())
+                .orElseThrow( () -> new UsernameNotFoundException("User not found with Email : " + roomInfo.getEmail())))
+            .build();
 
     if (roomInfo.getStartTime() == null) {
       LocalDateTime datetime = LocalDateTime.now();
@@ -94,6 +108,36 @@ public class RoomServiceImpl implements RoomService {
     log.info("[createRoom] save participants complete");
   }
 
+  @Override
+  public void deleteRoom(Long roomId) {
+    int ret = participantRepository.deleteAllByRoom_RoomId(roomId);
+    log.info("[DeleteRoom] All participants in room {} are deleted - service - {}", roomId, ret);
+    int ret2 = roomRepository.deleteAllByRoomId(roomId);
+    log.info("[DeleteRoom] Room {} is deleted - service - {}", roomId, ret2);
+  }
+
+  @Override
+  public RoomPutRes updateRoom(RoomPutReq roomInfo) {
+    Room room = getRoom(roomInfo.getRoomId());
+    room.setStartTime(roomInfo.getStartTime());
+    room.setName(roomInfo.getName());
+    room.setDescription(roomInfo.getDescription());
+    participantRepository.deleteAllByRoom_RoomId(roomInfo.getRoomId());
+    saveParticipants(roomInfo.getParticipants(), room);
+    roomRepository.save(room);
+    RoomPutRes roomPutRes=RoomPutRes.builder()
+        .roomId(room.getRoomId())
+        .name(room.getName())
+        .description(room.getDescription())
+        .participants(roomInfo.getParticipants())
+        .startTime(room.getStartTime())
+        .endTime(room.getEndTime())
+        .managerId(room.getUser().getUserId())
+        .managerName(room.getUser().getName())
+        .build();
+    return roomPutRes;
+  }
+
   private void saveParticipants(List<ParticipantDto> person, Room room) {
     Participant participant;
     Code code;
@@ -107,7 +151,8 @@ public class RoomServiceImpl implements RoomService {
 
       participant = Participant.builder()
           .code(code)
-          .user(userRepository.findByEmail(person.get(i).getEmail()))
+          .user(userRepository.findByEmail(person.get(i).getEmail())
+              .orElseThrow( () -> new UsernameNotFoundException("User not found with Email")))
           .room(room).build();
       log.info("[saveParticipants] participant: {}", participant);
       participantRepository.save(participant);
