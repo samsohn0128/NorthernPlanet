@@ -120,8 +120,13 @@ export default {
   },
   async created() {
     try {
-      this.roomInfo = await getRoom(this.roomId);
+      //websocket init
+      const url = 'wss://' + location.host + '/groupcall';
+      console.log(url);
+      this.$store.dispatch('meetingRoom/wsInit', url);
 
+      //roomId로 roomInfo 받아와서 data setting 하기
+      this.roomInfo = await getRoom(this.roomId);
       this.roomName = this.roomInfo.data.name;
       this.manager =
         this.roomInfo.data.managerName + '-' + this.roomInfo.data.managerId;
@@ -148,6 +153,16 @@ export default {
       }
     },
     sendMsgToKurento() {
+      if (!this.userName) {
+        this.$toast.error('이름을 입력해주세요!', {
+          timeout: 2000,
+          draggable: false,
+          position: 'bottom-right',
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+        });
+        return;
+      }
       const myNameId = this.userName + '-' + this.userId;
       const roomNameId = this.roomName + '-' + this.roomId;
       const message = {
@@ -162,6 +177,8 @@ export default {
         startWithMic: this.isMicOn,
         startWithVideo: this.isVideoOn,
       };
+      console.log('message: ', message);
+      console.log('meetingInfo: ', meetingInfo);
       this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
       this.$store.dispatch('meetingRoom/sendMessage', message);
     },
