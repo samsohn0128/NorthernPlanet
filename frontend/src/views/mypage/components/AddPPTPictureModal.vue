@@ -1,7 +1,7 @@
 <template>
   <div
     class="modal fade"
-    id="AddPPTModal"
+    id="AddPPTPictureModal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="ModalChangePassword"
@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="modal-title" id="ModalWithdraw">발표자료 추가하기</h6>
+          <h6 class="modal-title" id="ModalWithdraw">사진 등록하기</h6>
           <button
             type="button"
             class="btn-close"
@@ -20,34 +20,21 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div>
-          <label class="input-file-button" for="input-picture"
-            >사진 추가하기</label
-          >
-          <label class="input-file-button" for="input-file"
-            >파일 추가하기</label
-          >
-          <div id="showFileName"></div>
-          <input
-            type="file"
-            multiple="multiple"
-            id="input-picture"
-            style="display: none"
-            @change="selectFile"
-          />
-          <input
-            type="file"
-            id="input-file"
-            style="display: none"
-            @change="selectFile"
-          />
-          <img
-            class="image"
-            :src="imgUrl.first"
-            alt=""
-            @click="dialogVisible.first = true"
-          />
-        </div>
+        <label class="input-file-button" for="input-file">파일 추가하기</label>
+        <div id="showFileName"></div>
+        <input
+          type="file"
+          multiple="multiple"
+          id="input-file"
+          style="display: none"
+          @change="selectFile"
+        />
+        <img
+          class="image"
+          :src="imgUrl.first"
+          alt=""
+          @click="dialogVisible.first = true"
+        />
         <div class="modal-footer">
           <button
             type="button"
@@ -71,11 +58,11 @@
 </template>
 
 <script>
-import { addPresentation, getPresentations } from '@/api/presentation.js';
+import { presentationAddDelete } from '@/api/presentation.js';
 import store from '@/store';
 
 export default {
-  name: 'AddPPTModal',
+  name: 'AddPPTPictureModal',
   data() {
     return {
       dialogVisible: { first: false },
@@ -87,20 +74,19 @@ export default {
     async addPPT() {
       let formData = new FormData();
       let imgFile = document.getElementById('input-file').files;
-      if (!imgFile) {
-        imgFile = document.getElementById('input-picture').files;
-      }
       formData.append('file', imgFile);
-      formData.append('user_id', store.getters['users/getUser'].userId);
+      // formData.append('user_id', store.getters['users/getUser'].userId);
+      formData.append('user_id', store.state.users.userId);
+      formData.append('slideId', this.$route.params.presentation_id);
+      formData.append('sequenceNum', store.state.mypage.sequenceNum);
       // let userData = {
       //   user_id: store.getters['users/getUser'].userId,
       //   formData,
       // };
       try {
-        await addPresentation(formData);
-        await getPresentations(formData.user_id);
+        await presentationAddDelete(formData);
       } catch (exp) {
-        this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
+        this.$alertify.error('파일 추가에 실패했습니다.');
       }
     },
     selectFile(e) {
@@ -111,9 +97,6 @@ export default {
       this.imgUrl.first = URL.createObjectURL(file);
 
       let imgFile = document.getElementById('input-file').files;
-      if (!imgFile) {
-        imgFile = document.getElementById('input-picture').files;
-      }
       let fileList = '';
       for (let i = 0; i < imgFile.length; i++) {
         fileList += imgFile[i].name + '<br>';

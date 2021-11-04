@@ -1,5 +1,5 @@
 <template>
-  <div class="my-page-container col-12">
+  <div class="col-12 my-page-container">
     <div id="houseScroll" class="container-box">
       <div v-for="(data, idx) in datas" v-bind:key="idx" class="box">
         <div class="inside-box">
@@ -30,7 +30,11 @@
             </template>
             <!-- Menu bar -->
             <v-list>
-              <v-list-item v-for="(item, index) in items" :key="index">
+              <v-list-item
+                v-for="(item, index) in items"
+                :key="index"
+                @click="setPPTInfo(data)"
+              >
                 <!-- 발표자료 수정 -->
                 <div v-if="index == 0">
                   <router-link
@@ -46,22 +50,16 @@
                   </router-link>
                 </div>
                 <!-- 이름 수정하기 -->
-                <div v-else-if="index == 2">
-                  <a
-                    href="#ModifyPPTNameModal"
-                    data-bs-toggle="modal"
-                    @click="setCurrentPresenatationInfo(data)"
-                    >{{ item.title }}</a
-                  >
+                <div v-else-if="index == 1">
+                  <a href="#ModifyPPTNameModal" data-bs-toggle="modal">{{
+                    item.title
+                  }}</a>
                 </div>
                 <!-- 발표자료 삭제하기 -->
-                <div v-else-if="index == 3">
-                  <a
-                    href="#DeletePPTModal"
-                    data-bs-toggle="modal"
-                    @click="setCurrentPresenatationInfo(data)"
-                    >{{ item.title }}</a
-                  >
+                <div v-else-if="index == 2">
+                  <a href="#DeletePPTModal" data-bs-toggle="modal">{{
+                    item.title
+                  }}</a>
                 </div>
                 <!-- 나머지 Menu bar일 경우 -->
                 <div v-else>
@@ -72,6 +70,7 @@
           </v-menu>
           <span></span>
         </div>
+        <ModifyPPTNameModal :name="datas[idx].presentationName" :id="idx" />
       </div>
     </div>
     <div class="bottom-button">
@@ -84,8 +83,8 @@
         발표자료 추가
       </button>
     </div>
+    <!-- <ModifyPPTNameModal :name="currentTitle" :id="currentId" /> -->
     <AddPPTModal></AddPPTModal>
-    <ModifyPPTNameModal></ModifyPPTNameModal>
     <DeletePPTModal></DeletePPTModal>
   </div>
 </template>
@@ -95,7 +94,6 @@ import { getPresentations } from '@/api/presentation.js';
 import AddPPTModal from './components/AddPPTModal.vue';
 import ModifyPPTNameModal from './components/ModifyPPTNameModal.vue';
 import DeletePPTModal from './components/DeletePPTModal.vue';
-import { mapActions } from 'vuex';
 import store from '@/store';
 
 export default {
@@ -103,6 +101,8 @@ export default {
   components: { AddPPTModal, ModifyPPTNameModal, DeletePPTModal },
   data: () => {
     return {
+      currentId: store.getters['mypage/getCurrentId'],
+      currentTitle: store.getters['mypage/getCurrentTitle'],
       datas: [
         {
           userPresentationId: 0,
@@ -118,154 +118,21 @@ export default {
           presentationName: 'title3',
         },
         {
-          userPresentationId: 0,
-          presentationId: 0,
+          userPresentationId: 2,
+          presentationId: 2,
           thumbnail:
             'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail:
-            'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail:
-            'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail:
-            'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail:
-            'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail:
-            'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail: 'none',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail: 'none',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail: 'none',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail: 'none',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail: 'none',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
+          presentationName: 'title4',
         },
       ],
       items: [
         { title: '발표자료 수정', link: '/' },
-        { title: '공유하기' },
         { title: '이름 수정하기' },
         { title: '발표자료 삭제' },
       ],
     };
   },
   methods: {
-    ...mapActions('mypage', ['setCurrentPresenatationInfo']),
     async getppt() {
       let userId = store.getters['users/getUser'].userId;
       try {
@@ -273,6 +140,10 @@ export default {
       } catch (exp) {
         this.$alertify.error('프레젠테이션 갖고 오기에 실패했습니다.');
       }
+    },
+    async setPPTInfo(data) {
+      await store.dispatch('mypage/setCurrentPresenatationInfo', data);
+      console.log(store.state.mypage);
     },
   },
   // created: {
@@ -287,10 +158,6 @@ export default {
   margin: 10px 0 0 0;
 }
 .my-page-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-end;
   width: 100%;
   height: 700px;
   border: 0px solid black;
@@ -339,7 +206,7 @@ export default {
 }
 .bottom-button {
   width: 100%;
-  margin: 0px;
+  margin: 5px 0px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
