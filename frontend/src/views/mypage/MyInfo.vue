@@ -15,7 +15,7 @@
               py-7
             "
           >
-            <h3 class="text-center">My Page</h3>
+            <h3 class="text-center">My Profile</h3>
             <div class="card-body">
               <div class="row">
                 <div class="col-md-12 pt-5">
@@ -97,7 +97,7 @@ export default {
       let message = '';
       if (!this.userName) {
         message = '변경할 이름을 입력하세요';
-        this.toastError(message);
+        this.$toastError(message);
         return;
       }
       let userData = {
@@ -107,35 +107,16 @@ export default {
         .then(({ status }) => {
           console.log(status);
           if (status != 200) {
-            this.toastError('이름 변경중 오류가 발생했습니다.');
+            this.$toastError('이름 변경중 오류가 발생했습니다.');
             return;
           } else {
-            this.toastSuccess('이름이 변경됐습니다.');
+            this.$toastSuccess('이름이 변경됐습니다.');
             store.dispatch('users/SET_NAME', this.userName);
           }
         })
         .catch(() => {
-          this.toastError('이름 변경 시도가 실패했습니다.');
+          this.$toastError('이름 변경 시도가 실패했습니다.');
         });
-    },
-
-    toastError(message) {
-      this.$toast.error(message, {
-        timeout: 2000,
-        draggable: false,
-        position: 'bottom-right',
-        pauseOnFocusLoss: false,
-        pauseOnHover: false,
-      });
-    },
-    toastSuccess(message) {
-      this.$toast.success(message, {
-        timeout: 2000,
-        draggable: false,
-        position: 'bottom-right',
-        pauseOnFocusLoss: false,
-        pauseOnHover: false,
-      });
     },
   },
 };

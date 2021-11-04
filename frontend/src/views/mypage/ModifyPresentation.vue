@@ -372,18 +372,12 @@ export default {
 
       updateScript(updateScriptReq).then(res => {
         if (res.status != 200) {
-          this.$alertify.error(
+          this.$toastError(
             '대본을 저장하던 중에 오류가 발생했습니다. 대본이 유실될 수 있습니다.',
           );
           return;
         } else {
-          this.$toast.success('대본이 수정되었습니다.', {
-            timeout: 2000,
-            draggable: false,
-            position: 'bottom-right',
-            pauseOnFocusLoss: false,
-            pauseOnHover: false,
-          });
+          this.$toastSuccess('대본이 수정되었습니다.');
 
           this.editorText = curEditorText;
         }
@@ -393,9 +387,7 @@ export default {
   created() {
     getSlide(this.slideId).then(res => {
       if (res.status != 200) {
-        this.$alertify.error(
-          '슬라이드 정보를 가져오는 중에 오류가 발생했습니다.',
-        );
+        this.$toastError('슬라이드 정보를 가져오는 중에 오류가 발생했습니다.');
         return;
       } else {
         this.editorText = res.data.script;

@@ -74,29 +74,11 @@ export default {
     withdraw() {
       deleteUser(this.user.userId).then(({ status }) => {
         if (status != 200) {
-          this.toastError('탈퇴에 실패했습니다.');
+          this.$toastError('탈퇴에 실패했습니다.');
         } else {
-          this.toastSuccess('탈퇴 성공했습니다.');
+          this.$toastSuccess('탈퇴 성공했습니다.');
           this.$router.push('/');
         }
-      });
-    },
-    toastError(message) {
-      this.$toast.error(message, {
-        timeout: 2000,
-        draggable: false,
-        position: 'bottom-right',
-        pauseOnFocusLoss: false,
-        pauseOnHover: false,
-      });
-    },
-    toastSuccess(message) {
-      this.$toast.success(message, {
-        timeout: 2000,
-        draggable: false,
-        position: 'bottom-right',
-        pauseOnFocusLoss: false,
-        pauseOnHover: false,
       });
     },
   },
