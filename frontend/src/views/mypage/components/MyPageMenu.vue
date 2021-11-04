@@ -40,12 +40,7 @@
         </li>
         <div
           class="moving-tab position-absolute nav-link"
-          style="
-            padding: 0px;
-            transition: all 0.5s ease 0s;
-            transform: translate3d(0px, 0px, 0px);
-            width: 190px;
-          "
+          style="padding: 0px; transition: all 0.5s ease 0s; width: 190px"
         >
           <a
             class="nav-link mb-0 px-0 py-1 active"
@@ -72,6 +67,17 @@ export default {
       nowIndex: 1,
     };
   },
+  mounted() {
+    const link = document.location.href;
+
+    var linkArray = link.split('/');
+    console.log(linkArray[linkArray.length - 1]);
+    if (linkArray[linkArray.length - 1] == 'presentation') {
+      document.getElementsByClassName('moving-tab')[0].style.transform =
+        'translate3d(0px, 34px, 0px)';
+      this.nowIndex = 2;
+    }
+  },
   methods: {
     navClick(index) {
       const movingTab = document.getElementsByClassName('moving-tab')[0];
@@ -92,7 +98,7 @@ export default {
 <style scoped>
 .main-square {
   width: 200px;
-  height: 100%;
+  height: 90%;
   text-align: center;
   border-style: solid;
   border-width: 1.5px;
