@@ -87,7 +87,10 @@
             :key="idx"
             @click="setIdx(slide.sequenceNum)"
           >
-            <div class="PPTbox" data-app>
+            <div class="choose-ppt-icons">
+              <i class="ni ni-fat-add"></i><i class="ni ni-fat-remove"></i>
+            </div>
+            <div class="PPTbox">
               <div style="width: 100%; height: 150px">
                 <img
                   :src="slides[idx].formdata"
@@ -441,6 +444,7 @@ export default {
 .choose-ppt:hover {
   cursor: pointer;
 }
+
 .PPTbox {
   width: 100%;
 
