@@ -1,6 +1,20 @@
 <template>
   <div class="col-12 my-page-container">
     <div id="houseScroll" class="container-box">
+      <div class="card-presentation">
+        <PresentationNewCardItem
+          data-bs-toggle="modal"
+          data-bs-target="#AddPPTModal"
+        ></PresentationNewCardItem>
+      </div>
+      <div
+        v-for="(data, idx) in datas"
+        v-bind:key="idx"
+        class="card-presentation"
+      >
+        <PresentationCardItem></PresentationCardItem>
+      </div>
+
       <div v-for="(data, idx) in datas" v-bind:key="idx" class="box">
         <div class="inside-box">
           <img
@@ -73,16 +87,16 @@
         <ModifyPPTNameModal :name="datas[idx].presentationName" :id="idx" />
       </div>
     </div>
-    <div class="bottom-button">
+    <!-- <div class="bottom-button">
       <button
-        class="btn btn-primary"
+        class="btn bg-gradient-primary"
         data-bs-toggle="modal"
         data-bs-target="#AddPPTModal"
         style="margin: 0px"
       >
         발표자료 추가
       </button>
-    </div>
+    </div> -->
     <!-- <ModifyPPTNameModal :name="currentTitle" :id="currentId" /> -->
     <AddPPTModal></AddPPTModal>
     <DeletePPTModal></DeletePPTModal>
@@ -95,10 +109,17 @@ import AddPPTModal from './components/AddPPTModal.vue';
 import ModifyPPTNameModal from './components/ModifyPPTNameModal.vue';
 import DeletePPTModal from './components/DeletePPTModal.vue';
 import store from '@/store';
-
+import PresentationCardItem from './components/PresentationCardItem.vue';
+import PresentationNewCardItem from './components/PresentationNewCardItem.vue';
 export default {
   name: 'Presentation',
-  components: { AddPPTModal, ModifyPPTNameModal, DeletePPTModal },
+  components: {
+    AddPPTModal,
+    ModifyPPTNameModal,
+    DeletePPTModal,
+    PresentationCardItem,
+    PresentationNewCardItem,
+  },
   data: () => {
     return {
       currentId: store.getters['mypage/getCurrentId'],
@@ -160,8 +181,11 @@ export default {
 .my-page-container {
   width: 100%;
   height: 700px;
-  border: 0px solid black;
+  border: 0px solid rgb(235, 233, 233);
   border-radius: 5px;
+}
+.card-presentation {
+  margin: 2%;
 }
 .container-box {
   display: flex;
@@ -169,7 +193,7 @@ export default {
   flex-wrap: wrap;
   align-items: flex-start;
   height: 90%;
-  border: 2px solid black;
+  border: 2px solid rgb(235, 233, 233);
   border-radius: 5px;
 }
 .box {
