@@ -1,6 +1,6 @@
 package com.pyhu.northernplanet.api.service;
 
-import com.pyhu.northernplanet.api.request.PptToPngReq;
+import com.pyhu.northernplanet.api.request.PptPdf2PngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.common.dto.PresentationDto;
 import com.pyhu.northernplanet.common.dto.SlideDto;
@@ -20,13 +20,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.springframework.stereotype.Service;
@@ -166,12 +173,12 @@ public class PresentationServiceImpl implements PresentationService {
     return presentationDto;
   }
 
-  public int createPpt(PptToPngReq pptToPngReq) throws IOException {
+  public int createPpt(PptPdf2PngReq pptPdf2PngReq) throws IOException {
     log.info("[createPpt - service]");
     List<Slide> slides = new LinkedList<>();
-    MultipartFile convFile = pptToPngReq.getPpt();
+    MultipartFile convFile = pptPdf2PngReq.getPptPdf();
     String originalFileName = convFile.getOriginalFilename();
-    String pptFolderDirectory = presentationDirectory + "/" + pptToPngReq.getUserId();
+    String pptFolderDirectory = presentationDirectory + "/" + pptPdf2PngReq.getUserId();
     File pptFolder = new File(pptFolderDirectory);
     if (!pptFolder.exists()) {
       pptFolder.mkdirs();
@@ -188,11 +195,11 @@ public class PresentationServiceImpl implements PresentationService {
     List<XSLFSlide> xslfSlideList = ppt.getSlides();
 
     // save presentation
-    User user = userRepository.findById(pptToPngReq.getUserId())
+    User user = userRepository.findById(pptPdf2PngReq.getUserId())
         .orElseThrow(() -> new NullPointerException());
     LocalDateTime now = LocalDateTime.now();
-    String presentationName = pptToPngReq.getPpt().getOriginalFilename()
-        .substring(0, pptToPngReq.getPpt().getOriginalFilename().lastIndexOf('.'));
+    String presentationName = pptPdf2PngReq.getPptPdf().getOriginalFilename()
+        .substring(0, pptPdf2PngReq.getPptPdf().getOriginalFilename().lastIndexOf('.'));
     Presentation presentation = Presentation.builder()
         .user(user)
         .name(presentationName)
@@ -215,7 +222,7 @@ public class PresentationServiceImpl implements PresentationService {
       xslfSlideList.get(i).draw(graphics);
 
       //creating an image file as output
-      String folderDirectory = presentationDirectory + "/" + pptToPngReq.getUserId() + "/"
+      String folderDirectory = presentationDirectory + "/" + pptPdf2PngReq.getUserId() + "/"
           + presentation.getPresentationId();
       File folder = new File(folderDirectory);
       if (!folder.exists()) {
@@ -224,7 +231,7 @@ public class PresentationServiceImpl implements PresentationService {
       String saveName = i + ".png";
       // save images
       FileOutputStream out = new FileOutputStream(folderDirectory + "/" + saveName);
-      javax.imageio.ImageIO.write(img, "png", out);
+      ImageIO.write(img, "png", out);
       out.close();
       log.info("[createPpt - service] image successfully created");
 
@@ -241,6 +248,77 @@ public class PresentationServiceImpl implements PresentationService {
       out.close();
     }
     slideRepository.saveAll(slides);
+
+    return 0;
+  }
+
+  @Override
+  public int createPdf(PptPdf2PngReq pptPdf2PngReq) throws IOException {
+    log.info("[createPdf - service]");
+    List<Slide> slides = new LinkedList<>();
+    MultipartFile convFile = pptPdf2PngReq.getPptPdf();
+    String originalFileName = convFile.getOriginalFilename();
+    String pdfFolderDirectory = presentationDirectory + "/" + pptPdf2PngReq.getUserId();
+    File pptFolder = new File(pdfFolderDirectory);
+    if (!pptFolder.exists()) {
+      pptFolder.mkdirs();
+    }
+
+    File pdfFile = new File(pdfFolderDirectory + "/" + originalFileName);
+    convFile.transferTo(pdfFile);
+    log.info("[createPpt - service] file successfully created");
+    FileInputStream fis = new FileInputStream(pdfFile);
+    pdfFile.delete();
+    PDDocument pdfDoc = PDDocument.load(fis); //Document 생성
+    PDFRenderer pdfRenderer = new PDFRenderer(pdfDoc);
+
+    // save presentation
+    User user = userRepository.findById(pptPdf2PngReq.getUserId())
+        .orElseThrow(() -> new NullPointerException());
+    LocalDateTime now = LocalDateTime.now();
+    String presentationName = pptPdf2PngReq.getPptPdf().getOriginalFilename()
+        .substring(0, pptPdf2PngReq.getPptPdf().getOriginalFilename().lastIndexOf('.'));
+    Presentation presentation = Presentation.builder()
+        .user(user)
+        .name(presentationName)
+        .size(pdfDoc.getPages().getCount())
+        .uploadTime(now)
+        .build();
+    log.info("[createPresentation - service] Presentation : {}", presentation);
+    presentation = presentationRepository.saveAndFlush(presentation);
+
+    try {
+      String resultImgPath = presentationDirectory + "/" + pptPdf2PngReq.getUserId() + "/"
+          + presentation.getPresentationId(); //이미지가 저장될 경로
+      Files.createDirectories(Paths.get(resultImgPath));
+      //PDF2Img에서는 경로가 없는 경우 이미지 파일이 생성이 안되기 때문에 디렉토리를 만들어준다.
+
+      //순회하며 이미지로 변환 처리
+      for (int i = 0; i < pdfDoc.getPages().getCount(); i++) {
+        String saveName = i + ".png";
+        String fileName = resultImgPath + "/" + saveName;
+
+        //DPI 설정
+        BufferedImage bim = pdfRenderer.renderImageWithDPI(i, 300, ImageType.RGB);
+        ImageIOUtil.writeImage(bim, fileName, 300);
+
+        // save slides
+        Slide slide = Slide.builder()
+            .saveName(saveName)
+            .originalName(pdfFile.getName().substring(0, pdfFile.getName().lastIndexOf('.')))
+            .directory(fileName)
+            .sequence(i)
+            .presentation(presentation)
+            .build();
+        slides.add(slide);
+        log.info("[createPpt - service] Slide : {}", slide);
+      }
+      slideRepository.saveAll(slides);
+      pdfDoc.close(); //모두 사용한 PDF 문서는 닫는다.
+    } catch (Exception e) {
+      log.error("[conversionPdf2Img - service] Failed to convert pdf to png");
+      e.printStackTrace();
+    }
 
     return 0;
   }

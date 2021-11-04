@@ -1,6 +1,6 @@
 package com.pyhu.northernplanet.api.controller;
 
-import com.pyhu.northernplanet.api.request.PptToPngReq;
+import com.pyhu.northernplanet.api.request.PptPdf2PngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.response.PresentationDetailGetRes;
 import com.pyhu.northernplanet.api.response.PresentationListGetRes;
@@ -108,15 +108,21 @@ public class PresentationController {
     return new ResponseEntity<>(presentationDetailGetRes, HttpStatus.OK);
   }
 
-  @PostMapping("/ppt")
-  @ApiOperation(value = "ppt")
+  @PostMapping("/pptpdf")
+  @ApiOperation(value = "pptpdf")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
-  public ResponseEntity<Integer> createPpt(@ModelAttribute PptToPngReq pptToPngReq) {
+  public ResponseEntity<Integer> createPptPdf(@ModelAttribute PptPdf2PngReq pptPdf2PngReq) {
     log.info("[createPpt - controller]");
+    String originalFilename = pptPdf2PngReq.getPptPdf().getOriginalFilename();
+    String extensionName = originalFilename.substring(originalFilename.lastIndexOf('.'));
     try {
-      presentationService.createPpt(pptToPngReq);
+      if (extensionName.equals(".ppt") || extensionName.equals(".pptx")) {
+        presentationService.createPpt(pptPdf2PngReq);
+      } else if (extensionName.equals(".pdf")) {
+        presentationService.createPdf(pptPdf2PngReq);
+      }
     } catch (Exception e) {
       log.error("[createPpt - controller] Failed to create presentation");
       e.printStackTrace();
