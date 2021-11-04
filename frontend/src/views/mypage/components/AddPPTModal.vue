@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { addPresentation, getPresentations } from '@/api/presentation.js';
+import { addPresentation, addPptpdf } from '@/api/presentation.js';
 import store from '@/store';
 
 export default {
@@ -80,25 +80,48 @@ export default {
     return {
       dialogVisible: { first: false },
       imgUrl: { first: '' },
+      userId: store.getters['users/getUserId'],
     };
   },
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
   methods: {
     async addPPT() {
       let formData = new FormData();
-      let imgFile = document.getElementById('input-file').files;
-      if (!imgFile) {
-        imgFile = document.getElementById('input-picture').files;
+      let imgFile = document.getElementById('input-picture').files;
+      console.log(imgFile);
+      if (imgFile.length == 0) {
+        this.Pptpdf();
+        return;
       }
-      formData.append('file', imgFile);
-      formData.append('user_id', store.getters['users/getUser'].userId);
-      // let userData = {
-      //   user_id: store.getters['users/getUser'].userId,
-      //   formData,
-      // };
+      formData.append('userId', this.userId);
+      for (let i = 0; i < imgFile.length; i++) {
+        formData.append('slides', imgFile[i]);
+      }
       try {
         await addPresentation(formData);
-        await getPresentations(formData.user_id);
+        await store.dispatch('mypage/setToastTrue', 1);
+        await this.$router.go();
+      } catch (exp) {
+        console.log(exp);
+        console.log('실패ㅠㅠ');
+        this.$alertify.error('사진 추가에 실패했습니다.');
+      }
+    },
+    async Pptpdf() {
+      let formData = new FormData();
+      let imgFile = document.getElementById('input-file').files;
+      if (imgFile.length == 0) {
+        this.$alertify.error('파일을 추가해주세요.');
+        return;
+      }
+      formData.append('userId', this.userId);
+      for (let i = 0; i < imgFile.length; i++) {
+        formData.append('slides', imgFile[i]);
+      }
+      try {
+        await addPptpdf(formData);
+        await store.dispatch('mypage/setToastTrue', 2);
+        await this.$router.go();
       } catch (exp) {
         this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
       }
@@ -111,7 +134,7 @@ export default {
       this.imgUrl.first = URL.createObjectURL(file);
 
       let imgFile = document.getElementById('input-file').files;
-      if (!imgFile) {
+      if (imgFile.length == 0) {
         imgFile = document.getElementById('input-picture').files;
       }
       let fileList = '';
@@ -120,6 +143,10 @@ export default {
       }
       let target2 = document.getElementById('showFileName');
       target2.innerHTML = fileList;
+    },
+    change() {
+      // this.dialog = false;
+      window.location.reload();
     },
   },
 };
