@@ -94,8 +94,8 @@ export default {
   components: { ChangePasswordModal, WithdrawModal },
   data() {
     return {
-      useremail: this.$store.state.users.login.useremail,
-      username: this.$store.state.users.login.username,
+      useremail: store.state.users.user.email,
+      username: store.state.users.user.name,
     };
   },
   computed: {
@@ -109,24 +109,28 @@ export default {
       if (!this.username) {
         message = '변경할 이름을 입력하세요';
         this.$alertify.error(message);
+        // this.$toastError(message);
         return;
       }
       let userData = {
-        user_id: this.$store.state.users.login.userid,
+        user_id: store.state.users.user.userid,
         name: this.username,
       };
       updateUserName(userData)
         .then(({ status }) => {
           if (status != 200) {
             this.$alertify.error('이름 변경중 오류가 발생했습니다.');
+            // this.$toastError('이름 변경중 오류가 발생했습니다.');
             return;
           } else {
             this.$alertify.success('이름이 변경됐습니다.');
-            this.$store.dispatch('users/SET_NAME', this.username);
+            // this.$toastSuccess('이름이 변경됐습니다.');
+            store.dispatch('users/SET_NAME', this.username);
           }
         })
         .catch(() => {
           this.$alertify.error('이름 변경 시도가 실패했습니다.');
+          // this.$toastError('이름 변경 시도가 실패했습니다.');
         });
     },
   },
