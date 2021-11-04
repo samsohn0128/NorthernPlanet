@@ -67,7 +67,7 @@ export default {
     isLogin(state) {
       return state.login.isLogin;
     },
-    getUserid(state) {
+    getUserId(state) {
       return state.user.userId;
     },
     userInfo(state) {
