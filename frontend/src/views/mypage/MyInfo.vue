@@ -101,7 +101,6 @@ export default {
         return;
       }
       let userData = {
-        user_id: store.state.users.user.userid,
         name: this.userName,
       };
       updateUserName(this.user.userId, userData)
