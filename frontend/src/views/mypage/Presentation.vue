@@ -12,7 +12,10 @@
         v-bind:key="idx"
         class="card-presentation"
       >
-        <PresentationCardItem></PresentationCardItem>
+        <PresentationCardItem
+          :presentationInfo="data"
+          :key="idx"
+        ></PresentationCardItem>
       </div>
 
       <div v-for="(data, idx) in datas" v-bind:key="idx" class="box">
