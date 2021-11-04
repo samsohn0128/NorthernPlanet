@@ -18,7 +18,7 @@ function addPresentation(userData) {
 }
 
 function modifyPresentationName(presentationId, userData) {
-  return instance.patch(presentationId, userData);
+  return instance.put(presentationId, userData);
 }
 
 function deletePresentation(presentationId) {

@@ -30,7 +30,11 @@
             </template>
             <!-- Menu bar -->
             <v-list>
-              <v-list-item v-for="(item, index) in items" :key="index">
+              <v-list-item
+                v-for="(item, index) in items"
+                :key="index"
+                @click="setPPTInfo(data)"
+              >
                 <!-- 발표자료 수정 -->
                 <div v-if="index == 0">
                   <router-link
@@ -47,21 +51,15 @@
                 </div>
                 <!-- 이름 수정하기 -->
                 <div v-else-if="index == 1">
-                  <a
-                    href="#ModifyPPTNameModal"
-                    data-bs-toggle="modal"
-                    @click="setPPTInfo(data)"
-                    >{{ item.title }}</a
-                  >
+                  <a href="#ModifyPPTNameModal" data-bs-toggle="modal">{{
+                    item.title
+                  }}</a>
                 </div>
                 <!-- 발표자료 삭제하기 -->
                 <div v-else-if="index == 2">
-                  <a
-                    href="#DeletePPTModal"
-                    data-bs-toggle="modal"
-                    @click="setPPTInfo(data)"
-                    >{{ item.title }}</a
-                  >
+                  <a href="#DeletePPTModal" data-bs-toggle="modal">{{
+                    item.title
+                  }}</a>
                 </div>
                 <!-- 나머지 Menu bar일 경우 -->
                 <div v-else>
@@ -72,7 +70,7 @@
           </v-menu>
           <span></span>
         </div>
-        <ModifyPPTNameModal :data="data" :key="data.idx" />
+        <ModifyPPTNameModal :name="datas[idx].presentationName" :id="idx" />
       </div>
     </div>
     <div class="bottom-button">
@@ -85,6 +83,7 @@
         발표자료 추가
       </button>
     </div>
+    <!-- <ModifyPPTNameModal :name="currentTitle" :id="currentId" /> -->
     <AddPPTModal></AddPPTModal>
     <DeletePPTModal></DeletePPTModal>
   </div>
@@ -102,6 +101,8 @@ export default {
   components: { AddPPTModal, ModifyPPTNameModal, DeletePPTModal },
   data: () => {
     return {
+      currentId: store.getters['mypage/getCurrentId'],
+      currentTitle: store.getters['mypage/getCurrentTitle'],
       datas: [
         {
           userPresentationId: 0,
@@ -117,11 +118,11 @@ export default {
           presentationName: 'title3',
         },
         {
-          userPresentationId: 0,
-          presentationId: 0,
+          userPresentationId: 2,
+          presentationId: 2,
           thumbnail:
             'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title1',
+          presentationName: 'title4',
         },
       ],
       items: [
@@ -142,7 +143,7 @@ export default {
     },
     async setPPTInfo(data) {
       await store.dispatch('mypage/setCurrentPresenatationInfo', data);
-      console.log(store.state.mypage.currentPPTTitle);
+      console.log(store.state.mypage);
     },
   },
   // created: {
