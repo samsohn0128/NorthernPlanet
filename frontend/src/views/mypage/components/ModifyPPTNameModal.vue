@@ -42,6 +42,7 @@
             data-bs-dismiss="modal"
           >
             Cancel
+            <!-- {{ data.presentationName }} -->
           </button>
           <button
             type="button"
@@ -64,24 +65,24 @@ import store from '@/store';
 
 export default {
   name: 'ModifyPPTNameModal',
-  props: { data: Object },
+  props: { name: String, id: Number },
   data() {
     return {
-      // presentationId: store.state.mypage.currentPPTID,
-      // presentationName: store.state.mypage.currentPPTTitle,
-      presentationId: this.data.currentPPTID,
-      presentationName: this.data.currentPPTTitle,
+      presentationId: store.getters['mypage/getCurrentId'],
+      presentationName: store.getters['mypage/getCurrentTitle'],
+      // presentationId: this.id,
+      // presentationName: this.name,
     };
   },
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
   methods: {
     async modifyPPT() {
-      // console.log(this.data);
-      // console.log(this.presentationId);
+      console.log('data', this.presentationName);
+      console.log('presentation', this.presentationId);
       // console.log(this.presentationName);
       // Error: modal 열 때마다 새로고침하지 않으면 아래 아이디, Name 맨 처음에 고른 값이 들어가는 에러 발생
       let userData = {
-        presentationId: this.presentationId,
+        presentationId: this.$store.getters['mypage/getCurrentId'],
         presentationName: this.presentationName,
       };
       // 제목이 비어있을 경우 튕겨내기
@@ -96,14 +97,14 @@ export default {
         this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
       }
     },
-    getInfo() {
-      this.presentationId = store.getters['mypage/getCurrentId'];
-      this.presentationName = store.getters['mypage/getCurrentTitle'];
-    },
+    // getInfo() {
+    //   this.presentationId = store.getters['mypage/getCurrentId'];
+    //   this.presentationName = store.getters['mypage/getCurrentTitle'];
+    // },
   },
-  mounted() {
-    this.getInfo();
-  },
+  // mounted() {
+  //   this.getInfo();
+  // },
 };
 </script>
 
