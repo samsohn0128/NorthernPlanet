@@ -102,28 +102,26 @@ export default {
         await store.dispatch('mypage/setToastTrue', 1);
         await this.$router.go();
       } catch (exp) {
-        console.log(exp);
-        console.log('실패ㅠㅠ');
-        this.$alertify.error('사진 추가에 실패했습니다.');
+        this.$toastError('사진 추가에 실패했습니다.');
       }
     },
     async Pptpdf() {
       let formData = new FormData();
       let imgFile = document.getElementById('input-file').files;
       if (imgFile.length == 0) {
-        this.$alertify.error('파일을 추가해주세요.');
+        this.$toastError('파일을 추가해주세요.');
         return;
       }
       formData.append('userId', this.userId);
       for (let i = 0; i < imgFile.length; i++) {
-        formData.append('slides', imgFile[i]);
+        formData.append('pptPdf', imgFile[i]);
       }
       try {
         await addPptpdf(formData);
         await store.dispatch('mypage/setToastTrue', 2);
         await this.$router.go();
       } catch (exp) {
-        this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
+        this.$toastError('프레젠테이션 추가에 실패했습니다.');
       }
     },
     selectFile(e) {
