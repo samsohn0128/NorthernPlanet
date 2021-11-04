@@ -42,6 +42,7 @@ public class PresentationController {
       @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity<Integer> createPresentation(
       @ModelAttribute PresentationPostReq presentationPostReq) {
+    log.info("[createPresentation - controller]");
     try {
       presentationService.createPresentation(presentationPostReq);
     } catch (Exception e) {

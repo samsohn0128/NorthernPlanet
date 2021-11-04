@@ -135,7 +135,7 @@
 import AppNav from '@/components/common/AppNav.vue';
 import AddPPTPictureModal from './components/AddPPTPictureModal.vue';
 import {
-  getPresentationDetail,
+  // getPresentationDetail,
   presentationAddDelete,
   savePresentation,
 } from '@/api/presentation.js';
@@ -151,7 +151,6 @@ export default {
     return {
       idx: 0,
       presentationId: this.$route.params.presentation_id,
-      userId: store.state.users.user.userId,
       effects: [
         'basic',
         'fadein',
@@ -272,14 +271,10 @@ export default {
   methods: {
     ...mapActions('mypage', ['setSequenceNum']),
     // 백엔드 연결 뒤에 주석 해제, 아래 mounted도!
-    async getPresentationData() {
-      // getPresentationDetail(this.userId, this.presentationId);
-      let response = await getPresentationDetail(
-        this.userId,
-        this.presentationId,
-      );
-      response.data.slideList = this.slides;
-    },
+    // getPresentationData() {
+    //   getPresentationDetail(this.presentationId);
+    //   // this.slides = getPresentationDetail(this.presentationId);
+    // },
     goBackPresentation() {
       this.$router.push({ name: 'Presentation' });
     },
@@ -301,7 +296,7 @@ export default {
     selectPicture() {},
     // 사진 먼저 등록받고나서 여기로 이동
     setPicture(sequenceNum) {
-      let userId = store.getters['users/getUserId'];
+      let userId = store.getters['users/getUser'];
       let slideId = this.presentationId;
       let data = {
         userId,
@@ -380,7 +375,6 @@ export default {
           this.$toastError(
             '대본을 저장하던 중에 오류가 발생했습니다. 대본이 유실될 수 있습니다.',
           );
-          // this.$toastError('대본을 저장하던 중에 오류가 발생했습니다. 대본이 유실될 수 있습니다.');
           return;
         } else {
           this.$toastSuccess('대본이 수정되었습니다.');
@@ -402,9 +396,9 @@ export default {
     });
   },
   // 백엔드 연결 뒤에 주석 해제
-  mounted() {
-    this.getPresentationData();
-  },
+  // mounted() {
+  //   this.getPresentationData();
+  // },
 };
 </script>
 
