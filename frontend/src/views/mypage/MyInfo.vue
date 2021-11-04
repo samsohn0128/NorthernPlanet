@@ -24,7 +24,7 @@
                     <input
                       type="email"
                       class="form-control"
-                      :value="useremail"
+                      :value="user.email"
                       readonly
                     />
                   </div>
@@ -38,7 +38,7 @@
                       <input
                         type="name"
                         class="form-control"
-                        v-model="username"
+                        v-model="userName"
                       />
                     </div>
                     <div class="col-3">
@@ -55,14 +55,6 @@
               </div>
               <div class="row">
                 <div class="col-md-12 text-center mt-5">
-                  <button
-                    type="button"
-                    class="btn bg-gradient-dark w-50"
-                    data-bs-toggle="modal"
-                    data-bs-target="#ModalChangePassword"
-                  >
-                    Change Password
-                  </button>
                   <br />
                   <button
                     type="button"
@@ -79,23 +71,20 @@
         </div>
       </div>
     </section>
-    <ChangePasswordModal></ChangePasswordModal>
     <WithdrawModal></WithdrawModal>
   </span>
 </template>
 <script>
-import ChangePasswordModal from './components/ChangePasswordModal.vue';
 import WithdrawModal from './components/WithdrawModal.vue';
 import { updateUserName } from '@/api/users.js';
 import store from '@/store';
 
 export default {
   name: 'MyInfo',
-  components: { ChangePasswordModal, WithdrawModal },
+  components: { WithdrawModal },
   data() {
     return {
-      useremail: this.$store.state.users.login.useremail,
-      username: this.$store.state.users.login.username,
+      userName: store.state.users.user.name,
     };
   },
   computed: {
@@ -106,28 +95,47 @@ export default {
   methods: {
     modifyName() {
       let message = '';
-      if (!this.username) {
+      if (!this.userName) {
         message = '변경할 이름을 입력하세요';
-        this.$alertify.error(message);
+        this.toastError(message);
         return;
       }
       let userData = {
-        user_id: this.$store.state.users.login.userid,
-        name: this.username,
+        name: this.userName,
       };
-      updateUserName(userData)
+      updateUserName(this.user.userId, userData)
         .then(({ status }) => {
+          console.log(status);
           if (status != 200) {
-            this.$alertify.error('이름 변경중 오류가 발생했습니다.');
+            this.toastError('이름 변경중 오류가 발생했습니다.');
             return;
           } else {
-            this.$alertify.success('이름이 변경됐습니다.');
-            this.$store.dispatch('users/SET_NAME', this.username);
+            this.toastSuccess('이름이 변경됐습니다.');
+            store.dispatch('users/SET_NAME', this.userName);
           }
         })
         .catch(() => {
-          this.$alertify.error('이름 변경 시도가 실패했습니다.');
+          this.toastError('이름 변경 시도가 실패했습니다.');
         });
+    },
+
+    toastError(message) {
+      this.$toast.error(message, {
+        timeout: 2000,
+        draggable: false,
+        position: 'bottom-right',
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+      });
+    },
+    toastSuccess(message) {
+      this.$toast.success(message, {
+        timeout: 2000,
+        draggable: false,
+        position: 'bottom-right',
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+      });
     },
   },
 };
