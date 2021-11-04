@@ -38,16 +38,16 @@
             </div>
             <div class="chat-message clearfix">
               <div class="input-group mb-0">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter text here..."
-                />
                 <div class="input-group-prepend">
                   <span class="input-group-text"
                     ><i class="fa fa-send"></i
                   ></span>
                 </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter text here..."
+                />
               </div>
             </div>
           </div>
@@ -211,7 +211,7 @@ body {
 }
 
 .chat .chat-history .my-message {
-  background: white;
+  background: #efefef;
 }
 
 .chat .chat-history .my-message:after {
@@ -223,13 +223,13 @@ body {
   width: 0;
   position: absolute;
   pointer-events: none;
-  border-bottom-color: white;
+  border-bottom-color: #efefef;
   border-width: 10px;
   margin-left: -10px;
 }
 
 .chat .chat-history .other-message {
-  background: lightgoldenrodyellow;
+  background: #e8f1f3;
   text-align: right;
 }
 
