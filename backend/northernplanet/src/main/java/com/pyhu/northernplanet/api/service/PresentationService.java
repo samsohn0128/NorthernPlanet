@@ -1,6 +1,6 @@
 package com.pyhu.northernplanet.api.service;
 
-import com.pyhu.northernplanet.api.request.PptToPngReq;
+import com.pyhu.northernplanet.api.request.PptPdf2PngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.common.dto.PresentationDto;
 import java.io.IOException;
@@ -14,6 +14,8 @@ public interface PresentationService {
 
   PresentationDto getPresentationDetail(Long userId, Long presentationId);
 
-  int createPpt(PptToPngReq ppTtoPngReq) throws IOException;
+  int createPpt(PptPdf2PngReq pptPdf2PngReq) throws IOException;
+
+  int createPdf(PptPdf2PngReq pptPdf2PngReq) throws IOException;
 
 }
