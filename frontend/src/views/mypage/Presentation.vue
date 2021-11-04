@@ -16,7 +16,7 @@
           :presentationInfo="data"
           :key="idx"
         ></PresentationCardItem>
-        <ModifyPPTNameModal :name="datas[idx].presentationName" :id="idx" />
+        <ModifyPPTNameModal :name="data.presentationName" :id="idx" />
       </div>
     </div>
     <AddPPTModal></AddPPTModal>
