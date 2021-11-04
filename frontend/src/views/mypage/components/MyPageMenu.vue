@@ -69,9 +69,7 @@ export default {
   },
   mounted() {
     const link = document.location.href;
-
     var linkArray = link.split('/');
-    console.log(linkArray[linkArray.length - 1]);
     if (linkArray[linkArray.length - 1] == 'presentation') {
       document.getElementsByClassName('moving-tab')[0].style.transform =
         'translate3d(0px, 34px, 0px)';
