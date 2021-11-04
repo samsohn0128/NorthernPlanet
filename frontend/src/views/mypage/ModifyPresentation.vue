@@ -15,6 +15,7 @@
         my-1
         py-1
       "
+      style="cursor: pointer"
     >
       <div class="container-fluid">
         <a
@@ -88,7 +89,8 @@
             @click="setIdx(slide.sequenceNum)"
           >
             <div class="choose-ppt-icons">
-              <i class="ni ni-fat-add"></i><i class="ni ni-fat-remove"></i>
+              <i class="ni ni-fat-add"></i><i class="ni ni-fat-remove"></i
+              ><i class="ni ni-spaceship"></i>
             </div>
             <div class="PPTbox">
               <div style="width: 100%; height: 150px">
@@ -149,6 +151,7 @@ export default {
       idx: 0,
       presentationId: this.$route.params.presentation_id,
       effects: [
+        'basic',
         'fadein',
         'fadedown',
         'fadeleft',
