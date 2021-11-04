@@ -2,6 +2,7 @@ package com.pyhu.northernplanet.api.controller;
 
 import com.pyhu.northernplanet.api.request.PptPdf2PngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
+import com.pyhu.northernplanet.api.request.PresentationUpdateReq;
 import com.pyhu.northernplanet.api.response.PresentationDetailGetRes;
 import com.pyhu.northernplanet.api.response.PresentationListGetRes;
 import com.pyhu.northernplanet.api.service.PresentationService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -82,6 +84,10 @@ public class PresentationController {
   }
 
   @GetMapping("/{userId}/{presentationId}")
+  @ApiOperation(value = "발표자료 상세 보기")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity<PresentationDetailGetRes> getPresentationDetail(
       @PathVariable @ApiParam(value = "사용자 ID", required = true) Long userId,
       @PathVariable @ApiParam(value = "발표자료 ID", required = true) Long presentationId) {
@@ -103,9 +109,25 @@ public class PresentationController {
       e.printStackTrace();
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-//    HttpHeaders httpHeaders = new HttpHeaders();
-//    httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
     return new ResponseEntity<>(presentationDetailGetRes, HttpStatus.OK);
+  }
+
+  @PutMapping("/{presentationId}")
+  @ApiOperation(value = "발표 자료 수정")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<Integer> updatePresentation(
+      @ModelAttribute PresentationUpdateReq presentationUpdateReq) {
+    log.info("[updatePresentation - controller]");
+    try {
+      presentationService.updatePresentation(presentationUpdateReq);
+    } catch (Exception e) {
+      log.error("[updatePresentation - controller] Failed to update presentation");
+      e.printStackTrace();
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PostMapping("/pptpdf")

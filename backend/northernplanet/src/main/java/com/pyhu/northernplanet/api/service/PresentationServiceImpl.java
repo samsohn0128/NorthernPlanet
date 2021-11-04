@@ -2,6 +2,7 @@ package com.pyhu.northernplanet.api.service;
 
 import com.pyhu.northernplanet.api.request.PptPdf2PngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
+import com.pyhu.northernplanet.api.request.PresentationUpdateReq;
 import com.pyhu.northernplanet.common.dto.PresentationDto;
 import com.pyhu.northernplanet.common.dto.SlideDto;
 import com.pyhu.northernplanet.db.entity.Presentation;
@@ -318,8 +319,12 @@ public class PresentationServiceImpl implements PresentationService {
     } catch (Exception e) {
       log.error("[conversionPdf2Img - service] Failed to convert pdf to png");
       e.printStackTrace();
+      return 1;
     }
+    return 0;
+  }
 
+  public int updatePresentation(PresentationUpdateReq presentationUpdateReq) {
     return 0;
   }
 }
