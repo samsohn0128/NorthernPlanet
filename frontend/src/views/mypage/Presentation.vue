@@ -104,26 +104,26 @@ export default {
       currentId: store.getters['mypage/getCurrentId'],
       currentTitle: store.getters['mypage/getCurrentTitle'],
       datas: [
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail:
-            'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 2,
-          presentationId: 2,
-          thumbnail:
-            'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title4',
-        },
+        // {
+        //   presentationId: 0,
+        //   presentationName: 'title1',
+        //   // userPresentationId: 0,
+        //   // thumbnail:
+        //   //   'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
+        // },
+        // {
+        //   presentationId: 1,
+        //   presentationName: 'title3',
+        //   // userPresentationId: 1,
+        //   // thumbnail: 'none',
+        // },
+        // {
+        //   presentationId: 2,
+        //   presentationName: 'title4',
+        //   // userPresentationId: 2,
+        //   // thumbnail:
+        //   //   'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
+        // },
       ],
       items: [
         { title: '발표자료 수정', link: '/' },
@@ -134,10 +134,15 @@ export default {
   },
   methods: {
     async getppt() {
-      let userId = store.getters['users/getUser'].userId;
+      let userId = store.getters['users/getUserId'];
       try {
-        this.datas = await getPresentations(userId);
+        let response = await getPresentations(userId);
+        this.datas = response.data;
+        // console.log('통신 완료');
+        // console.log(this.datas);
       } catch (exp) {
+        // console.log(exp);
+        // console.log('에러');
         this.$alertify.error('프레젠테이션 갖고 오기에 실패했습니다.');
       }
     },
@@ -146,9 +151,18 @@ export default {
       console.log(store.state.mypage);
     },
   },
-  // created: {
-  //   getppt(),
-  // }
+  created() {
+    this.getppt();
+    if (store.state.mypage.getToastAlert == 1) {
+      // this.$toastSuccess('사진을 저장했습니다.');
+      this.$alertify.error('사진을 저장했습니다.');
+      store.dispatch('mypage/setToastFalse');
+    } else if (store.state.mypage.getToastAlert == 2) {
+      // this.$toastSuccess('파일을 저장했습니다.');
+      this.$alertify.error('파일을 저장했습니다.');
+      store.dispatch('mypage/setToastFalse');
+    }
+  },
 };
 </script>
 

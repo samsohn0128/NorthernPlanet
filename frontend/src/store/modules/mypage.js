@@ -9,6 +9,7 @@ export default {
     currentPPTTitle: null,
     effect: null,
     sequenceNum: null,
+    getToastAlert: 0,
   }),
   mutations: {
     SET_CURRENT_PRESENTATION_INFO: function (state, data) {
@@ -25,6 +26,12 @@ export default {
     SET_SEQUENCE_NUM: function (state, sequenceNum) {
       state.sequenceNum = sequenceNum;
     },
+    SET_TOAST_TRUE: function (state, number) {
+      state.getToastAlert = number;
+    },
+    SET_TOAST_FALSE: function (state) {
+      state.getToastAlert = 0;
+    },
   },
   actions: {
     setCurrentPresenatationInfo: function ({ commit }, data) {
@@ -38,6 +45,12 @@ export default {
     },
     setSequenceNum({ commit }, sequenceNum) {
       commit('SET_SEQUENCE_NUM', sequenceNum);
+    },
+    setToastTrue({ commit }, number) {
+      commit('SET_TOAST_TRUE', number);
+    },
+    setToastFalse({ commit }) {
+      commit('SET_TOAST_FALSE');
     },
   },
   getters: {
