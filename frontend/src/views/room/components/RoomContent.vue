@@ -123,6 +123,14 @@
               >
                 Delete Room
               </button>
+              <button
+                type="button"
+                class="btn bg-gradient-warning w-100 ms-3"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-link"
+              >
+                링크생성
+              </button>
             </span>
           </div>
         </div>
@@ -147,6 +155,7 @@
       </div>
     </form>
     <RoomDeleteModal v-bind:roomId="this.room.roomId"></RoomDeleteModal>
+    <LinkModal v-bind:roomId="this.room.roomId"></LinkModal>
   </section>
 </template>
 
@@ -158,6 +167,7 @@ import { findUser } from '@/api/users.js';
 //import { deletetot, showfiledetail } from '@/api/file.js';
 import moment from 'moment';
 import RoomDeleteModal from './RoomDeleteModal.vue';
+import LinkModal from './LinkModal.vue';
 // import UploadDialog from './UploadDialog';
 // import RoomFiledetail from './RoomFiledetail.vue';
 import store from '@/store';
@@ -166,6 +176,7 @@ export default {
   components: {
     DatePicker,
     RoomDeleteModal,
+    LinkModal,
     // UploadDialog,
     // RoomFiledetail,
   },

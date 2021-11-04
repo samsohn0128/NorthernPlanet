@@ -10,7 +10,7 @@
       <div
         class="card-body content text-white ps-0"
         data-bs-toggle="modal"
-        :data-bs-target="'#RoomReadyModal' + roomInfo.room_id"
+        :data-bs-target="'#RoomReadyModal' + roomInfo.roomId"
         style="cursor: pointer"
       >
         <h4 class="text-white" style="cursor: pointer; float: left">
@@ -97,7 +97,7 @@
       </span>
     </div>
     <!-- Modal -->
-    <RoomReadyModal :roomInfo="roomInfo" :key="roomInfo.room_id" />
+    <RoomReadyModal :roomInfo="roomInfo" :key="roomInfo.roomId" />
   </div>
   <!--카드 유닛-->
 </template>
@@ -124,6 +124,7 @@ export default {
   },
   methods: {
     setAndGoToRoomInfo() {
+      console.log('roomInfo: ', this.roomInfo);
       this.$store.dispatch('rooms/setRoom', this.roomInfo);
       this.$router.push('/dashboard/info');
     },

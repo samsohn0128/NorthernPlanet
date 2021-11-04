@@ -29,7 +29,9 @@ export default {
   created() {
     store.dispatch('rooms/fetchRooms', this.user.userId);
 
+    //const url = 'ws://' + '3.36.57.26:3000' + '/groupcall';
     const url = 'wss://' + location.host + '/groupcall';
+    console.log(url);
     store.dispatch('meetingRoom/wsInit', url);
   }, //axios
 };

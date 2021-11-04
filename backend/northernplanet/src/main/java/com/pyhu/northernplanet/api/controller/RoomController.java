@@ -91,6 +91,7 @@ public class RoomController {
       @ApiResponse(code = 404, message = "방 정보 없음"),
       @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity<RoomGetRes> getRoomByRoomId(@PathVariable("roomId") Long roomId) {
+    log.info("roomId로 방 1개 가져오기: {}", roomId);
     RoomGetRes room = null;
     try {
       List<ParticipantDto> participants = participantService.getParticipantByRoomId(roomId);
