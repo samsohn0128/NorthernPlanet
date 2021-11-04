@@ -35,7 +35,7 @@ function updateUserPwd(userData) {
 }
 
 function deleteUser(userId) {
-  return instance.delete('delete/' + userId);
+  return instance.delete('/' + userId);
 }
 
 function googleLoginUser() {
