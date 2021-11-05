@@ -27,15 +27,15 @@ function checkUser(email) {
 function searchUsers(input) {
   return instance.get('search/' + input);
 }
-function updateUserName(userData) {
-  return instance.put('update/name', userData);
+function updateUserName(userId, userData) {
+  return instance.put('/' + userId, userData);
 }
 function updateUserPwd(userData) {
   return instance.put('update/password', userData);
 }
 
 function deleteUser(userId) {
-  return instance.delete('delete/' + userId);
+  return instance.delete('/' + userId);
 }
 
 function googleLoginUser() {

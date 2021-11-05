@@ -5,7 +5,6 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-
 public class PptPdf2PngReq {
 
   @ApiParam(value = "사용자 ID", required = true)

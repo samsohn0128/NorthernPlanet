@@ -1,11 +1,14 @@
 package com.pyhu.northernplanet.api.controller;
 
+import com.pyhu.northernplanet.api.request.UserPutReq;
 import com.pyhu.northernplanet.api.service.UserService;
 import com.pyhu.northernplanet.common.dto.UserOauthDto;
+import com.pyhu.northernplanet.db.entity.User;
 import com.pyhu.northernplanet.security.CurrentUser;
 import com.pyhu.northernplanet.security.UserPrincipal;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
@@ -47,113 +53,8 @@ public class UserController {
     }
     return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
   }
-//  @PostMapping("/register")
-//  @ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
-//  @ApiResponses({
-//      @ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"),
-//      @ApiResponse(code = 500, message = "서버 오류")
-//  })
-//  public ResponseEntity<? extends BaseResponseBody> register(
-//      @RequestBody @ApiParam(value = "회원가입 정보", required = true) UserRegisterReq registerInfo) {
-//
-//    //임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
-//    userService.createUser(registerInfo);
-//
-//    return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-//  }
-//
-//  @PostMapping("/login")
-//  @ApiOperation(value = "login.")
-//  @ApiResponses({
-//      @ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"),
-//      @ApiResponse(code = 500, message = "서버 오류")
-//  })
-//  public ResponseEntity<UserGetRes> login(
-//      @RequestBody @ApiParam(value = "로그인", required = true) LoginReq loginInfo) {
-//    Users user = userService.getUserByEmail(loginInfo.getEmail());
-//    UserGetRes res = new UserGetRes();
-//    res.setEmail(user.getEmail());
-//    res.setName(user.getName());
-//    res.setUserId(user.getUserId());
-//    log.info("[login] loninInfo: {}, UserGetRes: {}", loginInfo, res);
-//    if (user == null || !user.getPassword().equals(loginInfo.getPassword())) {
-//      return new ResponseEntity<UserGetRes>(HttpStatus.NOT_FOUND);
-//    }
-//    return new ResponseEntity<UserGetRes>(res, HttpStatus.OK);
-//
-//  }
-//
-//  @PutMapping("/update/name")
-//  @ApiOperation(value = "이름 변경")
-//  @ApiResponses({
-//      @ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"),
-//      @ApiResponse(code = 500, message = "서버 오류")
-//  })
-//  public ResponseEntity<? extends BaseResponseBody> updateName(
-//      @RequestBody @ApiParam(value = "수정", required = true) UserUpdateNameReq updateInfo) {
-//    Users user = userService.getUserByuserId(updateInfo.getUser_id());
-//    if (user == null) {
-//      return ResponseEntity.status(401)
-//          .body(BaseResponseBody.of(401, "update Name fail: 사용자가 없습니다."));
-//    }
-//    user.setName(updateInfo.getName());
-//    userService.updatePassword(user);
-//    return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-//  }
-//
-//  @PutMapping("/update/password")
-//  @ApiOperation(value = "비밀번호 변경")
-//  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"), @ApiResponse(code = 500, message = "서버 오류")})
-//  public ResponseEntity<? extends BaseResponseBody> updatePassword(
-//      @RequestBody @ApiParam(value = "수정", required = true) UserUpdatePwdReq updateInfo) {
-//    Users user = null;
-//    if (updateInfo.getEmail() != null) {//이메일로 비밀번호 변경
-//      user = userService.getUserByEmail(updateInfo.getEmail());
-//      if (user == null || !user.getEmail().equals(updateInfo.getEmail())) {
-//        return ResponseEntity.status(404)
-//            .body(BaseResponseBody.of(404, "update password fail: 사용자가 없습니다."));
-//      }
-//    } else if (updateInfo.getCurrentPassword() != null) {//현재 비밀번호로 비밀번호 변경
-//      user = userService.getUserByuserId(updateInfo.getUser_id());
-//      if (user == null || !user.getPassword().equals(updateInfo.getCurrentPassword())) {
-//        return ResponseEntity.status(404)
-//            .body(BaseResponseBody.of(404, "update password fail: 사용자가 없습니다."));
-//      }
-//      user.setPassword(updateInfo.getNewPassword());
-//    }
-//    log.info("[updatePassword] user: {}", user);
-//    userService.updatePassword(user);
-//    return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-//  }
-//
-//  @DeleteMapping("/delete/{userId}")
-//  @ApiOperation(value = "사용자삭제")
-//  @ApiResponses({
-//      @ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"),
-//      @ApiResponse(code = 500, message = "서버 오류")
-//  })
-//  public ResponseEntity<? extends BaseResponseBody> deleteUser(@PathVariable("userId") int userId) {
-//
-//    //임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
-//    Users user = userService.getUserByuserId(userId);
-//    if (user == null) {
-//      return ResponseEntity.status(500).body(BaseResponseBody.of(500, "fail"));
-//    }
-//    userService.deleteUser(user);
-//    return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
-//  }
-//
-//
+
+
   @GetMapping("/search/{email}")
   @ApiOperation(value = "이메일로 사용자 검색")
   @ApiResponses({
@@ -163,57 +64,54 @@ public class UserController {
       @ApiResponse(code = 500, message = "서버 오류")
   })
   public ResponseEntity<UserOauthDto> getUserByEmail(@PathVariable("email") String email) {
-    UserOauthDto userOauthDto=null;
-    try{
+    UserOauthDto userOauthDto = null;
+    try {
       userOauthDto = userService.getUserByEmail(email);
       return new ResponseEntity<>(userOauthDto, HttpStatus.OK);
-    }catch (Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return new ResponseEntity<>(userOauthDto, HttpStatus.NOT_FOUND);
 
   }
-//
-//  @GetMapping("check/{email}")
-//  @ApiOperation(value = "회원가입 - 이메일로 사용자 검색", notes = "회원가입 시 사용됨 - 계정이 없어야 true")
-//  @ApiResponses({
-//      @ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"),
-//      @ApiResponse(code = 500, message = "서버 오류")
-//  })
-//  public ResponseEntity<? extends BaseResponseBody> checkUserByEmail(
-//      @PathVariable("email") String email) {
-//    Users user = userService.getUserByEmail(email);
-//    if (user != null) {
-//      log.info("사용자 계정이 존재함 user: {}", user);
-//      return ResponseEntity.status(500).body(BaseResponseBody.of(500, "사용자 계정이 존재합니다."));
-//    } else {
-//      log.info("사용자 계정이 없음 user: {}", user);
-//      return ResponseEntity.status(200).body(BaseResponseBody.of(200, "사용자 계정이 없습니다."));
-//    }
-//  }
-//
-//
-//  @GetMapping("/search/{keyword}")
-//  @ApiOperation(value = "이메일 중 일부 키워드로 검색된 사용자 정보 가져오기")
-//  @ApiResponses({
-//      @ApiResponse(code = 200, message = "성공"),
-//      @ApiResponse(code = 401, message = "인증 실패"),
-//      @ApiResponse(code = 404, message = "사용자 없음"),
-//      @ApiResponse(code = 409, message = "이미 존재하는 유저"),
-//      @ApiResponse(code = 500, message = "서버 오류")
-//  })
-//  public ResponseEntity<List<UserGetRes>> getUserByKeyword(
-//      @PathVariable("keyword") String keyword) {
-//
-//    List<UserGetRes> userGetRes = userService.getUserByKeyword(keyword);
-//    if (userGetRes != null) {
-//      return new ResponseEntity<List<UserGetRes>>(userGetRes, HttpStatus.OK);
-//    } else {
-//      return new ResponseEntity<List<UserGetRes>>(userGetRes, HttpStatus.NOT_FOUND);
-//    }
-//
-//  }
 
+
+  @PutMapping("/{userId}")
+  @ApiOperation(value = "사용자 아이디로 이름 변경")
+  @ApiResponses({
+      @ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "사용자 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")
+  })
+  public ResponseEntity<?> updateName(@PathVariable("userId") Long userId,
+      @RequestBody @ApiParam(value = "수정", required = true) UserPutReq updateInfo) {
+    try{
+      userService.updateUserName(userId, updateInfo.getName());
+      return new ResponseEntity<>(HttpStatus.OK);
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
+
+
+  @DeleteMapping("/{userId}")
+  @ApiOperation(value = "사용자 아이디로 회원탈퇴")
+  @ApiResponses({
+      @ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "사용자 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")
+  })
+  public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId) {
+
+    try{
+      userService.deleteUser(userId);
+      return new ResponseEntity<>(HttpStatus.OK);
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
 }

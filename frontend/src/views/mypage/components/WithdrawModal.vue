@@ -56,28 +56,28 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VueAlertify from 'vue-alertify';
 import { deleteUser } from '@/api/users.js';
-Vue.use(VueAlertify);
+import store from '@/store';
 export default {
   name: 'WithdrawModal',
   components: {},
   props: {},
   data() {
-    return {
-      // userId: '',
-    };
+    return {};
+  },
+  computed: {
+    user() {
+      return store.getters['users/getUser'];
+    },
   },
   methods: {
     withdraw() {
-      const userId = this.$store.state.users.login.userid;
-      deleteUser(userId).then(({ status }) => {
+      deleteUser(this.user.userId).then(({ status }) => {
         if (status != 200) {
-          this.$alertify.error('탈퇴에 실패했습니다.');
+          this.$toastError('탈퇴에 실패했습니다.');
         } else {
-          this.$alertify.success('탈퇴 성공했습니다.');
-          this.$router.push('/dashboard');
+          this.$toastSuccess('탈퇴 성공했습니다.');
+          this.$router.push('/');
         }
       });
     },

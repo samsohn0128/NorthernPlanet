@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Long getUserIdByOauthId(int oauthId) {
+  public Long getUserIdByOauthId(String oauthId) {
     Long userId = userRepository.findUserIdByOauthId(oauthId);
     return userId;
   }
@@ -58,5 +58,20 @@ public class UserServiceImpl implements UserService {
         .image(user.getImage())
         .oauthId(user.getOauthId()).build();
     return userOauthDto;
+  }
+
+  @Override
+  public void updateUserName(Long userId, String name) {
+    User user = userRepository.findByUserId(userId).orElseThrow(
+        () -> new UsernameNotFoundException("User not found with userId : " + userId));
+    log.info("userId: {}, name: {}", userId, name);
+    userRepository.updateUserNameByUserId(userId, name);
+  }
+
+  @Override
+  public void deleteUser(Long userId) {
+    User user = userRepository.findByUserId(userId).orElseThrow(
+        () -> new UsernameNotFoundException("User not found with userId : " + userId));
+    userRepository.deleteById(userId);
   }
 }

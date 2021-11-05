@@ -1,89 +1,24 @@
 <template>
   <div class="col-12 my-page-container">
     <div id="houseScroll" class="container-box">
-      <div v-for="(data, idx) in datas" v-bind:key="idx" class="box">
-        <div class="inside-box">
-          <img
-            :src="data.thumbnail"
-            class="card-img"
-            style="width: 100%"
-            alt="thumbnail"
-          />
-        </div>
-        <div id="app" class="presentation-name-box" data-app>
-          <span>{{ data.presentationName }}</span>
-          <v-menu>
-            <template v-slot:activator="{ on: menu, attrs }">
-              <!-- hover -->
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on: tooltip }">
-                  <button
-                    class="button-setting"
-                    v-bind="attrs"
-                    v-on="{ ...tooltip, ...menu }"
-                  >
-                    <i class="ni ni-bold-down"></i>
-                  </button>
-                </template>
-                <span>설정을 변경하려면 클릭하세요.</span>
-              </v-tooltip>
-            </template>
-            <!-- Menu bar -->
-            <v-list>
-              <v-list-item
-                v-for="(item, index) in items"
-                :key="index"
-                @click="setPPTInfo(data)"
-              >
-                <!-- 발표자료 수정 -->
-                <div v-if="index == 0">
-                  <router-link
-                    :to="{
-                      name: 'ModifyPresentation',
-                      params: {
-                        presentation_id: data.presentationId,
-                        name: data.presentationName,
-                      },
-                    }"
-                  >
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                  </router-link>
-                </div>
-                <!-- 이름 수정하기 -->
-                <div v-else-if="index == 1">
-                  <a href="#ModifyPPTNameModal" data-bs-toggle="modal">{{
-                    item.title
-                  }}</a>
-                </div>
-                <!-- 발표자료 삭제하기 -->
-                <div v-else-if="index == 2">
-                  <a href="#DeletePPTModal" data-bs-toggle="modal">{{
-                    item.title
-                  }}</a>
-                </div>
-                <!-- 나머지 Menu bar일 경우 -->
-                <div v-else>
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </div>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-          <span></span>
-        </div>
-        <ModifyPPTNameModal :name="datas[idx].presentationName" :id="idx" />
+      <div class="card-presentation">
+        <PresentationNewCardItem
+          data-bs-toggle="modal"
+          data-bs-target="#AddPPTModal"
+        ></PresentationNewCardItem>
+      </div>
+      <div
+        v-for="(data, idx) in datas"
+        v-bind:key="idx"
+        class="card-presentation"
+      >
+        <PresentationCardItem
+          :presentationInfo="data"
+          :key="idx"
+        ></PresentationCardItem>
+        <ModifyPPTNameModal :name="data.presentationName" :id="idx" />
       </div>
     </div>
-    <div class="bottom-button">
-      <button
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#AddPPTModal"
-        style="margin: 0px"
-      >
-        발표자료 추가
-      </button>
-    </div>
-    <!-- <ModifyPPTNameModal :name="currentTitle" :id="currentId" /> -->
     <AddPPTModal></AddPPTModal>
     <DeletePPTModal></DeletePPTModal>
   </div>
@@ -95,50 +30,57 @@ import AddPPTModal from './components/AddPPTModal.vue';
 import ModifyPPTNameModal from './components/ModifyPPTNameModal.vue';
 import DeletePPTModal from './components/DeletePPTModal.vue';
 import store from '@/store';
-
+import PresentationCardItem from './components/PresentationCardItem.vue';
+import PresentationNewCardItem from './components/PresentationNewCardItem.vue';
 export default {
   name: 'Presentation',
-  components: { AddPPTModal, ModifyPPTNameModal, DeletePPTModal },
+  components: {
+    AddPPTModal,
+    ModifyPPTNameModal,
+    DeletePPTModal,
+    PresentationCardItem,
+    PresentationNewCardItem,
+  },
   data: () => {
     return {
       currentId: store.getters['mypage/getCurrentId'],
       currentTitle: store.getters['mypage/getCurrentTitle'],
       datas: [
-        {
-          userPresentationId: 0,
-          presentationId: 0,
-          thumbnail:
-            'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title1',
-        },
-        {
-          userPresentationId: 1,
-          presentationId: 1,
-          thumbnail: 'none',
-          presentationName: 'title3',
-        },
-        {
-          userPresentationId: 2,
-          presentationId: 2,
-          thumbnail:
-            'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-          presentationName: 'title4',
-        },
-      ],
-      items: [
-        { title: '발표자료 수정', link: '/' },
-        { title: '이름 수정하기' },
-        { title: '발표자료 삭제' },
+        // {
+        //   userPresentationId: 0,
+        //   presentationId: 0,
+        //   thumbnail:
+        //     'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
+        //   presentationName: 'title1',
+        // },
+        // {
+        //   userPresentationId: 1,
+        //   presentationId: 1,
+        //   thumbnail: 'none',
+        //   presentationName: 'title3',
+        // },
+        // {
+        //   userPresentationId: 2,
+        //   presentationId: 2,
+        //   thumbnail:
+        //     'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
+        //   presentationName: 'title4',
+        // },
       ],
     };
   },
   methods: {
     async getppt() {
-      let userId = store.getters['users/getUser'].userId;
+      let userId = store.getters['users/getUserId'];
       try {
-        this.datas = await getPresentations(userId);
+        let response = await getPresentations(userId);
+        this.datas = response.data;
+        // console.log('통신 완료');
+        // console.log(this.datas);
       } catch (exp) {
-        this.$alertify.error('프레젠테이션 갖고 오기에 실패했습니다.');
+        // console.log(exp);
+        // console.log('에러');
+        this.$toastError('프레젠테이션 갖고 오기에 실패했습니다.');
       }
     },
     async setPPTInfo(data) {
@@ -146,9 +88,9 @@ export default {
       console.log(store.state.mypage);
     },
   },
-  // created: {
-  //   getppt(),
-  // }
+  created() {
+    this.getppt();
+  },
 };
 </script>
 
@@ -160,8 +102,11 @@ export default {
 .my-page-container {
   width: 100%;
   height: 700px;
-  border: 0px solid black;
+  border: 0px solid rgb(235, 233, 233);
   border-radius: 5px;
+}
+.card-presentation {
+  margin: 2%;
 }
 .container-box {
   display: flex;
@@ -169,7 +114,7 @@ export default {
   flex-wrap: wrap;
   align-items: flex-start;
   height: 90%;
-  border: 2px solid black;
+  border: 2px solid rgb(235, 233, 233);
   border-radius: 5px;
 }
 .box {

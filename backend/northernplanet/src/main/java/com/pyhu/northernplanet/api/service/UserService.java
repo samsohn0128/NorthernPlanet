@@ -28,7 +28,7 @@ public interface UserService {
    * @param oauthId
    * @return 사용자 아이디
    */
-  Long getUserIdByOauthId(int oauthId);
+  Long getUserIdByOauthId(String oauthId);
 
   /**
    * email로 사용자 정보 가져오기
@@ -36,4 +36,16 @@ public interface UserService {
    * @return { 사용자 아이디, 이메일, 사용자 이름, 프로필 사진, oAuthId }
    */
   UserOauthDto getUserByEmail(String email);
+
+  /**
+   * 사용자 아이디로 사용자 이름 변경
+   * @param userId, name
+   */
+  void updateUserName(Long userId, String name);
+
+  /**
+   * 사용자 아이디로 회원탈퇴
+   * @param userId
+   */
+  void deleteUser(Long userId);
 }

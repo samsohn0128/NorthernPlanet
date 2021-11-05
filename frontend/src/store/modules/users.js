@@ -38,7 +38,7 @@ export default {
       state.users = payload;
     },
     SET_NAME(state, payload) {
-      state.login.username = payload;
+      state.user.name = payload;
     },
     SET_USER(state, payload) {
       state.user.userId = payload.userId;
@@ -67,7 +67,7 @@ export default {
     isLogin(state) {
       return state.login.isLogin;
     },
-    getUserid(state) {
+    getUserId(state) {
       return state.user.userId;
     },
     userInfo(state) {

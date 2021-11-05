@@ -154,13 +154,7 @@ export default {
     },
     sendMsgToKurento() {
       if (!this.userName) {
-        this.$toast.error('이름을 입력해주세요!', {
-          timeout: 2000,
-          draggable: false,
-          position: 'bottom-right',
-          pauseOnFocusLoss: false,
-          pauseOnHover: false,
-        });
+        this.$toastError('이름을 입력해주세요!');
         return;
       }
       const myNameId = this.userName + '-' + this.userId;
