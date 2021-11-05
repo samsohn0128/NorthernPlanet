@@ -1,11 +1,11 @@
 package com.pyhu.northernplanet.api.request;
 
 import io.swagger.annotations.ApiParam;
-import java.util.List;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class PresentationUpdateReq {
+public class SlidePatchReq {
 
   @ApiParam(value = "사용자 ID", required = true)
   private Long userId;
@@ -13,6 +13,6 @@ public class PresentationUpdateReq {
   @ApiParam(value = "발표 자료 ID", required = true)
   private Long presentationId;
 
-  @ApiParam(value = "발표 자료", required = true)
-  private List<SlideUpdateReq> slides;
+  @ApiParam(value = "슬라이드 파일", required = true)
+  private MultipartFile slideFile;
 }

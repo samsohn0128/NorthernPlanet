@@ -3,6 +3,7 @@ package com.pyhu.northernplanet.api.service;
 import com.pyhu.northernplanet.api.request.PptPdf2PngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.request.PresentationUpdateReq;
+import com.pyhu.northernplanet.api.request.SlidePatchReq;
 import com.pyhu.northernplanet.common.dto.PresentationDto;
 import com.pyhu.northernplanet.common.dto.SlideDto;
 import com.pyhu.northernplanet.db.entity.Presentation;
@@ -25,6 +26,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -324,7 +327,108 @@ public class PresentationServiceImpl implements PresentationService {
     return 0;
   }
 
+  @Override
   public int updatePresentation(PresentationUpdateReq presentationUpdateReq) {
+    log.info("[updatePresentation - service] userId : {}, presentationId : {}",
+        presentationUpdateReq.getUserId(), presentationUpdateReq.getPresentationId());
+
+    return 0;
+  }
+
+  @Override
+  public int updatePresentationName(Long presentationId, String presentationName) {
+    log.info("[updatePresentationName - service] userId : {}, presentationName : {}",
+        presentationId, presentationName);
+    Presentation presentation = presentationRepository.findById(presentationId)
+        .orElseThrow(() -> new RuntimeException());
+    presentation.setName(presentationName);
+    try {
+      presentationRepository.save(presentation);
+    } catch (Exception e) {
+      log.error("[updatePresentationName - service] Failed to update the name of presentation.");
+      e.printStackTrace();
+      return 1;
+    }
+    return 0;
+  }
+
+  @Override
+  public int addSlide(SlidePatchReq slidePatchReq) throws IOException {
+    log.info("[addSlide - service] userId : {}, presentationId : {}", slidePatchReq.getUserId(),
+        slidePatchReq.getPresentationId());
+    Presentation presentation = presentationRepository.findById(slidePatchReq.getPresentationId())
+        .orElseThrow(() -> new RuntimeException());
+    //save presentation
+    presentation.setSize(presentation.getSize() + 1);
+    presentationRepository.save(presentation);
+    //save slide
+    List<Slide> slides = slideRepository.findByPresentation_presentationId(
+            slidePatchReq.getPresentationId())
+        .orElseThrow(() -> new RuntimeException());
+    Collections.sort(slides, Comparator.comparingInt(Slide::getSequence));
+    String originalFileName = slidePatchReq.getSlideFile().getOriginalFilename();
+    String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
+    Integer sequence = slides.get(slides.size() - 1).getSequence() + 1;
+    String saveName = sequence + extensionName;
+    Slide slide = Slide.builder()
+        .saveName(saveName)
+        .originalName(originalFileName)
+        .directory(presentationDirectory + "/" + slidePatchReq.getUserId() + "/"
+            + presentation.getPresentationId() + "/" + saveName)
+        .sequence(sequence)
+        .presentation(presentation)
+        .build();
+
+    // save presentation files
+    String folderDirectory = presentationDirectory + "/" + slidePatchReq.getUserId() + "/"
+        + presentation.getPresentationId();
+    File folder = new File(folderDirectory);
+    if (!folder.exists()) {
+      folder.mkdirs();
+    }
+
+    MultipartFile slideFile = slidePatchReq.getSlideFile();
+    File slideSaveFile = new File(folderDirectory + "/" + sequence + extensionName);
+    slideFile.transferTo(slideSaveFile);
+    return 0;
+  }
+
+  @Override
+  public int deleteSlide(Long slideId) throws IOException {
+    log.info("[deleteSlide - service] slideId : {}", slideId);
+    Slide slide = slideRepository.findById(slideId).orElseThrow(() -> new RuntimeException());
+    //delete slide file
+    File slideFile = new File(slide.getDirectory());
+    slideFile.delete();
+    //delete slide
+    slideRepository.delete(slide);
+    //decrease presentation size
+    Presentation presentation = presentationRepository.findById(
+        slide.getPresentation().getPresentationId()).orElseThrow(() -> new RuntimeException());
+    presentation.setSize(presentation.getSize() - 1);
+    presentationRepository.save(presentation);
+    return 0;
+  }
+
+  @Override
+  public int deletePresentation(Long presentationId) throws IOException {
+    log.info("[deletePresentation - service] presentationId : {}", presentationId);
+    Presentation presentation = presentationRepository.findById(presentationId)
+        .orElseThrow(() -> new RuntimeException());
+    //delete slides
+    List<Slide> slides = slideRepository.findByPresentation_presentationId(presentationId)
+        .orElseThrow(() -> new RuntimeException());
+    slides.forEach(slide -> {
+      File slideFile = new File(slide.getDirectory());
+      slideFile.delete();
+      slideRepository.delete(slide);
+      log.info("[deletePresentation - service] {} was deleted.", slide.getSaveName());
+    });
+    //delete presentation folder
+    File presentationFolder = new File(
+        presentationDirectory + presentation.getUser().getUserId() + presentationId);
+    presentationFolder.delete();
+    log.info("[deletePresentation - service] presentation {} was deleted.", presentation.getName());
     return 0;
   }
 }

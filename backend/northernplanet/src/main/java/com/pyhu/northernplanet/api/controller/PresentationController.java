@@ -3,6 +3,7 @@ package com.pyhu.northernplanet.api.controller;
 import com.pyhu.northernplanet.api.request.PptPdf2PngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
 import com.pyhu.northernplanet.api.request.PresentationUpdateReq;
+import com.pyhu.northernplanet.api.request.SlidePatchReq;
 import com.pyhu.northernplanet.api.response.PresentationDetailGetRes;
 import com.pyhu.northernplanet.api.response.PresentationListGetRes;
 import com.pyhu.northernplanet.api.service.PresentationService;
@@ -19,11 +20,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,14 +41,15 @@ public class PresentationController {
 
   private final PresentationService presentationService;
 
-  @PostMapping("/")
+  @PostMapping(value = "/", headers = {"Content-type=application/json"})
   @ApiOperation(value = "발표자료 업로드")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity<Integer> createPresentation(
       @ModelAttribute PresentationPostReq presentationPostReq) {
-    log.info("[createPresentation - controller]");
+    log.info("[createPresentation - controller] presentationPostReq userId : {}",
+        presentationPostReq.getUserId());
     try {
       presentationService.createPresentation(presentationPostReq);
     } catch (Exception e) {
@@ -130,6 +135,42 @@ public class PresentationController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  @PatchMapping("/{presentationId}")
+  @ApiOperation(value = "발표 자료 수정")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<Integer> updatePresentationName(@PathVariable Long presentationId,
+      @RequestBody String presentationName) {
+    log.info("[updatePresentationName - controller] presentationId : {}, presentationName : {}",
+        presentationId, presentationName);
+    try {
+      presentationService.updatePresentationName(presentationId, presentationName);
+    } catch (Exception e) {
+      log.error(
+          "[updatePresentationName - controller] Failed to update the name of presentation.");
+      e.printStackTrace();
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PatchMapping("/slide")
+  @ApiOperation(value = "발표 자료 수정")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<Integer> addSlide(@ModelAttribute SlidePatchReq slidePatchReq) {
+    log.info("[addSlide - controller] presentationId: {}", slidePatchReq.getPresentationId());
+    try {
+      presentationService.addSlide(slidePatchReq);
+    } catch (Exception e) {
+      log.error("[addSlide - controller] Failed to add slide.");
+      e.printStackTrace();
+    }
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
   @PostMapping("/pptpdf")
   @ApiOperation(value = "pptpdf")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
@@ -153,4 +194,37 @@ public class PresentationController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  @DeleteMapping("/slide/{slideId}")
+  @ApiOperation(value = "발표 자료 한장 삭제")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<Integer> deleteSlide(@PathVariable Long slideId) {
+    log.info("[deleteSlide - controller] slideId : {}", slideId);
+    try {
+      presentationService.deleteSlide(slideId);
+    } catch (Exception e) {
+      log.error("[deleteSlide - controller] Failed to delete a slide.");
+      e.printStackTrace();
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @DeleteMapping("/{presentationId}")
+  @ApiOperation(value = "발표 자료 한장 삭제")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<Integer> deletePresentation(@PathVariable Long presentationId) {
+    log.info("[deleteSlide - controller] presentationId : {}", presentationId);
+    try {
+      presentationService.deletePresentation(presentationId);
+    } catch (Exception e) {
+      log.error("[deleteSlide - controller] Failed to delete a slide.");
+      e.printStackTrace();
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }
