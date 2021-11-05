@@ -39,7 +39,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navigation">
           <ul class="navbar-nav navbar-nav-hover mx-auto">
-            <li class="nav-item px-3" @click="savePPT(idx)">
+            <li class="nav-item px-3" @click="savePPT()">
               <a class="nav-link"> Save all</a>
             </li>
 
@@ -81,35 +81,62 @@
         </div>
       </div>
       <div class="body-ppt">
-        <draggable class="col-3 ppt-overflow">
-          <transition-group>
-            <div
-              class="choose-ppt card"
-              v-for="(slide, idx) in slides"
-              :key="idx"
-              @click="setIdx(slide.sequenceNum)"
-            >
-              <div class="choose-ppt-icons">
-                <i class="ni ni-fat-add"></i><i class="ni ni-fat-remove"></i
-                ><i class="ni ni-spaceship"></i>
-              </div>
-              <div class="PPTbox">
-                <div style="width: 100%; height: 150px">
-                  <img
-                    :src="slides[idx].formdata"
-                    style="max-width: 20vw; max-height: 9vw"
-                    alt="thumbnail"
-                  />
+        <div class="col-3 ppt-overflow">
+          <!-- 자동 업데이트 싫으면 @end="updateItemOrder 없애기-->
+          <draggable v-model="slideList" @end="updateItemOrder">
+            <transition-group>
+              <div
+                class="choose-ppt card"
+                v-for="(slide, idx) in slideList"
+                :key="slide.slideId"
+                @click="setIdx(slide.slideId)"
+              >
+                <div class="choose-ppt-icons">
+                  <i
+                    class="ni ni-fat-remove"
+                    @click="deleteTheSlide(slide.slideId)"
+                  ></i>
+                  <i class="ni ni-spaceship"></i>
+                </div>
+                <div class="PPTbox">
+                  <div style="width: 100%; height: 150px">
+                    <img
+                      :src="slideList[idx].slideFile"
+                      style="max-width: 20vw; max-height: 9vw"
+                      alt="thumbnail"
+                    />
+                  </div>
                 </div>
               </div>
+            </transition-group>
+          </draggable>
+          <div class="choose-ppt card">
+            <div class="PPTbox">
+              <div style="width: 100%; height: 150px">
+                <label class="input-file-button" for="input-file"
+                  >Add new slide</label
+                >
+                <input
+                  type="file"
+                  id="input-file"
+                  style="display: none"
+                  @change="selectFile"
+                />
+                <img
+                  class="image thumbnail-setting"
+                  :src="imgUrl.first"
+                  alt=""
+                  @click="dialogVisible.first = true"
+                />
+              </div>
             </div>
-          </transition-group>
-        </draggable>
+          </div>
+        </div>
         <div class="col-9 body-margin-top">
           <div class="body-main">
             <div>
               <img
-                :src="slides[idx].formdata"
+                :src="slideList[idx].slideFile"
                 style="max-width: 60vw; max-height: 50vh; margin: 5px"
                 alt="animations"
               />
@@ -125,6 +152,7 @@
               @blur="saveEditorText"
             />
           </div>
+          <img id="ItemPreview" src="" />
         </div>
       </div>
     </div>
@@ -138,8 +166,9 @@ import AppNav from '@/components/common/AppNav.vue';
 import AddPPTPictureModal from './components/AddPPTPictureModal.vue';
 import {
   getPresentationDetail,
-  presentationAddDelete,
   savePresentation,
+  addSlide,
+  deleteSlide,
 } from '@/api/presentation.js';
 import { mapActions } from 'vuex';
 import { getSlide, updateScript } from '@/api/slide.js';
@@ -154,6 +183,7 @@ export default {
       idx: 0,
       presentationId: this.$route.params.presentation_id,
       userId: store.state.users.user.userId,
+      debounce: false,
       effects: [
         'basic',
         'fadein',
@@ -167,78 +197,92 @@ export default {
         'flipy',
         'rotatein',
       ],
-      slides: [
+      presentationName: null,
+      size: null,
+      uploadTime: null,
+      slideList: [
         {
-          formdata:
+          script: 'ppt1',
+          sequence: 0,
+          slideFile:
             'https://import.cdn.thinkific.com/292401/PuGMXOphTKWoVdN3FOd6_D__6___1__png',
-          sequenceNum: 0,
-          script: 'ppt1',
+          slideId: 0,
           effect: 0,
         },
         {
-          formdata:
+          script: 'ppt1',
+          sequence: 1,
+          slideFile:
             'http://designbase.co.kr/wp-content/uploads/2020/12/webcoding-06-overview.jpg',
-          sequenceNum: 1,
-          script: 'ppt1',
+          slideId: 1,
           effect: 0,
         },
         {
-          formdata:
-            'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
-          sequenceNum: 2,
           script: 'ppt2',
+          sequence: 2,
+          slideFile:
+            'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+          slideId: 2,
           effect: 1,
         },
         {
-          formdata: 'https://d2gd6pc034wcta.cloudfront.net/images/logo@2x.png',
-          sequenceNum: 3,
           script: 'ppt3',
+          sequence: 3,
+          slideFile: 'https://d2gd6pc034wcta.cloudfront.net/images/logo@2x.png',
+          slideId: 3,
           effect: 1,
         },
         {
-          formdata:
-            'https://upload.acmicpc.net/54146fb3-bcf1-4f78-9caa-8e2c6440d7aa/',
-          sequenceNum: 4,
           script: 'ppt4',
+          sequence: 4,
+          slideFile:
+            'https://upload.acmicpc.net/54146fb3-bcf1-4f78-9caa-8e2c6440d7aa/',
+          slideId: 4,
           effect: 0,
         },
         {
-          formdata:
-            'https://papago.naver.com/97ec80a681e94540414daf2fb855ba3b.svg',
-          sequenceNum: 5,
           script: 'ppt5',
+          sequence: 5,
+          slideFile:
+            'https://papago.naver.com/97ec80a681e94540414daf2fb855ba3b.svg',
+          slideId: 5,
           effect: 0,
         },
         {
-          formdata: 'https://edu.ssafy.com/asset/images/header-logo.jpg',
-          sequenceNum: 6,
           script: 'ppt6',
+          sequence: 6,
+          slideFile: 'https://edu.ssafy.com/asset/images/header-logo.jpg',
           effect: 0,
+          slideId: 6,
         },
         {
-          formdata:
-            'https://www.samsung.com/sec/static/_images/common/logo_samsung_black.svg',
-          sequenceNum: 7,
           script: 'ppt7',
+          sequence: 7,
+          slideFile:
+            'https://www.samsung.com/sec/static/_images/common/logo_samsung_black.svg',
+          slideId: 7,
           effect: 0,
         },
         {
-          formdata:
-            'https://image7.coupangcdn.com/image/coupang/common/logo_coupang_w350.png',
-          sequenceNum: 8,
           script: 'ppt8',
+          sequence: 8,
+          slideFile:
+            'https://image7.coupangcdn.com/image/coupang/common/logo_coupang_w350.png',
+          slideId: 8,
           effect: 0,
         },
         {
-          formdata: 'data9',
-          sequenceNum: 9,
           script: 'ppt9',
+          sequence: 9,
+          slideFile: 'data9',
+          slideId: 9,
           effect: 0,
         },
         {
-          formdata: 'data10',
-          sequenceNum: 10,
           script: 'ppt10',
+          sequence: 10,
+          slideFile: 'data10',
+          slideId: 10,
           effect: 0,
         },
       ],
@@ -256,6 +300,8 @@ export default {
       slideId: 1, // 슬라이드 번호를 가져올 수 있게 되면 변경 예정 (임시로 넣어둔 값)
       editorText: '',
       showAnimation: false,
+      dialogVisible: { first: false },
+      imgUrl: { first: '' },
     };
   },
   computed: {
@@ -276,12 +322,17 @@ export default {
     ...mapActions('mypage', ['setSequenceNum']),
     // 백엔드 연결 뒤에 주석 해제, 아래 mounted도!
     async getPresentationData() {
-      // getPresentationDetail(this.userId, this.presentationId);
       let response = await getPresentationDetail(
         this.userId,
         this.presentationId,
       );
-      response.data.slideList = this.slides;
+      // ByteArray를 img로 변경
+      let imgByteArray = response.data.slideList;
+      imgByteArray.forEach(element => {
+        element.slideFile = 'data:image/png;base64,' + element.slideFile;
+      });
+      // slideList 대입
+      this.slideList = response.data.slideList;
     },
     goBackPresentation() {
       this.$router.push({ name: 'Presentation' });
@@ -320,11 +371,9 @@ export default {
       savePresentation(data);
     },
     // 슬라이드를 저장한다.
-    savePPT(sequenceNum) {
-      console.log(sequenceNum);
-      console.log(this.slides);
-      let datas = document.querySelectorAll('.choose-ppt');
-      console.log(datas);
+    savePPT() {
+      // let presentationId = this.presentationId;
+      // updateItemOrder(); // Drag&Drop으로 옮긴 순서 정보 저장하기
       // let userId = store.getters['users/getUser'];
       // let slideId = this.presentationId;
       // // let effect = store.getters['mypage/getEffect']; // effect DB, API에 등록 후 사용하기
@@ -338,40 +387,71 @@ export default {
       //     },
       //   ],
       // };
-      // savePresentation(data);
+      // savePresentation(presentationId, data);
     },
     setIdx(num) {
       this.idx = num;
     },
     // PPT를 새로 추가한다.
-    addPPT(sequenceNum) {
+    addnewSlide() {
+      // Modal 추가하기
+
+      let userId = this.userId;
       let presentationId = this.presentationId;
-      let userId = store.getters['users/getUser'];
       let data = {
         userId,
-        slides: [
-          {
-            slideId: -1, //(추가했을 경우 -1)
-            sequenceNum, //(삭제했을 경우 -1)
-          },
-        ],
+        presentationId,
       };
-      presentationAddDelete(presentationId, data);
+      addSlide(data);
     },
     // PPT를 제거한다.
-    deletePPT(slideId) {
+    deleteTheSlide(slideId) {
+      console.log('delete', slideId);
+      let userId = this.userId;
       let presentationId = this.presentationId;
-      let userId = store.getters['users/getUser'];
       let data = {
         userId,
-        slides: [
-          {
-            slideId, //(추가했을 경우 -1)
-            sequenceNum: -1, //(삭제했을 경우 -1)
-          },
-        ],
+        presentationId,
       };
-      presentationAddDelete(presentationId, data);
+      deleteSlide(slideId, data);
+    },
+    updateItemOrder: function () {
+      // get your info then...
+      let items = this.slideList.map(function (slide, index) {
+        return { slide: slide, order: index };
+      });
+      console.log(items);
+      if (this.debounce) return;
+      this.debounce = setTimeout(
+        function (items) {
+          this.debounce = false;
+          // send it to your db
+          console.log(items);
+        }.bind(this, items),
+        2000,
+      );
+    },
+    selectFile(e) {
+      const file = e.target.files[0];
+      document.getElementsByClassName('image')[0].src =
+        URL.createObjectURL(file);
+      this.imageChanged = true;
+      this.imgUrl.first = URL.createObjectURL(file);
+
+      let imgFile = document.getElementById('input-file').files;
+      if (imgFile.length == 0) {
+        imgFile = document.getElementById('input-picture').files;
+      }
+      let fileList = '';
+      for (let i = 0; i < imgFile.length; i++) {
+        fileList += imgFile[i].name + '<br>';
+      }
+      let target2 = document.getElementById('showFileName');
+      target2.innerHTML = fileList;
+    },
+    change() {
+      // this.dialog = false;
+      window.location.reload();
     },
     saveEditorText() {
       let curEditorText = this.$refs.toastuiEditor.invoke('getHTML');
@@ -488,6 +568,10 @@ export default {
   overflow: auto;
   border-right-color: rgb(85, 85, 85);
   border-width: thick;
+}
+.thumbnail-setting {
+  max-width: 200px;
+  max-height: 150px;
 }
 .body-margin-top {
   margin-top: 2vh;
