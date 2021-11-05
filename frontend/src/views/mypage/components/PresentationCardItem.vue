@@ -91,6 +91,15 @@ export default {
   width: 200px;
   height: 220px;
 }
+.card-title {
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  white-space: nowrap; /* 한 줄 제한*/
+  overflow: hidden; /* 넘어가는 글자 숨기기 */
+  /* overflow: scroll; /* 넘어가는 글자 넘기기 */
+  text-overflow: ellipsis; /* 말 줄임표 추가 */
+}
 .ni:hover {
   color: rgb(139, 0, 116);
 }
