@@ -27,7 +27,7 @@ function addPresentation(userData) {
 }
 
 function addPptpdf(userData) {
-  return file.post('/', userData);
+  return file.post('/pptpdf', userData);
 }
 
 function modifyPresentationName(presentationId, userData) {

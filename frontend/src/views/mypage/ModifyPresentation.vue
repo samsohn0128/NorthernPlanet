@@ -380,7 +380,6 @@ export default {
           this.$toastError(
             '대본을 저장하던 중에 오류가 발생했습니다. 대본이 유실될 수 있습니다.',
           );
-          // this.$toastError('대본을 저장하던 중에 오류가 발생했습니다. 대본이 유실될 수 있습니다.');
           return;
         } else {
           this.$toastSuccess('대본이 수정되었습니다.');
