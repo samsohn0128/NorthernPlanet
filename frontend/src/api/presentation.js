@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { BASE_URL } from '@/constant/index.js';
 const instance = axios.create({
-  // baseURL: 'https://i5a107.p.ssafy.io:8446/mypage/',
   baseURL: BASE_URL + '/presentation',
   headers: {
     'Content-type': 'application/json',
@@ -10,16 +9,14 @@ const instance = axios.create({
 });
 
 const file = axios.create({
-  // baseURL: 'https://i5a107.p.ssafy.io:8446/mypage/',
   baseURL: BASE_URL + '/presentation',
   headers: {
     'Content-type': 'multipart/form-data',
   },
   withCredentials: true,
 });
-
 function getPresentations(userId) {
-  return instance.get(`/${userId}`);
+  return instance.get('/' + userId);
 }
 
 function addPresentation(userData) {
@@ -31,7 +28,7 @@ function addPptpdf(userData) {
 }
 
 function modifyPresentationName(presentationId, userData) {
-  return instance.put(`/${presentationId}`, userData);
+  return instance.put('/' + presentationId, userData);
 }
 
 function deletePresentation(presentationId) {
@@ -39,17 +36,17 @@ function deletePresentation(presentationId) {
 }
 
 function getPresentationDetail(userId, presentationId) {
-  return instance.get(`/${userId}/${presentationId}`);
+  return instance.get('/' + userId + '/' + presentationId);
 }
 
 function presentationAddDelete(presentationId, data) {
-  return instance.put(`/${presentationId}`, data);
+  return instance.put('/' + presentationId, data);
   // return instance.patch(`/${presentationId}`, data);
 }
 
 function savePresentation(data) {
   let presentationId = data.slides[0].slideId;
-  return instance.put(`/${presentationId}`, data);
+  return instance.put('/' + presentationId, data);
 }
 
 export {

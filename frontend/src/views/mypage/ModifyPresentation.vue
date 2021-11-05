@@ -1,12 +1,73 @@
 <template>
   <div>
     <AppNav />
+    <nav
+      class="
+        navbar navbar-expand-lg
+        blur blur-rounded
+        top-0
+        border-bottom
+        z-index-3
+        shadow
+        w-100
+        mt-1
+        d-none d-lg-block
+        my-1
+        py-1
+      "
+      style="cursor: pointer"
+    >
+      <div class="container-fluid">
+        <a
+          class="navbar-brand font-weight-bolder ms-3"
+          rel="tooltip"
+          data-placement="bottom"
+          target="_blank"
+        >
+          {{ $route.params.name }}
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navigation"
+          aria-controls="navigation"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navigation">
+          <ul class="navbar-nav navbar-nav-hover mx-auto">
+            <li class="nav-item px-3" @click="savePPT(idx)">
+              <a class="nav-link"> Save all</a>
+            </li>
+
+            <li class="nav-item px-3" @click="goBackPresentation()">
+              <a class="nav-link"> Back to the list </a>
+            </li>
+
+            <li class="nav-item px-3" @click="showAllPPT()">
+              <a class="nav-link"> Preview </a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav">
+            <button
+              class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
+              @click="animationTabToggle('hi')"
+            >
+              Animation
+            </button>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
     <div id="modify-ppt">
       <div class="head-ppt">
-        <div class="col-3 title-css">{{ $route.params.name }}</div>
-        <div class="col-9 head-ppt-center">
-          <div>효과 미리보기</div>
-          <div class="head-animation">
+        <div class="container-fluid">
+          <div class="head-animation" v-if="showAnimation == true">
             <div
               v-for="effect in effects"
               :class="['effect-container']"
@@ -14,16 +75,7 @@
               :id="effect"
               @click="showExample(effect)"
             >
-              <div>
-                <img
-                  :src="slides[idx].formdata"
-                  style="max-width: 100px; max-height: 100px; margin-right: 5px"
-                  alt="animations"
-                />
-                <div class="text-center">
-                  {{ effect }}
-                </div>
-              </div>
+              <h6>{{ effect }}</h6>
             </div>
           </div>
         </div>
@@ -31,51 +83,22 @@
       <div class="body-ppt">
         <div class="col-3 ppt-overflow">
           <div
-            class="choose-ppt"
+            class="choose-ppt card"
             v-for="(slide, idx) in slides"
             :key="idx"
             @click="setIdx(slide.sequenceNum)"
           >
-            <div class="PPTbox" data-app>
-              <div style="width: 15px"></div>
-              <img
-                :src="slides[idx].formdata"
-                style="max-width: 20vw; height: 70px"
-                alt="thumbnail"
-              />
-              <div style="width: 15px">
-                <v-menu>
-                  <template v-slot:activator="{ on: menu, attrs }">
-                    <!-- hover -->
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on: tooltip }">
-                        <button v-bind="attrs" v-on="{ ...tooltip, ...menu }">
-                          <i class="ni ni-settings-gear-65"></i>
-                        </button>
-                      </template>
-                      <span>PPT를 추가하거나 삭제하려면 클릭하세요.</span>
-                    </v-tooltip>
-                  </template>
-                  <!-- Menu bar -->
-                  <v-list>
-                    <v-list-item v-for="(item, index) in items" :key="index">
-                      <!-- PPT 추가 -->
-                      <div v-if="index == 0">
-                        <v-list-item-title @click="addPPT(slide.sequenceNum)">{{
-                          item.title
-                        }}</v-list-item-title>
-                      </div>
-                      <!-- PPT 삭제 -->
-                      <div v-else>
-                        <v-list-item-title
-                          @click="deletePPT(slide.sequenceNum)"
-                          >{{ item.title }}</v-list-item-title
-                        >
-                      </div>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-                <div v-if="slide.effect != 0" class="effect-mark-box"></div>
+            <div class="choose-ppt-icons">
+              <i class="ni ni-fat-add"></i><i class="ni ni-fat-remove"></i
+              ><i class="ni ni-spaceship"></i>
+            </div>
+            <div class="PPTbox">
+              <div style="width: 100%; height: 150px">
+                <img
+                  :src="slides[idx].formdata"
+                  style="max-width: 20vw; max-height: 9vw"
+                  alt="thumbnail"
+                />
               </div>
             </div>
           </div>
@@ -89,40 +112,16 @@
                 alt="animations"
               />
             </div>
-            <!-- <textarea name="text" id="" cols="30" rows="10"></textarea> -->
-            <div>
-              <Editor
-                ref="toastuiEditor"
-                :options="editorOptions"
-                height="300px"
-                initialEditType="wysiwyg"
-                previewStyle="vertical"
-                @blur="saveEditorText"
-              />
-            </div>
           </div>
-          <div class="buttons-setting">
-            <div>
-              <button @click="goBackPresentation()">목록 보기</button>
-              <!-- <button class="buttons-detail">대본 저장</button> -->
-            </div>
-            <div>
-              <button
-                class="buttons-detail"
-                data-bs-toggle="modal"
-                data-bs-target="#AddPPTPictureModal"
-                style="margin: 0px"
-                @click="setSequenceNum(idx)"
-              >
-                사진 등록하기
-              </button>
-              <button class="buttons-detail" @click="savePPT(idx)">
-                슬라이드 저장
-              </button>
-              <button class="buttons-detail" @click="showAllPPT()">
-                전체 미리보기
-              </button>
-            </div>
+          <div>
+            <Editor
+              ref="toastuiEditor"
+              :options="editorOptions"
+              height="300px"
+              initialEditType="wysiwyg"
+              previewStyle="vertical"
+              @blur="saveEditorText"
+            />
           </div>
         </div>
       </div>
@@ -253,6 +252,7 @@ export default {
       },
       slideId: 1, // 슬라이드 번호를 가져올 수 있게 되면 변경 예정 (임시로 넣어둔 값)
       editorText: '',
+      showAnimation: false,
     };
   },
   computed: {
@@ -388,6 +388,11 @@ export default {
         }
       });
     },
+    animationTabToggle(message) {
+      console.log(message);
+      this.showAnimation = !this.showAnimation;
+      console.log('show animation: ', this.showAnimation);
+    },
   },
   created() {
     getSlide(this.slideId).then(res => {
@@ -409,11 +414,29 @@ export default {
 
 <style scoped>
 #modify-ppt {
-  margin: 1vw;
+  margin-top: 0%;
+  margin-left: 2%;
+  margin-right: 2%;
+  padding: 0%;
+}
+.effect-container {
+  position: relative;
+  cursor: pointer;
+  margin: 1%;
+  width: 200px;
+  height: 80px;
+  background: white;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .head-ppt {
   display: flex;
   flex-direction: row;
+  border-radius: 15px;
+  background-color: aliceblue;
 }
 .title-css {
   display: flex;
@@ -429,13 +452,16 @@ export default {
 .choose-ppt:hover {
   cursor: pointer;
 }
+
 .PPTbox {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: top;
-  border: 0.5px solid black;
+  width: 100%;
+
+  /* flex-direction: row; */
+  /* justify-content: space-between; */
+  /* align-items: top; */
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
 }
+
 .head-ppt-center {
   flex-direction: column;
 }
@@ -450,9 +476,11 @@ export default {
 }
 .ppt-overflow {
   margin-top: 2vh;
-  height: 60vh;
+  height: 80vh;
   text-align: center;
   overflow: auto;
+  border-right-color: rgb(85, 85, 85);
+  border-width: thick;
 }
 .body-margin-top {
   margin-top: 2vh;
@@ -466,7 +494,10 @@ export default {
 }
 .body-main {
   flex-direction: column;
-  border: 2px solid black;
+  text-align: center;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  resize: vertical;
+  overflow: auto;
 }
 .buttons-setting {
   display: flex;
@@ -478,9 +509,7 @@ export default {
 }
 
 /* 애니메이션 설정 */
-.basic {
-  animation: basic 0.7s;
-}
+
 .fadein {
   animation: fadeIn 0.7s;
 }
@@ -521,19 +550,14 @@ export default {
 
 /* 스크롤바 뒷 배경 설정*/
 ::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: aliceblue;
 }
 
 /* 스크롤바 막대 설정*/
 ::-webkit-scrollbar-thumb {
   height: 17%;
-  background-color: #303f9f;
+  background-color: rgb(228, 226, 226);
   /* 스크롤바 둥글게 설정    */
   border-radius: 10px;
-}
-
-/* 스크롤바 뒷 배경 설정*/
-::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.33);
 }
 </style>

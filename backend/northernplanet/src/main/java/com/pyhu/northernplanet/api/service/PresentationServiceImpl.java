@@ -52,12 +52,10 @@ public class PresentationServiceImpl implements PresentationService {
 //  private final String presentationDirectory = "/home/ubuntu/presentation";
   // dongwoo
 //  private final String presentationDirectory = "/Users/dongwoosohn/presentation";
-  //aeeun
+  // aeeun
 //  private final String presentationDirectory = "/Users/gim-aeeun/file";
   // juyeop
   private final String presentationDirectory = "C:\\Users\\JuYeop\\pjt3-picture";
-
-
 
   @Override
   public int createPresentation(PresentationPostReq presentationPostReq) throws IOException {
