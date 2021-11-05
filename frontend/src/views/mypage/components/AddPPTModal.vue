@@ -80,6 +80,7 @@ export default {
     return {
       dialogVisible: { first: false },
       imgUrl: { first: '' },
+      userId: store.getters['users/getUserId'],
     };
   },
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
@@ -115,12 +116,6 @@ export default {
       for (let i = 0; i < imgFile.length; i++) {
         formData.append('pptPdf', imgFile[i]);
       }
-      formData.append('file', imgFile);
-      formData.append('user_id', store.getters['users/getUser'].userId);
-      // let userData = {
-      //   user_id: store.getters['users/getUser'].userId,
-      //   formData,
-      // };
       try {
         await addPptpdf(formData);
         await this.$toastSuccess('파일을 저장했습니다.');
@@ -137,7 +132,7 @@ export default {
       this.imgUrl.first = URL.createObjectURL(file);
 
       let imgFile = document.getElementById('input-file').files;
-      if (!imgFile) {
+      if (imgFile.length == 0) {
         imgFile = document.getElementById('input-picture').files;
       }
       let fileList = '';
@@ -146,6 +141,10 @@ export default {
       }
       let target2 = document.getElementById('showFileName');
       target2.innerHTML = fileList;
+    },
+    change() {
+      // this.dialog = false;
+      window.location.reload();
     },
   },
 };
