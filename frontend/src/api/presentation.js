@@ -44,9 +44,16 @@ function presentationAddDelete(presentationId, data) {
   // return instance.patch(`/${presentationId}`, data);
 }
 
-function savePresentation(data) {
-  let presentationId = data.slides[0].slideId;
+function savePresentation(presentationId, data) {
   return instance.put('/' + presentationId, data);
+}
+
+function addSlide(data) {
+  return instance.patch('/slide', data);
+}
+
+function deleteSlide(slideId, data) {
+  return instance.delete(`/slide/${slideId}`, data);
 }
 
 export {
@@ -58,4 +65,6 @@ export {
   getPresentationDetail,
   presentationAddDelete,
   savePresentation,
+  addSlide,
+  deleteSlide,
 };
