@@ -82,34 +82,23 @@ export default {
     user() {
       return this.$store.getters['users/getUser'];
     },
-    chatTime() {
-      return this.$store.getters['meetingRoom/getChatTime'];
-    },
-    chatName() {
-      return this.$store.getters['meetingRoom/getChatName'];
-    },
-    chatContent() {
-      return this.$store.getters['meetingRoom/getChatContent'];
+    chat() {
+      return this.$store.getters['meetingRoom/getChat'];
     },
   },
   watch: {
-    chatTime(value) {
-      console.log('watch chatTime', value);
+    chat(value) {
+      console.log('watch chat', value);
     },
   },
   methods: {
     addChat: function () {
-      console.log(this.user.name);
-      console.log(this.chatInput);
-
       // 현재 채팅을 전송한 시간
       this.date = new Date();
       let ampm = this.date.getHours() >= 12 ? 'PM' : 'AM';
       let hours = this.date.getHours();
       hours = hours ? hours : 12;
       this.nowTime = hours + ' : ' + this.date.getMinutes() + ' ' + ampm;
-
-      console.log(this.nowTime);
 
       const message = {
         id: 'addChat',

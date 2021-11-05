@@ -19,9 +19,7 @@ export default {
     roomNumber: null,
     participants: null,
     myName: null,
-    chatTime: null,
-    chatName: null,
-    chatContent: null,
+    chat: null,
     /* nowImageUrl: null, */
     currentPage: null,
     manager: null,
@@ -102,9 +100,7 @@ export default {
       state.roomNumber = null;
       state.participants = null;
       state.myName = null;
-      state.chatTime = null;
-      state.chatName = null;
-      state.chatContent = null;
+      state.chat = null;
       /* state.nowImageUrl = null; */
       state.currentPage = null;
       state.manager = null;
@@ -143,9 +139,7 @@ export default {
       state.selectedContentId = id;
     }, */
     ADD_CHAT(state, { time, name, chatContent }) {
-      state.chatTime = time;
-      state.chatName = name;
-      state.chatContent = chatContent;
+      state.chat = { time, name, chatContent };
     },
   },
   // actions
@@ -408,14 +402,8 @@ export default {
     },
   },
   getters: {
-    getChatTime(state) {
-      return state.chatTime;
-    },
-    getChatName(state) {
-      return state.chatName;
-    },
-    getChatContent(state) {
-      return state.chatContent;
+    getChat(state) {
+      return state.chat;
     },
   },
 };
