@@ -21,13 +21,22 @@
                 </li>
                 <li class="clearfix">
                   <div class="message-data">
-                    <span class="message-data-time">10:12 AM, Today</span>
+                    <span class="message-data-time">10:12 AM, minji</span>
                   </div>
                   <div class="message my-message">Are we meeting today?</div>
                 </li>
                 <li class="clearfix">
                   <div class="message-data">
-                    <span class="message-data-time">10:15 AM, Today</span>
+                    <span class="message-data-time">10:15 AM, youngeun</span>
+                  </div>
+                  <div class="message my-message">
+                    Project has been already finished and I have results to show
+                    you.
+                  </div>
+                </li>
+                <li class="clearfix">
+                  <div class="message-data">
+                    <span class="message-data-time">10:15 AM, youngeun</span>
                   </div>
                   <div class="message my-message">
                     Project has been already finished and I have results to show
@@ -42,8 +51,10 @@
                   type="text"
                   class="form-control"
                   placeholder="Enter text here..."
+                  v-model="chatInput"
+                  @keyup.enter="addChat"
                 />
-                <div class="input-group-prepend">
+                <div class="input-group-prepend" @click="addChat">
                   <span class="input-group-text"
                     ><i class="fa fa-send"></i
                   ></span>
@@ -60,6 +71,56 @@
 <script>
 export default {
   name: 'Chat',
+  data() {
+    return {
+      chatInput: '',
+      date: null,
+      nowTime: '',
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.getters['users/getUser'];
+    },
+    chatTime() {
+      return this.$store.getters['meetingRoom/getChatTime'];
+    },
+    chatName() {
+      return this.$store.getters['meetingRoom/getChatName'];
+    },
+    chatContent() {
+      return this.$store.getters['meetingRoom/getChatContent'];
+    },
+  },
+  watch: {
+    chatTime(value) {
+      console.log('watch chatTime', value);
+    },
+  },
+  methods: {
+    addChat: function () {
+      console.log(this.user.name);
+      console.log(this.chatInput);
+
+      // 현재 채팅을 전송한 시간
+      this.date = new Date();
+      let ampm = this.date.getHours() >= 12 ? 'PM' : 'AM';
+      let hours = this.date.getHours();
+      hours = hours ? hours : 12;
+      this.nowTime = hours + ' : ' + this.date.getMinutes() + ' ' + ampm;
+
+      console.log(this.nowTime);
+
+      const message = {
+        id: 'addChat',
+        time: this.nowTime,
+        name: this.user.name,
+        chatContent: this.chatInput,
+      };
+
+      this.$store.dispatch('meetingRoom/sendMessage', message);
+    },
+  },
 };
 </script>
 

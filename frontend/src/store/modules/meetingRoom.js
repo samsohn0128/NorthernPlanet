@@ -19,6 +19,9 @@ export default {
     roomNumber: null,
     participants: null,
     myName: null,
+    chatTime: null,
+    chatName: null,
+    chatContent: null,
     /* nowImageUrl: null, */
     currentPage: null,
     manager: null,
@@ -99,6 +102,9 @@ export default {
       state.roomNumber = null;
       state.participants = null;
       state.myName = null;
+      state.chatTime = null;
+      state.chatName = null;
+      state.chatContent = null;
       /* state.nowImageUrl = null; */
       state.currentPage = null;
       state.manager = null;
@@ -136,6 +142,11 @@ export default {
     /* SET_SELECTED_CONTENT_ID(state, id) {
       state.selectedContentId = id;
     }, */
+    ADD_CHAT(state, { time, name, chatContent }) {
+      state.chatTime = time;
+      state.chatName = name;
+      state.chatContent = chatContent;
+    },
   },
   // actions
   actions: {
@@ -197,6 +208,10 @@ export default {
               }
             },
           );
+          break;
+        }
+        case 'addChat': {
+          context.dispatch('addChat', message);
           break;
         }
         default: {
@@ -387,6 +402,20 @@ export default {
           context.commit('SET_ONGOING_PRESENTATION', { message, imageSrcs });
         });
       }
+    },
+    addChat(context, message) {
+      context.commit('ADD_CHAT', message);
+    },
+  },
+  getters: {
+    getChatTime(state) {
+      return state.chatTime;
+    },
+    getChatName(state) {
+      return state.chatName;
+    },
+    getChatContent(state) {
+      return state.chatContent;
     },
   },
 };
