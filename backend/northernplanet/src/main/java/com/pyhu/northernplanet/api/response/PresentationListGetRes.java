@@ -15,4 +15,7 @@ public class PresentationListGetRes {
   private Integer size;
 
   private LocalDateTime uploadTime;
+
+  private byte[] thumbnail;
+
 }

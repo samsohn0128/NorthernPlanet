@@ -122,11 +122,23 @@ public class PresentationServiceImpl implements PresentationService {
         .orElseThrow(() -> new RuntimeException());
     List<PresentationDto> presentationDtoList = new ArrayList<>();
     presentationList.forEach(presentation -> {
+      Slide slide = slideRepository.findByPresentation_presentationId(
+          presentation.getPresentationId()).orElseThrow(() -> new RuntimeException()).get(0);
+      byte[] slideByteArray = null;
+      try (InputStream inputStream = new FileInputStream(slide.getDirectory())) {
+        slideByteArray = IOUtils.toByteArray(inputStream);
+      } catch (Exception e) {
+        log.error(
+            "[getPresentationDetail - service] Failed to get inputStream. slideDirectory : {}",
+            slide.getDirectory());
+        e.printStackTrace();
+      }
       PresentationDto presentationDto = PresentationDto.builder()
           .presentationId(presentation.getPresentationId())
           .presentationName(presentation.getName())
           .size(presentation.getSize())
           .uploadTime(presentation.getUploadTime())
+          .thumbnail(slideByteArray)
           .build();
       presentationDtoList.add(presentationDto);
       log.info("[getPresentationList - service] presentationId : {}",
@@ -146,10 +158,8 @@ public class PresentationServiceImpl implements PresentationService {
     List<SlideDto> slideDtoList = new ArrayList<>();
     slideList.forEach(slide -> {
       byte[] slideByteArray = null;
-      try {
-        InputStream inputStream = new FileInputStream(slide.getDirectory());
+      try (InputStream inputStream = new FileInputStream(slide.getDirectory())) {
         slideByteArray = IOUtils.toByteArray(inputStream);
-        inputStream.close();
       } catch (Exception e) {
         log.error(
             "[getPresentationDetail - service] Failed to get inputStream. slideDirectory : {}",
