@@ -294,7 +294,7 @@ public class PresentationServiceImpl implements PresentationService {
     presentation = presentationRepository.saveAndFlush(presentation);
 
     try {
-      String resultImgPath = getPresentationDirectory(pptPdf2PngReq.getUserId(), ,
+      String resultImgPath = getPresentationDirectory(pptPdf2PngReq.getUserId(),
           presentation.getPresentationId());//이미지가 저장될 경로
       Files.createDirectories(Paths.get(resultImgPath));
       //PDF2Img에서는 경로가 없는 경우 이미지 파일이 생성이 안되기 때문에 디렉토리를 만들어준다.
