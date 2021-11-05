@@ -75,7 +75,9 @@ export default {
       try {
         this.datas = await getPresentations(userId);
       } catch (exp) {
-        this.$alertify.error('프레젠테이션 갖고 오기에 실패했습니다.');
+        // console.log(exp);
+        // console.log('에러');
+        this.$toastError('프레젠테이션 갖고 오기에 실패했습니다.');
       }
     },
     async setPPTInfo(data) {
@@ -83,9 +85,9 @@ export default {
       console.log(store.state.mypage);
     },
   },
-  // created: {
-  //   getppt(),
-  // }
+  created() {
+    this.getppt();
+  },
 };
 </script>
 

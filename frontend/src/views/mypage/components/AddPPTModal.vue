@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { addPresentation, getPresentations } from '@/api/presentation.js';
+import { addPresentation, addPptpdf } from '@/api/presentation.js';
 import store from '@/store';
 
 export default {
@@ -86,9 +86,34 @@ export default {
   methods: {
     async addPPT() {
       let formData = new FormData();
+      let imgFile = document.getElementById('input-picture').files;
+      console.log(imgFile);
+      if (imgFile.length == 0) {
+        this.Pptpdf();
+        return;
+      }
+      formData.append('userId', this.userId);
+      for (let i = 0; i < imgFile.length; i++) {
+        formData.append('slides', imgFile[i]);
+      }
+      try {
+        await addPresentation(formData);
+        await this.$toastSuccess('사진을 저장했습니다.');
+        this.$router.go();
+      } catch (exp) {
+        this.$toastError('사진 추가에 실패했습니다.');
+      }
+    },
+    async Pptpdf() {
+      let formData = new FormData();
       let imgFile = document.getElementById('input-file').files;
-      if (!imgFile) {
-        imgFile = document.getElementById('input-picture').files;
+      if (imgFile.length == 0) {
+        this.$toastError('파일을 추가해주세요.');
+        return;
+      }
+      formData.append('userId', this.userId);
+      for (let i = 0; i < imgFile.length; i++) {
+        formData.append('pptPdf', imgFile[i]);
       }
       formData.append('file', imgFile);
       formData.append('user_id', store.getters['users/getUser'].userId);
@@ -97,10 +122,11 @@ export default {
       //   formData,
       // };
       try {
-        await addPresentation(formData);
-        await getPresentations(formData.user_id);
+        await addPptpdf(formData);
+        await this.$toastSuccess('파일을 저장했습니다.');
+        this.$router.go();
       } catch (exp) {
-        this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
+        this.$toastError('프레젠테이션 추가에 실패했습니다.');
       }
     },
     selectFile(e) {

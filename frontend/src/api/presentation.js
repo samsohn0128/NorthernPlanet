@@ -9,12 +9,24 @@ const instance = axios.create({
   withCredentials: true,
 });
 
+const file = axios.create({
+  // baseURL: 'https://i5a107.p.ssafy.io:8446/mypage/',
+  baseURL: BASE_URL + '/presentation',
+  headers: {
+    'Content-type': 'multipart/form-data',
+  },
+  withCredentials: true,
+});
 function getPresentations(userId) {
   return instance.get('list/' + userId);
 }
 
 function addPresentation(userData) {
-  return instance.post('', userData);
+  return file.post('/', userData);
+}
+
+function addPptpdf(userData) {
+  return file.post('/pptpdf', userData);
 }
 
 function modifyPresentationName(presentationId, userData) {
@@ -46,4 +58,5 @@ export {
   getPresentationDetail,
   presentationAddDelete,
   savePresentation,
+  addPptpdf,
 };
