@@ -29,57 +29,60 @@
         </div>
       </div>
       <div class="body-ppt">
-        <div class="col-3 ppt-overflow">
-          <div
-            class="choose-ppt"
-            v-for="(slide, idx) in slides"
-            :key="idx"
-            @click="setIdx(slide.sequenceNum)"
-          >
-            <div class="PPTbox" data-app>
-              <div style="width: 15px"></div>
-              <img
-                :src="slides[idx].formdata"
-                style="max-width: 20vw; height: 70px"
-                alt="thumbnail"
-              />
-              <div style="width: 15px">
-                <v-menu>
-                  <template v-slot:activator="{ on: menu, attrs }">
-                    <!-- hover -->
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on: tooltip }">
-                        <button v-bind="attrs" v-on="{ ...tooltip, ...menu }">
-                          <i class="ni ni-settings-gear-65"></i>
-                        </button>
-                      </template>
-                      <span>PPT를 추가하거나 삭제하려면 클릭하세요.</span>
-                    </v-tooltip>
-                  </template>
-                  <!-- Menu bar -->
-                  <v-list>
-                    <v-list-item v-for="(item, index) in items" :key="index">
-                      <!-- PPT 추가 -->
-                      <div v-if="index == 0">
-                        <v-list-item-title @click="addPPT(slide.sequenceNum)">{{
-                          item.title
-                        }}</v-list-item-title>
-                      </div>
-                      <!-- PPT 삭제 -->
-                      <div v-else>
-                        <v-list-item-title
-                          @click="deletePPT(slide.sequenceNum)"
-                          >{{ item.title }}</v-list-item-title
-                        >
-                      </div>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-                <div v-if="slide.effect != 0" class="effect-mark-box"></div>
+        <draggable class="col-3 ppt-overflow">
+          <transition-group>
+            <div
+              class="choose-ppt"
+              v-for="(slide, idx) in slides"
+              :key="slide.sequenceNum"
+              @click="setIdx(slide.sequenceNum)"
+            >
+              <div class="PPTbox" data-app>
+                <div style="width: 15px"></div>
+                <img
+                  :src="slides[idx].formdata"
+                  style="max-width: 20vw; height: 70px"
+                  alt="thumbnail"
+                />
+                <div style="width: 15px">
+                  <v-menu>
+                    <template v-slot:activator="{ on: menu, attrs }">
+                      <!-- hover -->
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on: tooltip }">
+                          <button v-bind="attrs" v-on="{ ...tooltip, ...menu }">
+                            <i class="ni ni-settings-gear-65"></i>
+                          </button>
+                        </template>
+                        <span>PPT를 추가하거나 삭제하려면 클릭하세요.</span>
+                      </v-tooltip>
+                    </template>
+                    <!-- Menu bar -->
+                    <v-list>
+                      <v-list-item v-for="(item, index) in items" :key="index">
+                        <!-- PPT 추가 -->
+                        <div v-if="index == 0">
+                          <v-list-item-title
+                            @click="addPPT(slide.sequenceNum)"
+                            >{{ item.title }}</v-list-item-title
+                          >
+                        </div>
+                        <!-- PPT 삭제 -->
+                        <div v-else>
+                          <v-list-item-title
+                            @click="deletePPT(slide.sequenceNum)"
+                            >{{ item.title }}</v-list-item-title
+                          >
+                        </div>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                  <div v-if="slide.effect != 0" class="effect-mark-box"></div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </transition-group>
+        </draggable>
         <div class="col-9 body-margin-top">
           <div class="body-main">
             <div>
@@ -132,6 +135,7 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable';
 import AppNav from '@/components/common/AppNav.vue';
 import AddPPTPictureModal from './components/AddPPTPictureModal.vue';
 import {
@@ -146,7 +150,7 @@ import store from '@/store';
 
 export default {
   name: 'ModifyPresentation',
-  components: { AppNav, AddPPTPictureModal, Editor },
+  components: { draggable, AppNav, AddPPTPictureModal, Editor },
   data() {
     return {
       idx: 0,
@@ -318,20 +322,24 @@ export default {
     },
     // 슬라이드를 저장한다.
     savePPT(sequenceNum) {
-      let userId = store.getters['users/getUser'];
-      let slideId = this.presentationId;
-      // let effect = store.getters['mypage/getEffect']; // effect DB, API에 등록 후 사용하기
-      let data = {
-        userId,
-        slides: [
-          {
-            slideId, //(추가했을 경우 -1)
-            sequenceNum, //(삭제했을 경우 -1)
-            // effect,
-          },
-        ],
-      };
-      savePresentation(data);
+      console.log(sequenceNum);
+      console.log(this.slides);
+      let datas = document.querySelectorAll('.choose-ppt');
+      console.log(datas);
+      // let userId = store.getters['users/getUser'];
+      // let slideId = this.presentationId;
+      // // let effect = store.getters['mypage/getEffect']; // effect DB, API에 등록 후 사용하기
+      // let data = {
+      //   userId,
+      //   slides: [
+      //     {
+      //       slideId, //(추가했을 경우 -1)
+      //       sequenceNum, //(삭제했을 경우 -1)
+      //       // effect,
+      //     },
+      //   ],
+      // };
+      // savePresentation(data);
     },
     setIdx(num) {
       this.idx = num;

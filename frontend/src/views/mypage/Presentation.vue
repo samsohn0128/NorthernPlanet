@@ -153,13 +153,6 @@ export default {
   },
   created() {
     this.getppt();
-    if (store.state.mypage.getToastAlert == 1) {
-      this.$toastSuccess('사진을 저장했습니다.');
-      store.dispatch('mypage/setToastFalse');
-    } else if (store.state.mypage.getToastAlert == 2) {
-      this.$toastSuccess('파일을 저장했습니다.');
-      store.dispatch('mypage/setToastFalse');
-    }
   },
 };
 </script>

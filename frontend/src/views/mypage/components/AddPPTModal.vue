@@ -99,8 +99,8 @@ export default {
       }
       try {
         await addPresentation(formData);
-        await store.dispatch('mypage/setToastTrue', 1);
-        await this.$router.go();
+        await this.$toastSuccess('사진을 저장했습니다.');
+        this.$router.go();
       } catch (exp) {
         this.$toastError('사진 추가에 실패했습니다.');
       }
@@ -118,8 +118,8 @@ export default {
       }
       try {
         await addPptpdf(formData);
-        await store.dispatch('mypage/setToastTrue', 2);
-        await this.$router.go();
+        await this.$toastSuccess('파일을 저장했습니다.');
+        this.$router.go();
       } catch (exp) {
         this.$toastError('프레젠테이션 추가에 실패했습니다.');
       }
