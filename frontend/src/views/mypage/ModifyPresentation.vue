@@ -113,15 +113,14 @@
           <div class="choose-ppt card">
             <div class="PPTbox">
               <div style="width: 100%; height: 150px">
-                <label class="input-file-button" for="input-file"
-                  >Add new slide</label
-                >
-                <input
-                  type="file"
-                  id="input-file"
-                  style="display: none"
-                  @change="selectFile"
-                />
+                <label
+                  >Add new slide
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#AddSlideModal"
+                  />
+                </label>
                 <img
                   class="image thumbnail-setting"
                   :src="imgUrl.first"
@@ -156,14 +155,14 @@
         </div>
       </div>
     </div>
-    <AddPPTPictureModal></AddPPTPictureModal>
+    <AddSlideModal></AddSlideModal>
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable';
 import AppNav from '@/components/common/AppNav.vue';
-import AddPPTPictureModal from './components/AddPPTPictureModal.vue';
+import AddSlideModal from './components/AddSlideModal.vue';
 import {
   getPresentationDetail,
   savePresentation,
@@ -177,7 +176,7 @@ import store from '@/store';
 
 export default {
   name: 'ModifyPresentation',
-  components: { draggable, AppNav, AddPPTPictureModal, Editor },
+  components: { draggable, AppNav, AddSlideModal, Editor },
   data() {
     return {
       idx: 0,
@@ -406,14 +405,13 @@ export default {
     },
     // PPT를 제거한다.
     deleteTheSlide(slideId) {
-      console.log('delete', slideId);
-      let userId = this.userId;
-      let presentationId = this.presentationId;
-      let data = {
-        userId,
-        presentationId,
-      };
-      deleteSlide(slideId, data);
+      try {
+        deleteSlide(slideId);
+        this.$toastSuccess('슬라이드가 삭제되었습니다.');
+        this.$router.go();
+      } catch (exp) {
+        this.$toastError('사진 삭제에 실패했습니다.');
+      }
     },
     updateItemOrder: function () {
       // get your info then...
@@ -430,28 +428,6 @@ export default {
         }.bind(this, items),
         2000,
       );
-    },
-    selectFile(e) {
-      const file = e.target.files[0];
-      document.getElementsByClassName('image')[0].src =
-        URL.createObjectURL(file);
-      this.imageChanged = true;
-      this.imgUrl.first = URL.createObjectURL(file);
-
-      let imgFile = document.getElementById('input-file').files;
-      if (imgFile.length == 0) {
-        imgFile = document.getElementById('input-picture').files;
-      }
-      let fileList = '';
-      for (let i = 0; i < imgFile.length; i++) {
-        fileList += imgFile[i].name + '<br>';
-      }
-      let target2 = document.getElementById('showFileName');
-      target2.innerHTML = fileList;
-    },
-    change() {
-      // this.dialog = false;
-      window.location.reload();
     },
     saveEditorText() {
       let curEditorText = this.$refs.toastuiEditor.invoke('getHTML');
@@ -470,7 +446,6 @@ export default {
           return;
         } else {
           this.$toastSuccess('대본이 수정되었습니다.');
-
           this.editorText = curEditorText;
         }
       });
