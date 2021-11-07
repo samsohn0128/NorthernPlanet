@@ -39,10 +39,10 @@ function getPresentationDetail(userId, presentationId) {
   return instance.get('/' + userId + '/' + presentationId);
 }
 
-function presentationAddDelete(presentationId, data) {
-  return instance.put('/' + presentationId, data);
-  // return instance.patch(`/${presentationId}`, data);
-}
+// function presentationAddDelete(presentationId, data) {
+//   return instance.put('/' + presentationId, data);
+//   // return instance.patch(`/${presentationId}`, data);
+// }
 
 function savePresentation(presentationId, data) {
   return instance.put('/' + presentationId, data);
@@ -52,8 +52,8 @@ function addSlide(data) {
   return instance.patch('/slide', data);
 }
 
-function deleteSlide(slideId, data) {
-  return instance.delete(`/slide/${slideId}`, data);
+function deleteSlide(slideId) {
+  return instance.delete(`/slide/${slideId}`);
 }
 
 export {
@@ -63,7 +63,7 @@ export {
   modifyPresentationName,
   deletePresentation,
   getPresentationDetail,
-  presentationAddDelete,
+  // presentationAddDelete,
   savePresentation,
   addSlide,
   deleteSlide,
