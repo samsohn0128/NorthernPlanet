@@ -4,13 +4,13 @@
     id="AddPPTModal"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="ModalChangePassword"
+    aria-labelledby="ModalAddPPT"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="modal-title" id="ModalWithdraw">발표자료 추가하기</h6>
+          <h6 class="modal-title" id="ModalAdd">발표자료 추가하기</h6>
           <button
             type="button"
             class="btn-close"
@@ -42,7 +42,7 @@
             @change="selectFile"
           />
           <img
-            class="image"
+            class="image thumbnail-setting"
             :src="imgUrl.first"
             alt=""
             @click="dialogVisible.first = true"
@@ -130,10 +130,9 @@ export default {
         URL.createObjectURL(file);
       this.imageChanged = true;
       this.imgUrl.first = URL.createObjectURL(file);
-
-      let imgFile = document.getElementById('input-file').files;
+      let imgFile = document.getElementById('input-picture').files;
       if (imgFile.length == 0) {
-        imgFile = document.getElementById('input-picture').files;
+        imgFile = document.getElementById('input-file').files;
       }
       let fileList = '';
       for (let i = 0; i < imgFile.length; i++) {
@@ -165,5 +164,9 @@ export default {
   font-size: 15px;
   font-weight: bold;
   text-align: center;
+}
+.thumbnail-setting {
+  max-width: 200px;
+  max-height: 150px;
 }
 </style>
