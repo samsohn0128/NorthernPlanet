@@ -42,6 +42,7 @@ public class Slide {
 
   private Integer sequence;
 
+  private Integer effect;
   @ManyToOne
   @JsonBackReference
   @JoinColumn(name = "presentation_id")
