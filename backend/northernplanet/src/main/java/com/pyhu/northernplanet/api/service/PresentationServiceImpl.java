@@ -2,6 +2,9 @@ package com.pyhu.northernplanet.api.service;
 
 import com.pyhu.northernplanet.api.request.PptPdf2PngReq;
 import com.pyhu.northernplanet.api.request.PresentationPostReq;
+import com.pyhu.northernplanet.api.request.PresentationUpdateReq;
+import com.pyhu.northernplanet.api.request.SlidePatchReq;
+import com.pyhu.northernplanet.api.request.SlideUpdateReq;
 import com.pyhu.northernplanet.common.dto.PresentationDto;
 import com.pyhu.northernplanet.common.dto.SlideDto;
 import com.pyhu.northernplanet.db.entity.Presentation;
@@ -24,8 +27,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,8 +93,8 @@ public class PresentationServiceImpl implements PresentationService {
       Slide slide = Slide.builder()
           .saveName(saveName)
           .originalName(originalFileName)
-          .directory(presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
-              + presentation.getPresentationId() + "/" + saveName)
+          .directory(getPresentationDirectory(presentationPostReq.getUserId(),
+              presentation.getPresentationId()) + File.separator + saveName)
           .sequence(i)
           .presentation(presentation)
           .build();
@@ -98,8 +104,8 @@ public class PresentationServiceImpl implements PresentationService {
     slideRepository.saveAll(slides);
 
     // save presentation files
-    String folderDirectory = presentationDirectory + "/" + presentationPostReq.getUserId() + "/"
-        + presentation.getPresentationId();
+    String folderDirectory = getPresentationDirectory(presentationPostReq.getUserId(),
+        presentation.getPresentationId());
     File folder = new File(folderDirectory);
     if (!folder.exists()) {
       folder.mkdirs();
@@ -109,7 +115,7 @@ public class PresentationServiceImpl implements PresentationService {
       MultipartFile slideFile = presentationPostReq.getSlides().get(i);
       String originalFileName = slideFile.getOriginalFilename();
       String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
-      File slide = new File(folderDirectory + "/" + i + extensionName);
+      File slide = new File(folderDirectory + File.separator + i + extensionName);
       slideFile.transferTo(slide);
     }
     return 0;
@@ -122,11 +128,23 @@ public class PresentationServiceImpl implements PresentationService {
         .orElseThrow(() -> new RuntimeException());
     List<PresentationDto> presentationDtoList = new ArrayList<>();
     presentationList.forEach(presentation -> {
+      Slide slide = slideRepository.findByPresentation_presentationId(
+          presentation.getPresentationId()).orElseThrow(() -> new RuntimeException()).get(0);
+      byte[] slideByteArray = null;
+      try (InputStream inputStream = new FileInputStream(slide.getDirectory())) {
+        slideByteArray = IOUtils.toByteArray(inputStream);
+      } catch (Exception e) {
+        log.error(
+            "[getPresentationDetail - service] Failed to get inputStream. slideDirectory : {}",
+            slide.getDirectory());
+        e.printStackTrace();
+      }
       PresentationDto presentationDto = PresentationDto.builder()
           .presentationId(presentation.getPresentationId())
           .presentationName(presentation.getName())
           .size(presentation.getSize())
           .uploadTime(presentation.getUploadTime())
+          .thumbnail(slideByteArray)
           .build();
       presentationDtoList.add(presentationDto);
       log.info("[getPresentationList - service] presentationId : {}",
@@ -146,10 +164,8 @@ public class PresentationServiceImpl implements PresentationService {
     List<SlideDto> slideDtoList = new ArrayList<>();
     slideList.forEach(slide -> {
       byte[] slideByteArray = null;
-      try {
-        InputStream inputStream = new FileInputStream(slide.getDirectory());
+      try (InputStream inputStream = new FileInputStream(slide.getDirectory())) {
         slideByteArray = IOUtils.toByteArray(inputStream);
-        inputStream.close();
       } catch (Exception e) {
         log.error(
             "[getPresentationDetail - service] Failed to get inputStream. slideDirectory : {}",
@@ -180,13 +196,13 @@ public class PresentationServiceImpl implements PresentationService {
     List<Slide> slides = new LinkedList<>();
     MultipartFile convFile = pptPdf2PngReq.getPptPdf();
     String originalFileName = convFile.getOriginalFilename();
-    String pptFolderDirectory = presentationDirectory + "/" + pptPdf2PngReq.getUserId();
+    String pptFolderDirectory = presentationDirectory + File.separator + pptPdf2PngReq.getUserId();
     File pptFolder = new File(pptFolderDirectory);
     if (!pptFolder.exists()) {
       pptFolder.mkdirs();
     }
 
-    File pptFile = new File(pptFolderDirectory + "/" + originalFileName);
+    File pptFile = new File(pptFolderDirectory + File.separator + originalFileName);
     convFile.transferTo(pptFile);
     log.info("[createPpt - service] file successfully created");
     XMLSlideShow ppt = new XMLSlideShow(new FileInputStream(pptFile));
@@ -224,15 +240,15 @@ public class PresentationServiceImpl implements PresentationService {
       xslfSlideList.get(i).draw(graphics);
 
       //creating an image file as output
-      String folderDirectory = presentationDirectory + "/" + pptPdf2PngReq.getUserId() + "/"
-          + presentation.getPresentationId();
+      String folderDirectory = getPresentationDirectory(pptPdf2PngReq.getUserId(),
+          presentation.getPresentationId());
       File folder = new File(folderDirectory);
       if (!folder.exists()) {
         folder.mkdirs();
       }
       String saveName = i + ".png";
       // save images
-      FileOutputStream out = new FileOutputStream(folderDirectory + "/" + saveName);
+      FileOutputStream out = new FileOutputStream(folderDirectory + File.separator + saveName);
       ImageIO.write(img, "png", out);
       out.close();
       log.info("[createPpt - service] image successfully created");
@@ -241,7 +257,7 @@ public class PresentationServiceImpl implements PresentationService {
       Slide slide = Slide.builder()
           .saveName(saveName)
           .originalName(pptFile.getName().substring(0, pptFile.getName().lastIndexOf('.')))
-          .directory(folderDirectory + "/" + saveName)
+          .directory(folderDirectory + File.separator + saveName)
           .sequence(i)
           .presentation(presentation)
           .build();
@@ -260,13 +276,13 @@ public class PresentationServiceImpl implements PresentationService {
     List<Slide> slides = new LinkedList<>();
     MultipartFile convFile = pptPdf2PngReq.getPptPdf();
     String originalFileName = convFile.getOriginalFilename();
-    String pdfFolderDirectory = presentationDirectory + "/" + pptPdf2PngReq.getUserId();
+    String pdfFolderDirectory = presentationDirectory + File.separator + pptPdf2PngReq.getUserId();
     File pptFolder = new File(pdfFolderDirectory);
     if (!pptFolder.exists()) {
       pptFolder.mkdirs();
     }
 
-    File pdfFile = new File(pdfFolderDirectory + "/" + originalFileName);
+    File pdfFile = new File(pdfFolderDirectory + File.separator + originalFileName);
     convFile.transferTo(pdfFile);
     log.info("[createPpt - service] file successfully created");
     FileInputStream fis = new FileInputStream(pdfFile);
@@ -290,15 +306,15 @@ public class PresentationServiceImpl implements PresentationService {
     presentation = presentationRepository.saveAndFlush(presentation);
 
     try {
-      String resultImgPath = presentationDirectory + "/" + pptPdf2PngReq.getUserId() + "/"
-          + presentation.getPresentationId(); //이미지가 저장될 경로
+      String resultImgPath = getPresentationDirectory(pptPdf2PngReq.getUserId(),
+          presentation.getPresentationId());//이미지가 저장될 경로
       Files.createDirectories(Paths.get(resultImgPath));
       //PDF2Img에서는 경로가 없는 경우 이미지 파일이 생성이 안되기 때문에 디렉토리를 만들어준다.
 
       //순회하며 이미지로 변환 처리
       for (int i = 0; i < pdfDoc.getPages().getCount(); i++) {
         String saveName = i + ".png";
-        String fileName = resultImgPath + "/" + saveName;
+        String fileName = resultImgPath + File.separator + saveName;
 
         //DPI 설정
         BufferedImage bim = pdfRenderer.renderImageWithDPI(i, 300, ImageType.RGB);
@@ -320,8 +336,163 @@ public class PresentationServiceImpl implements PresentationService {
     } catch (Exception e) {
       log.error("[conversionPdf2Img - service] Failed to convert pdf to png");
       e.printStackTrace();
+      return 1;
+    }
+    return 0;
+  }
+
+  @Override
+  public int updatePresentation(PresentationUpdateReq presentationUpdateReq) {
+    log.info("[updatePresentation - service] userId : {}, presentationId : {}",
+        presentationUpdateReq.getUserId(), presentationUpdateReq.getPresentationId());
+    List<Slide> slides = slideRepository.findByPresentation_presentationId(
+        presentationUpdateReq.getPresentationId()).orElseThrow(() -> new RuntimeException());
+    ConcurrentHashMap<Long, Slide> slideMap = new ConcurrentHashMap<>();
+    slides.forEach(slide -> slideMap.put(slide.getSlideId(), slide));
+    List<SlideUpdateReq> slideUpdateReqs = presentationUpdateReq.getSlides();
+    String folderDirecotry = getPresentationDirectory(presentationUpdateReq.getUserId(),
+        presentationUpdateReq.getPresentationId());
+
+    slideUpdateReqs.forEach(slideUpdateReq -> {
+      Slide slide = slideMap.get(slideUpdateReq.getSlideId());
+      if (slideUpdateReq.getSequence() != slide.getSequence()) {
+        File slideOldFile = new File(slide.getDirectory());
+        String extensionName = slide.getSaveName()
+            .substring(slide.getSaveName().lastIndexOf('.'));
+        File slideTempFile = new File(
+            folderDirecotry + File.separator + "temp" + slideUpdateReq.getSequence()
+                + extensionName);
+        slideOldFile.renameTo(slideTempFile);
+        log.info("[updatePresentation - service] {} file is renamed to {}", slideOldFile.getName(),
+            slideTempFile.getName());
+      }
+    });
+
+    slideUpdateReqs.forEach(slideUpdateReq -> {
+      Slide slide = slideMap.get(slideUpdateReq.getSlideId());
+      if (slideUpdateReq.getSequence() != slide.getSequence()) {
+        String extensionName = slide.getSaveName()
+            .substring(slide.getSaveName().lastIndexOf('.'));
+        File slideTempFile = new File(
+            folderDirecotry + File.separator + "temp" + slideUpdateReq.getSequence()
+                + extensionName);
+        File slideNewFile = new File(
+            folderDirecotry + File.separator + slideUpdateReq.getSequence() + extensionName);
+        slideTempFile.renameTo(slideNewFile);
+        log.info("[updatePresentation - service] {} file is renamed to {}", slideTempFile.getName(),
+            slideNewFile.getName());
+      }
+    });
+    slideUpdateReqs.forEach(slideUpdateReq -> {
+      Slide slide = slideMap.get(slideUpdateReq.getSlideId());
+      slide.setSequence(slideUpdateReq.getSequence());
+      slide.setEffect(slideUpdateReq.getEffect());
+      slideMap.replace(slideUpdateReq.getSlideId(), slide);
+    });
+    slideRepository.saveAll(slideMap.values());
+    return 0;
+  }
+
+  @Override
+  public int updatePresentationName(Long presentationId, String presentationName) {
+    log.info("[updatePresentationName - service] userId : {}, presentationName : {}",
+        presentationId, presentationName);
+    Presentation presentation = presentationRepository.findById(presentationId)
+        .orElseThrow(() -> new RuntimeException());
+    presentation.setName(presentationName);
+    try {
+      presentationRepository.save(presentation);
+    } catch (Exception e) {
+      log.error("[updatePresentationName - service] Failed to update the name of presentation.");
+      e.printStackTrace();
+      return 1;
+    }
+    return 0;
+  }
+
+  @Override
+  public int addSlide(SlidePatchReq slidePatchReq) throws IOException {
+    log.info("[addSlide - service] userId : {}, presentationId : {}", slidePatchReq.getUserId(),
+        slidePatchReq.getPresentationId());
+    Presentation presentation = presentationRepository.findById(slidePatchReq.getPresentationId())
+        .orElseThrow(() -> new RuntimeException());
+    //save presentation
+    presentation.setSize(presentation.getSize() + 1);
+    presentationRepository.save(presentation);
+    //save slide
+    List<Slide> slides = slideRepository.findByPresentation_presentationId(
+            slidePatchReq.getPresentationId())
+        .orElseThrow(() -> new RuntimeException());
+    Collections.sort(slides, Comparator.comparingInt(Slide::getSequence));
+    String originalFileName = slidePatchReq.getSlideFile().getOriginalFilename();
+    String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
+    Integer sequence = slides.get(slides.size() - 1).getSequence() + 1;
+    String saveName = sequence + extensionName;
+    Slide slide = Slide.builder()
+        .saveName(saveName)
+        .originalName(originalFileName)
+        .directory(
+            presentationDirectory + File.separator + slidePatchReq.getUserId() + File.separator
+                + presentation.getPresentationId() + File.separator + saveName)
+        .sequence(sequence)
+        .presentation(presentation)
+        .build();
+
+    // save presentation files
+    String folderDirectory =
+        presentationDirectory + File.separator + slidePatchReq.getUserId() + File.separator
+            + presentation.getPresentationId();
+    File folder = new File(folderDirectory);
+    if (!folder.exists()) {
+      folder.mkdirs();
     }
 
+    MultipartFile slideFile = slidePatchReq.getSlideFile();
+    File slideSaveFile = new File(folderDirectory + File.separator + sequence + extensionName);
+    slideFile.transferTo(slideSaveFile);
     return 0;
+  }
+
+  @Override
+  public int deleteSlide(Long slideId) throws IOException {
+    log.info("[deleteSlide - service] slideId : {}", slideId);
+    Slide slide = slideRepository.findById(slideId).orElseThrow(() -> new RuntimeException());
+    //delete slide file
+    File slideFile = new File(slide.getDirectory());
+    slideFile.delete();
+    //delete slide
+    slideRepository.delete(slide);
+    //decrease presentation size
+    Presentation presentation = presentationRepository.findById(
+        slide.getPresentation().getPresentationId()).orElseThrow(() -> new RuntimeException());
+    presentation.setSize(presentation.getSize() - 1);
+    presentationRepository.save(presentation);
+    return 0;
+  }
+
+  @Override
+  public int deletePresentation(Long presentationId) throws IOException {
+    log.info("[deletePresentation - service] presentationId : {}", presentationId);
+    Presentation presentation = presentationRepository.findById(presentationId)
+        .orElseThrow(() -> new RuntimeException());
+    //delete slides
+    List<Slide> slides = slideRepository.findByPresentation_presentationId(presentationId)
+        .orElseThrow(() -> new RuntimeException());
+    slides.forEach(slide -> {
+      File slideFile = new File(slide.getDirectory());
+      slideFile.delete();
+      slideRepository.delete(slide);
+      log.info("[deletePresentation - service] {} was deleted.", slide.getSaveName());
+    });
+    //delete presentation folder
+    File presentationFolder = new File(
+        presentationDirectory + presentation.getUser().getUserId() + presentationId);
+    presentationFolder.delete();
+    log.info("[deletePresentation - service] presentation {} was deleted.", presentation.getName());
+    return 0;
+  }
+
+  private String getPresentationDirectory(Long userId, Long presentationId) {
+    return presentationDirectory + File.separator + userId + File.separator + presentationId;
   }
 }
