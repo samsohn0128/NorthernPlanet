@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -42,6 +43,7 @@ public class Slide {
 
   private Integer sequence;
 
+  @ColumnDefault("0")
   private Integer effect;
   @ManyToOne
   @JsonBackReference

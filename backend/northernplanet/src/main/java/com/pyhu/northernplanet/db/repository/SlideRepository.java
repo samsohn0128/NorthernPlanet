@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SlideRepository extends JpaRepository<Slide, Long> {
 
-  Optional<List<Slide>> findByPresentation_presentationId(Long presentationId);
+  Optional<List<Slide>> findByPresentation_presentationIdOrderBySequence(Long presentationId);
+
 }

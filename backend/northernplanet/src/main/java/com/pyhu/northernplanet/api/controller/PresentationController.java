@@ -118,14 +118,14 @@ public class PresentationController {
     return new ResponseEntity<>(presentationDetailGetRes, HttpStatus.OK);
   }
 
-  @PutMapping("/{presentationId}")
+  @PutMapping("/")
   @ApiOperation(value = "발표 자료 수정")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity<Integer> updatePresentation(
-      @ModelAttribute PresentationUpdateReq presentationUpdateReq) {
-    log.info("[updatePresentation - controller]");
+      @RequestBody PresentationUpdateReq presentationUpdateReq) {
+    log.info("[updatePresentation - controller] ");
     try {
       presentationService.updatePresentation(presentationUpdateReq);
     } catch (Exception e) {
