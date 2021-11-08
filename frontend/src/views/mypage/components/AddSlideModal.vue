@@ -89,7 +89,7 @@ export default {
         formData.append('slide', imgFile[i]);
       }
       try {
-        await addSlide(formData);
+        await addSlide(this.presentationId, this.userId, formData);
         await this.$toastSuccess('사진을 추가했습니다.');
         this.$router.go();
       } catch (exp) {
