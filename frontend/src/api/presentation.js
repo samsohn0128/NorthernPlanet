@@ -48,8 +48,11 @@ function savePresentation(presentationId, data) {
   return instance.put('/' + presentationId, data);
 }
 
-function addSlide(data) {
-  return instance.patch('/slide', data);
+function addSlide(presentationId, userId, data) {
+  return file.patch(
+    `/slide?presentationId=${presentationId}&userId=${userId}`,
+    data,
+  );
 }
 
 function deleteSlide(slideId) {
