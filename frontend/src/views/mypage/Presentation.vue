@@ -8,19 +8,19 @@
         ></PresentationNewCardItem>
       </div>
       <div
-        v-for="(data, idx) in datas"
-        v-bind:key="idx"
+        v-for="data in datas"
+        v-bind:key="data.presentationId"
         class="card-presentation"
       >
         <PresentationCardItem
           :presentationInfo="data"
-          :key="idx"
+          :key="data"
         ></PresentationCardItem>
-        <ModifyPPTNameModal :name="data.presentationName" :id="idx" />
+        <ModifyPPTNameModal />
+        <DeletePPTModal :id="data.presentationId" />
       </div>
     </div>
     <AddPPTModal></AddPPTModal>
-    <DeletePPTModal></DeletePPTModal>
   </div>
 </template>
 
@@ -53,19 +53,6 @@ export default {
         //     'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
         //   presentationName: 'title1',
         // },
-        // {
-        //   userPresentationId: 1,
-        //   presentationId: 1,
-        //   thumbnail: 'none',
-        //   presentationName: 'title3',
-        // },
-        // {
-        //   userPresentationId: 2,
-        //   presentationId: 2,
-        //   thumbnail:
-        //     'https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80',
-        //   presentationName: 'title4',
-        // },
       ],
     };
   },
@@ -74,18 +61,19 @@ export default {
       let userId = store.getters['users/getUserId'];
       try {
         let response = await getPresentations(userId);
-        this.datas = response.data;
-        // console.log('통신 완료');
-        // console.log(this.datas);
+        console.log(response);
+        // ByteArray를 img로 변경
+        let imgByteArray = await response.data;
+        await imgByteArray.forEach(element => {
+          element.thumbnail = 'data:image/png;base64,' + element.thumbnail;
+        });
+        // slideList 대입
+        response.data = await imgByteArray;
+        this.datas = await response.data;
       } catch (exp) {
-        // console.log(exp);
-        // console.log('에러');
+        console.log(exp);
         this.$toastError('프레젠테이션 갖고 오기에 실패했습니다.');
       }
-    },
-    async setPPTInfo(data) {
-      await store.dispatch('mypage/setCurrentPresenatationInfo', data);
-      console.log(store.state.mypage);
     },
   },
   created() {
