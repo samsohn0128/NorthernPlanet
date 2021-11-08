@@ -423,10 +423,13 @@ public class PresentationServiceImpl implements PresentationService {
     List<Slide> slides = slideRepository.findByPresentation_presentationId(
             slidePatchReq.getPresentationId())
         .orElseThrow(() -> new RuntimeException());
-    Collections.sort(slides, Comparator.comparingInt(Slide::getSequence));
     String originalFileName = slidePatchReq.getSlideFile().getOriginalFilename();
     String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
-    Integer sequence = slides.get(slides.size() - 1).getSequence() + 1;
+    int maxSequence = 0;
+    for (Slide slide : slides) {
+      maxSequence = Math.max(maxSequence, slide.getSequence());
+    }
+    Integer sequence = maxSequence + 1;
     String saveName = sequence + extensionName;
     Slide slide = Slide.builder()
         .saveName(saveName)
@@ -437,6 +440,7 @@ public class PresentationServiceImpl implements PresentationService {
         .sequence(sequence)
         .presentation(presentation)
         .build();
+    slideRepository.save(slide);
 
     // save presentation files
     String folderDirectory =
@@ -484,6 +488,8 @@ public class PresentationServiceImpl implements PresentationService {
       slideRepository.delete(slide);
       log.info("[deletePresentation - service] {} was deleted.", slide.getSaveName());
     });
+    //delete presentation
+    presentationRepository.delete(presentation);
     //delete presentation folder
     File presentationFolder = new File(
         presentationDirectory + presentation.getUser().getUserId() + presentationId);

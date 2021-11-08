@@ -77,6 +77,7 @@ public class PresentationController {
             .presentationName(presentationDto.getPresentationName())
             .size(presentationDto.getSize())
             .uploadTime(presentationDto.getUploadTime())
+            .thumbnail(presentationDto.getThumbnail())
             .build();
         presentationListGetResList.add(presentationListGetRes);
       });
@@ -155,13 +156,14 @@ public class PresentationController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @PatchMapping("/slide")
+  @PostMapping("/slide")
   @ApiOperation(value = "발표 자료 수정")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity<Integer> addSlide(@ModelAttribute SlidePatchReq slidePatchReq) {
-    log.info("[addSlide - controller] presentationId: {}", slidePatchReq.getPresentationId());
+    log.info("[addSlide - controller] presentationId: {}, slideFileName: {}",
+            slidePatchReq.getPresentationId(), slidePatchReq.getSlideFile().getOriginalFilename());
     try {
       presentationService.addSlide(slidePatchReq);
     } catch (Exception e) {
