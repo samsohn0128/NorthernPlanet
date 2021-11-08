@@ -20,6 +20,7 @@ export default {
     participants: null,
     myName: null,
     chat: null,
+    messageList: null,
     /* nowImageUrl: null, */
     currentPage: null,
     manager: null,
@@ -101,6 +102,7 @@ export default {
       state.participants = null;
       state.myName = null;
       state.chat = null;
+      state.messageList = null;
       /* state.nowImageUrl = null; */
       state.currentPage = null;
       state.manager = null;
@@ -140,6 +142,13 @@ export default {
     }, */
     ADD_CHAT(state, { time, name, chatContent }) {
       state.chat = { time, name, chatContent };
+    },
+    ADD_CHAT_MESSAGE(state, chatMessage) {
+      if (state.messageList === null) {
+        state.messageList = [];
+      }
+
+      state.messageList.push(chatMessage);
     },
   },
   // actions
@@ -400,10 +409,16 @@ export default {
     addChat(context, message) {
       context.commit('ADD_CHAT', message);
     },
+    addChatMessage(context, chatMessage) {
+      context.commit('ADD_CHAT_MESSAGE', chatMessage);
+    },
   },
   getters: {
     getChat(state) {
       return state.chat;
+    },
+    getMessageList(state) {
+      return state.messageList;
     },
   },
 };

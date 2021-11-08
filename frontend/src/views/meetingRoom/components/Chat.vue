@@ -11,7 +11,12 @@
           <div class="chat">
             <div class="chat-history">
               <ul class="m-b-0">
-                <li class="clearfix">
+                <Message
+                  v-for="(message, index) in messageList"
+                  :message="message"
+                  :key="index"
+                />
+                <!-- <li class="clearfix">
                   <div align="right" class="message-data text-right">
                     <span class="message-data-time">10:10 AM, Today</span>
                   </div>
@@ -42,7 +47,7 @@
                     Project has been already finished and I have results to show
                     you.
                   </div>
-                </li>
+                </li> -->
               </ul>
             </div>
             <div class="chat-message clearfix">
@@ -69,8 +74,11 @@
 </template>
 
 <script>
+import Message from './Message.vue';
+
 export default {
   name: 'Chat',
+  components: { Message },
   data() {
     return {
       chatInput: '',
@@ -85,10 +93,18 @@ export default {
     chat() {
       return this.$store.getters['meetingRoom/getChat'];
     },
+    messageList() {
+      return this.$store.getters['meetingRoom/getMessageList'];
+    },
   },
   watch: {
     chat(value) {
       console.log('watch chat', value);
+
+      this.$store.dispatch('meetingRoom/addChatMessage', value);
+    },
+    messageList(value) {
+      console.log('watch messageList', value);
     },
   },
   methods: {
@@ -96,9 +112,9 @@ export default {
       // 현재 채팅을 전송한 시간
       this.date = new Date();
       let ampm = this.date.getHours() >= 12 ? 'PM' : 'AM';
-      let hours = this.date.getHours();
+      let hours = this.date.getHours() % 12;
       hours = hours ? hours : 12;
-      this.nowTime = hours + ' : ' + this.date.getMinutes() + ' ' + ampm;
+      this.nowTime = hours + ':' + this.date.getMinutes() + ' ' + ampm;
 
       const message = {
         id: 'addChat',
@@ -106,6 +122,8 @@ export default {
         name: this.user.name,
         chatContent: this.chatInput,
       };
+
+      this.chatInput = '';
 
       this.$store.dispatch('meetingRoom/sendMessage', message);
     },
@@ -118,7 +136,7 @@ body {
   background-color: #f4f7f6;
   margin-top: 20px;
 }
-.card {
+/* .card {
   background: #fff;
   transition: 0.5s;
   border: 0;
@@ -127,7 +145,7 @@ body {
   position: relative;
   width: 100%;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
-}
+} */
 .chat-app .people-list {
   width: 280px;
   position: absolute;
@@ -284,7 +302,7 @@ body {
 }
 
 .chat .chat-history .other-message:after {
-  border-bottom-color: #e8f1f3;
+  border-bottom-color: lightgoldenrodyellow;
   left: 93%;
 }
 
@@ -292,7 +310,7 @@ body {
   padding: 20px;
 }
 
-.online,
+/* .online,
 .offline,
 .me {
   margin-right: 2px;
@@ -306,11 +324,11 @@ body {
 
 .offline {
   color: #e47297;
-}
+} */
 
-.me {
+/* .me {
   color: #1d8ecd;
-}
+} */
 
 .float-right {
   float: right;
