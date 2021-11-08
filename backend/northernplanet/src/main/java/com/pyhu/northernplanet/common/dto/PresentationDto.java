@@ -20,4 +20,6 @@ public class PresentationDto {
   private List<SlideDto> slideList;
 
   private String contentType;
+
+  private byte[] thumbnail;
 }

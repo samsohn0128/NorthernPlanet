@@ -90,6 +90,7 @@ export default [
     children: [
       {
         path: '',
+        name: 'MyInfo',
         component: MyInfo,
       },
       {

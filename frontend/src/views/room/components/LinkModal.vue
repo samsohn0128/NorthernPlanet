@@ -67,13 +67,7 @@ export default {
       const copyText = document.getElementById('url-input');
       copyText.select();
       document.execCommand('copy');
-      this.$toast.success('URL copied!', {
-        timeout: 2000,
-        draggable: false,
-        position: 'bottom-right',
-        pauseOnFocusLoss: false,
-        pauseOnHover: false,
-      });
+      this.$toastSuccess('URL copied!');
     },
   },
 };
