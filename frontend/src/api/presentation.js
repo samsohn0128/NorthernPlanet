@@ -15,6 +15,7 @@ const file = axios.create({
   },
   withCredentials: true,
 });
+
 function getPresentations(userId) {
   return instance.get('/' + userId);
 }
@@ -44,8 +45,8 @@ function getPresentationDetail(userId, presentationId) {
 //   // return instance.patch(`/${presentationId}`, data);
 // }
 
-function savePresentation(presentationId, data) {
-  return instance.put('/' + presentationId, data);
+function savePresentation(data) {
+  return instance.put('/', data);
 }
 
 function addSlide(data) {
