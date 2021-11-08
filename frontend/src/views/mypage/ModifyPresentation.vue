@@ -200,90 +200,53 @@ export default {
       size: null,
       uploadTime: null,
       slideList: [
-        {
-          script: 'ppt1',
-          sequence: 0,
-          slideFile:
-            'https://import.cdn.thinkific.com/292401/PuGMXOphTKWoVdN3FOd6_D__6___1__png',
-          slideId: 0,
-          effect: 0,
-        },
-        {
-          script: 'ppt1',
-          sequence: 1,
-          slideFile:
-            'http://designbase.co.kr/wp-content/uploads/2020/12/webcoding-06-overview.jpg',
-          slideId: 1,
-          effect: 0,
-        },
-        {
-          script: 'ppt2',
-          sequence: 2,
-          slideFile:
-            'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
-          slideId: 2,
-          effect: 1,
-        },
-        {
-          script: 'ppt3',
-          sequence: 3,
-          slideFile: 'https://d2gd6pc034wcta.cloudfront.net/images/logo@2x.png',
-          slideId: 3,
-          effect: 1,
-        },
-        {
-          script: 'ppt4',
-          sequence: 4,
-          slideFile:
-            'https://upload.acmicpc.net/54146fb3-bcf1-4f78-9caa-8e2c6440d7aa/',
-          slideId: 4,
-          effect: 0,
-        },
-        {
-          script: 'ppt5',
-          sequence: 5,
-          slideFile:
-            'https://papago.naver.com/97ec80a681e94540414daf2fb855ba3b.svg',
-          slideId: 5,
-          effect: 0,
-        },
-        {
-          script: 'ppt6',
-          sequence: 6,
-          slideFile: 'https://edu.ssafy.com/asset/images/header-logo.jpg',
-          effect: 0,
-          slideId: 6,
-        },
-        {
-          script: 'ppt7',
-          sequence: 7,
-          slideFile:
-            'https://www.samsung.com/sec/static/_images/common/logo_samsung_black.svg',
-          slideId: 7,
-          effect: 0,
-        },
-        {
-          script: 'ppt8',
-          sequence: 8,
-          slideFile:
-            'https://image7.coupangcdn.com/image/coupang/common/logo_coupang_w350.png',
-          slideId: 8,
-          effect: 0,
-        },
-        {
-          script: 'ppt9',
-          sequence: 9,
-          slideFile: 'data9',
-          slideId: 9,
-          effect: 0,
-        },
-        {
-          script: 'ppt10',
-          sequence: 10,
-          slideFile: 'data10',
-          slideId: 10,
-          effect: 0,
-        },
+        // {
+        //   script: 'ppt1',
+        //   sequence: 0,
+        //   slideFile:
+        //     'https://import.cdn.thinkific.com/292401/PuGMXOphTKWoVdN3FOd6_D__6___1__png',
+        //   slideId: 0,
+        //   effect: 0,
+        // },
+        // {
+        //   script: 'ppt1',
+        //   sequence: 1,
+        //   slideFile:
+        //     'http://designbase.co.kr/wp-content/uploads/2020/12/webcoding-06-overview.jpg',
+        //   slideId: 1,
+        //   effect: 0,
+        // },
+        // {
+        //   script: 'ppt2',
+        //   sequence: 2,
+        //   slideFile:
+        //     'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+        //   slideId: 2,
+        //   effect: 1,
+        // },
+        // {
+        //   script: 'ppt3',
+        //   sequence: 3,
+        //   slideFile: 'https://d2gd6pc034wcta.cloudfront.net/images/logo@2x.png',
+        //   slideId: 3,
+        //   effect: 1,
+        // },
+        // {
+        //   script: 'ppt4',
+        //   sequence: 4,
+        //   slideFile:
+        //     'https://upload.acmicpc.net/54146fb3-bcf1-4f78-9caa-8e2c6440d7aa/',
+        //   slideId: 4,
+        //   effect: 0,
+        // },
+        // {
+        //   script: 'ppt5',
+        //   sequence: 5,
+        //   slideFile:
+        //     'https://papago.naver.com/97ec80a681e94540414daf2fb855ba3b.svg',
+        //   slideId: 5,
+        //   effect: 0,
+        // },
       ],
       items: [{ title: 'PPT 추가' }, { title: 'PPT 삭제' }],
       editorOptions: {
