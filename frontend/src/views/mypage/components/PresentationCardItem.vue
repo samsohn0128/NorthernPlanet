@@ -1,14 +1,18 @@
 <template>
   <div>
-    <div class="card card-presentation z-index-1">
+    <div
+      class="card card-presentation z-index-1"
+      @click="changeInfo(presentationInfo)"
+    >
       <div
         class="card-header p-0 mx-3 mt-3 position-relative move-on-hover"
         @click="goToModifyPresentation()"
       >
         <a href="javascript:;" class="d-block">
           <img
-            src="https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80"
+            :src="presentationInfo.thumbnail"
             class="img-fluid border-radius-lg"
+            alt="thumbnail"
           />
         </a>
       </div>
@@ -47,6 +51,8 @@
                 class="dropdown-item"
                 href="#ModifyPPTNameModal"
                 data-bs-toggle="modal"
+                :name="presentationInfo.presentationName"
+                :id="presentationInfo.presentationId"
                 >이름 변경</a
               >
             </li>
@@ -55,6 +61,7 @@
                 class="dropdown-item"
                 href="#DeletePPTModal"
                 data-bs-toggle="modal"
+                :id="presentationInfo.presentationId"
                 >삭제</a
               >
             </li>
@@ -64,10 +71,12 @@
     </div>
   </div>
 </template>
+
 <script>
+import store from '@/store';
+
 export default {
   name: 'PresentationCardItem',
-
   props: { presentationInfo: Object },
   data() {
     return {};
@@ -82,6 +91,12 @@ export default {
           name: this.presentationInfo.presentationName,
         },
       });
+    },
+    async changeInfo(presentationInfo) {
+      await store.dispatch(
+        'mypage/setCurrentPresenatationInfo',
+        presentationInfo,
+      );
     },
   },
 };
