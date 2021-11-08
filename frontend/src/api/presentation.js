@@ -28,11 +28,11 @@ function addPptpdf(userData) {
 }
 
 function modifyPresentationName(presentationId, userData) {
-  return instance.put('/' + presentationId, userData);
+  return instance.patch('/' + presentationId, userData);
 }
 
 function deletePresentation(presentationId) {
-  return instance.delete(presentationId);
+  return instance.delete('/' + presentationId);
 }
 
 function getPresentationDetail(userId, presentationId) {
@@ -48,11 +48,8 @@ function savePresentation(presentationId, data) {
   return instance.put('/' + presentationId, data);
 }
 
-function addSlide(presentationId, userId, data) {
-  return file.patch(
-    `/slide?presentationId=${presentationId}&userId=${userId}`,
-    data,
-  );
+function addSlide(data) {
+  return file.post('/slide', data);
 }
 
 function deleteSlide(slideId) {
