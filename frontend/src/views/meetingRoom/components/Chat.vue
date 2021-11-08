@@ -16,45 +16,13 @@
                   :message="message"
                   :key="index"
                 />
-                <!-- <li class="clearfix">
-                  <div align="right" class="message-data text-right">
-                    <span class="message-data-time">10:10 AM, Today</span>
-                  </div>
-                  <div class="message other-message float-right">
-                    Hi Aiden, how are you? How is the project coming along?
-                  </div>
-                </li>
-                <li class="clearfix">
-                  <div class="message-data">
-                    <span class="message-data-time">10:12 AM, minji</span>
-                  </div>
-                  <div class="message my-message">Are we meeting today?</div>
-                </li>
-                <li class="clearfix">
-                  <div class="message-data">
-                    <span class="message-data-time">10:15 AM, youngeun</span>
-                  </div>
-                  <div class="message my-message">
-                    Project has been already finished and I have results to show
-                    you.
-                  </div>
-                </li>
-                <li class="clearfix">
-                  <div class="message-data">
-                    <span class="message-data-time">10:15 AM, youngeun</span>
-                  </div>
-                  <div class="message my-message">
-                    Project has been already finished and I have results to show
-                    you.
-                  </div>
-                </li> -->
               </ul>
             </div>
-            <div class="chat-message clearfix">
+            <div class="chat-message clearfix chat-input">
               <div class="input-group mb-0">
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control chat-input-div"
                   placeholder="Enter text here..."
                   v-model="chatInput"
                   @keyup.enter="addChat"
@@ -79,6 +47,9 @@ import Message from './Message.vue';
 export default {
   name: 'Chat',
   components: { Message },
+  props: {
+    messageList: Array,
+  },
   data() {
     return {
       chatInput: '',
@@ -87,39 +58,26 @@ export default {
     };
   },
   computed: {
-    user() {
-      return this.$store.getters['users/getUser'];
-    },
-    chat() {
-      return this.$store.getters['meetingRoom/getChat'];
-    },
-    messageList() {
-      return this.$store.getters['meetingRoom/getMessageList'];
-    },
-  },
-  watch: {
-    chat(value) {
-      console.log('watch chat', value);
-
-      this.$store.dispatch('meetingRoom/addChatMessage', value);
-    },
-    messageList(value) {
-      console.log('watch messageList', value);
+    myName() {
+      return this.$store.getters['meetingRoom/getMyName'];
     },
   },
   methods: {
     addChat: function () {
+      if (this.chatInput === '') return;
       // 현재 채팅을 전송한 시간
       this.date = new Date();
       let ampm = this.date.getHours() >= 12 ? 'PM' : 'AM';
       let hours = this.date.getHours() % 12;
       hours = hours ? hours : 12;
-      this.nowTime = hours + ':' + this.date.getMinutes() + ' ' + ampm;
+      let minutes = this.date.getMinutes();
+      if (minutes >= 0 && minutes <= 9) minutes = '0'.concat(minutes);
+      this.nowTime = hours + ':' + minutes + ' ' + ampm;
 
       const message = {
         id: 'addChat',
         time: this.nowTime,
-        name: this.user.name,
+        name: this.myName,
         chatContent: this.chatInput,
       };
 
@@ -136,16 +94,7 @@ body {
   background-color: #f4f7f6;
   margin-top: 20px;
 }
-/* .card {
-  background: #fff;
-  transition: 0.5s;
-  border: 0;
-  margin-bottom: 30px;
-  border-radius: 0.55rem;
-  position: relative;
-  width: 100%;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
-} */
+
 .chat-app .people-list {
   width: 280px;
   position: absolute;
@@ -222,10 +171,9 @@ body {
   padding-left: 10px;
 }
 
-.chat .chat-history {
-  padding: 20px;
-  border-bottom: 2px solid #fff;
-}
+/* .chat .chat-history {
+  padding: 5px;
+} */
 
 .chat .chat-history ul {
   padding: 0;
@@ -307,28 +255,8 @@ body {
 }
 
 .chat .chat-message {
-  padding: 20px;
+  padding: 5px;
 }
-
-/* .online,
-.offline,
-.me {
-  margin-right: 2px;
-  font-size: 8px;
-  vertical-align: middle;
-}
-
-.online {
-  color: #86c541;
-}
-
-.offline {
-  color: #e47297;
-} */
-
-/* .me {
-  color: #1d8ecd;
-} */
 
 .float-right {
   float: right;
@@ -341,6 +269,16 @@ body {
   content: ' ';
   clear: both;
   height: 0;
+}
+
+.chat-input {
+  position: fixed;
+  bottom: 0;
+  border-top: 2px solid #fff;
+}
+
+.chat-input-div {
+  width: 80%;
 }
 
 @media only screen and (max-width: 767px) {

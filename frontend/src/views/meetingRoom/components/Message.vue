@@ -1,9 +1,9 @@
 <template>
   <div>
-    <li v-if="message.name === user.name" class="clearfix">
+    <li v-if="message.name === myName" class="clearfix">
       <div align="right" class="message-data text-right">
         <span class="message-data-time"
-          >{{ message.time }}, <b>{{ message.name }}</b></span
+          >{{ message.time }}, <b>{{ realName }}</b></span
         >
       </div>
       <div class="message other-message float-right">
@@ -13,27 +13,11 @@
     <li v-else class="clearfix">
       <div class="message-data">
         <span class="message-data-time"
-          >{{ message.time }}, <b>{{ message.name }}</b></span
+          >{{ message.time }}, <b>{{ realName }}</b></span
         >
       </div>
       <div class="message my-message">{{ message.chatContent }}</div>
     </li>
-    <!-- <li class="clearfix">
-      <div class="message-data">
-        <span class="message-data-time">10:15 AM, youngeun</span>
-      </div>
-      <div class="message my-message">
-        Project has been already finished and I have results to show you.
-      </div>
-    </li>
-    <li class="clearfix">
-      <div class="message-data">
-        <span class="message-data-time">10:15 AM, youngeun</span>
-      </div>
-      <div class="message my-message">
-        Project has been already finished and I have results to show you.
-      </div>
-    </li> -->
   </div>
 </template>
 
@@ -48,8 +32,11 @@ export default {
     return {};
   },
   computed: {
-    user() {
-      return this.$store.getters['users/getUser'];
+    myName() {
+      return this.$store.getters['meetingRoom/getMyName'];
+    },
+    realName() {
+      return this.message.name.split('-')[0];
     },
   },
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- navigator -->
-    <div class="d-flex justify-content-center navigator">
+    <div class="d-flex justify-content-center navigator fixed-navigator">
       <button
         :class="[
           { 'navigator-button-active': participantShow },
@@ -40,7 +40,7 @@
       v-if="presentationShow"
       class="presentation-controller"
     />
-    <Chat v-if="chatShow" class="chat" />
+    <Chat v-if="chatShow" :messageList="messageList" class="chat" />
 
     <!-- SideBar Items -->
     <!-- access alert -->
@@ -78,6 +78,25 @@ export default {
     },
     presenter() {
       return this.$store.state.meetingRoom.presenter;
+    },
+    user() {
+      return this.$store.getters['users/getUser'];
+    },
+    chat() {
+      return this.$store.getters['meetingRoom/getChat'];
+    },
+    messageList() {
+      return this.$store.getters['meetingRoom/getMessageList'];
+    },
+  },
+  watch: {
+    chat(value) {
+      console.log('watch chat', value);
+
+      this.$store.dispatch('meetingRoom/addChatMessage', value);
+    },
+    messageList(value) {
+      console.log('watch messageList', value);
     },
   },
   // : lifecycle hook
@@ -182,4 +201,9 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
+/* 사이드바 상단바 고정 css*/
+/* .fixed-navigator {
+  position: fixed;
+  top: 0;
+} */
 </style>

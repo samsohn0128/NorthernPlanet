@@ -325,6 +325,7 @@ export default {
       context.commit('DISPOSE_PARTICIPANT', participantName);
     },
     leaveRoom(context) {
+      window.location.reload(); // 새로고침
       router.push({ path: '/dashboard' });
       console.log(context.state.roomNumber);
       if (context.state.myName === context.state.manager) {
@@ -419,6 +420,9 @@ export default {
     },
     getMessageList(state) {
       return state.messageList;
+    },
+    getMyName(state) {
+      return state.myName;
     },
   },
 };
