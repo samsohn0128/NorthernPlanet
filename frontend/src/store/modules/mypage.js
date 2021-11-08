@@ -7,7 +7,6 @@ export default {
     // },
     currentPPTID: null,
     currentPPTTitle: null,
-    effect: null,
     sequenceNum: null,
   }),
   mutations: {
@@ -33,9 +32,6 @@ export default {
     // initPresentationInfo: function ({ commit }) {
     //   commit('INIT_CURRENT_PRESENTATION_INFO');
     // },
-    setEffect({ commit }, effect) {
-      commit('SET_EFFECT', effect);
-    },
     setSequenceNum({ commit }, sequenceNum) {
       commit('SET_SEQUENCE_NUM', sequenceNum);
     },
@@ -47,9 +43,6 @@ export default {
     },
     getCurrentTitle(state) {
       return state.currentPPTTitle;
-    },
-    getEffect(state) {
-      return state.effect;
     },
     getSequenceNum(state) {
       return state.sequenceNum;
