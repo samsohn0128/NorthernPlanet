@@ -19,7 +19,6 @@ import Presentation from '@/views/mypage/Presentation.vue';
 import ModifyPresentation from '@/views/mypage/ModifyPresentation.vue';
 
 import Script from '@/views/Script.vue';
-import Chat from '@/views/Chat.vue';
 
 export default [
   {
@@ -108,11 +107,6 @@ export default [
   {
     path: '/script',
     component: Script,
-    meta: { authRequired: true },
-  },
-  {
-    path: '/chat',
-    component: Chat,
     meta: { authRequired: true },
   },
 ];

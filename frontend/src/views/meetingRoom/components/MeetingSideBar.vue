@@ -151,7 +151,7 @@ export default {
   border: none;
   width: 130px;
   height: 35px;
-  border-radius: 0px 0px 0px 0px;
+  border-radius: 0px;
   color: white;
   font-weight: bold;
 }
