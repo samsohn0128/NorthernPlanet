@@ -79,7 +79,7 @@ export default {
     async addPPT() {
       let formData = new FormData();
       let imgFile = document.getElementById('input-picture').files;
-      console.log(imgFile);
+      // console.log(imgFile);
       if (imgFile.length == 0) {
         return;
       }
@@ -88,10 +88,17 @@ export default {
       for (let i = 0; i < imgFile.length; i++) {
         formData.append('slide', imgFile[i]);
       }
+      // formData 보기
+      // for (let key of formData.keys()) {
+      //   console.log(key);
+      // }
+      // for (let value of formData.values()) {
+      //   console.log(value);
+      // }
       try {
-        await addSlide(this.presentationId, this.userId, formData);
+        await addSlide(formData);
         await this.$toastSuccess('사진을 추가했습니다.');
-        this.$router.go();
+        // this.$router.go();
       } catch (exp) {
         this.$toastError('사진 추가에 실패했습니다.');
       }
@@ -103,7 +110,7 @@ export default {
       this.imageChanged = true;
       this.imgUrl.first = URL.createObjectURL(file);
       let imgFile = document.getElementById('input-picture').files;
-      console.log(imgFile);
+      // console.log(imgFile);
       let fileList = '';
       for (let i = 0; i < imgFile.length; i++) {
         fileList += imgFile[i].name + '<br>';
