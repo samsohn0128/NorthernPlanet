@@ -85,20 +85,18 @@ export default {
       }
       formData.append('userId', this.userId);
       formData.append('presentationId', this.presentationId);
-      for (let i = 0; i < imgFile.length; i++) {
-        formData.append('slide', imgFile[i]);
-      }
+      formData.append('slideFile', imgFile[0]);
       // formData 보기
       // for (let key of formData.keys()) {
-      //   console.log(key);
+      //   console.log('key: ', key);
       // }
       // for (let value of formData.values()) {
-      //   console.log(value);
+      //   console.log('value: ', value);
       // }
       try {
         await addSlide(formData);
         await this.$toastSuccess('사진을 추가했습니다.');
-        // this.$router.go();
+        this.$router.go();
       } catch (exp) {
         this.$toastError('사진 추가에 실패했습니다.');
       }
