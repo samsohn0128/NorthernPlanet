@@ -69,11 +69,11 @@
         <div class="container-fluid">
           <div class="head-animation" v-if="showAnimation == true">
             <div
-              v-for="effect in effects"
+              v-for="(idx, effect) in effects"
               :class="['effect-container']"
               :key="effect"
               :id="effect"
-              @click="showExample(effect)"
+              @click="showExample(idx, effect)"
             >
               <h6>{{ effect }}</h6>
             </div>
@@ -83,13 +83,14 @@
       <div class="body-ppt">
         <div class="col-3 ppt-overflow">
           <!-- 자동 업데이트 싫으면 @end="updateItemOrder 없애기-->
-          <draggable v-model="slideList" @end="updateItemOrder">
+          <!-- <draggable v-model="slideList" @end="updateItemOrder"> -->
+          <draggable v-model="slideList">
             <transition-group>
               <div
                 class="choose-ppt card"
                 v-for="(slide, idx) in slideList"
                 :key="slide.slideId"
-                @click="setIdx(slide.slideId)"
+                @click="setIdx(idx)"
               >
                 <div class="choose-ppt-icons">
                   <i
@@ -183,71 +184,24 @@ export default {
       presentationId: this.$route.params.presentation_id,
       userId: store.state.users.user.userId,
       debounce: false,
-      effects: [
-        'basic',
-        'fadein',
-        'fadedown',
-        'fadeleft',
-        'faderight',
-        'fadeup',
-        'backdown',
-        'backup',
-        'flipx',
-        'flipy',
-        'rotatein',
-      ],
+      effects: {
+        default: 0,
+        fadein: 1,
+        fadedown: 2,
+        fadeleft: 3,
+        faderight: 4,
+        fadeup: 5,
+        backdown: 6,
+        backup: 7,
+        flipx: 8,
+        flipy: 9,
+        rotatein: 10,
+      },
       presentationName: null,
       size: null,
       uploadTime: null,
-      slideList: [
-        // {
-        //   script: 'ppt1',
-        //   sequence: 0,
-        //   slideFile:
-        //     'https://import.cdn.thinkific.com/292401/PuGMXOphTKWoVdN3FOd6_D__6___1__png',
-        //   slideId: 0,
-        //   effect: 0,
-        // },
-        // {
-        //   script: 'ppt1',
-        //   sequence: 1,
-        //   slideFile:
-        //     'http://designbase.co.kr/wp-content/uploads/2020/12/webcoding-06-overview.jpg',
-        //   slideId: 1,
-        //   effect: 0,
-        // },
-        // {
-        //   script: 'ppt2',
-        //   sequence: 2,
-        //   slideFile:
-        //     'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
-        //   slideId: 2,
-        //   effect: 1,
-        // },
-        // {
-        //   script: 'ppt3',
-        //   sequence: 3,
-        //   slideFile: 'https://d2gd6pc034wcta.cloudfront.net/images/logo@2x.png',
-        //   slideId: 3,
-        //   effect: 1,
-        // },
-        // {
-        //   script: 'ppt4',
-        //   sequence: 4,
-        //   slideFile:
-        //     'https://upload.acmicpc.net/54146fb3-bcf1-4f78-9caa-8e2c6440d7aa/',
-        //   slideId: 4,
-        //   effect: 0,
-        // },
-        // {
-        //   script: 'ppt5',
-        //   sequence: 5,
-        //   slideFile:
-        //     'https://papago.naver.com/97ec80a681e94540414daf2fb855ba3b.svg',
-        //   slideId: 5,
-        //   effect: 0,
-        // },
-      ],
+      slideList: [],
+      sendSlideList: [],
       items: [{ title: 'PPT 추가' }, { title: 'PPT 삭제' }],
       editorOptions: {
         minHeight: '200px',
@@ -276,12 +230,10 @@ export default {
       };
       return data;
     },
-    currentEffect() {
-      return store.state.mypage.transition;
-    },
   },
   methods: {
     ...mapActions('mypage', ['setSequenceNum']),
+    // DB에서 Presentation 안의 Slide들을 가져온다.
     // 백엔드 연결 뒤에 주석 해제, 아래 mounted도!
     async getPresentationData() {
       let response = await getPresentationDetail(
@@ -295,62 +247,54 @@ export default {
       });
       // slideList 대입
       this.slideList = response.data.slideList;
+      console.log('시작 slideList: ', this.slideList);
     },
+    // Presentation으로 돌아간다.
     goBackPresentation() {
       this.$router.push({ name: 'Presentation' });
     },
-    showExample(effect) {
+    // Effect의 예시를 보여준다.
+    showExample(idx, effect) {
+      console.log(effect);
       const el = document.getElementById(effect);
       el.classList.add(effect);
       setTimeout(function () {
         el.classList.remove(effect);
       }, 1000);
-      this.selectEffect(effect);
+      this.selectEffect(idx);
     },
+    // 고른 Effect의 설정을 저장한다.
     selectEffect(effect) {
-      store.dispatch('mypage/setEffect', effect);
+      let num = this.idx;
+      this.slideList[num].effect = effect;
     },
+    // 전체 보기 화면으로 이동. 아직 구현하지 않음.
     showAllPPT() {
       console.log('showAllPPT');
     },
-    // 사진을 등록한다.
-    selectPicture() {},
-    // 사진 먼저 등록받고나서 여기로 이동
-    setPicture(sequenceNum) {
-      let userId = store.getters['users/getUserId'];
-      let slideId = this.presentationId;
-      let data = {
-        userId,
-        slides: [
-          {
-            slideId, //(추가했을 경우 -1)
-            'multipart/form-data': 'picture', // 사진 등록 후 변경
-            sequenceNum, //(삭제했을 경우 -1)
-            // effect,
-          },
-        ],
-      };
-      savePresentation(data);
-    },
     // 슬라이드를 저장한다.
-    savePPT() {
-      // let presentationId = this.presentationId;
-      // updateItemOrder(); // Drag&Drop으로 옮긴 순서 정보 저장하기
-      // let userId = store.getters['users/getUser'];
-      // let slideId = this.presentationId;
-      // // let effect = store.getters['mypage/getEffect']; // effect DB, API에 등록 후 사용하기
-      // let data = {
-      //   userId,
-      //   slides: [
-      //     {
-      //       slideId, //(추가했을 경우 -1)
-      //       sequenceNum, //(삭제했을 경우 -1)
-      //       // effect,
-      //     },
-      //   ],
-      // };
-      // savePresentation(presentationId, data);
+    async savePPT() {
+      try {
+        await this.updateItemOrder(); // Drag&Drop으로 옮긴 순서 정보 저장하기
+        let presentationId = this.presentationId;
+        let userId = store.getters['users/getUserId'];
+        // console.log('presentationId: ', presentationId);
+        // console.log('userId: ', userId);
+        let data = {
+          userId,
+          presentationId,
+          slides: this.sendSlideList,
+        };
+        console.log('끝 data: ', data);
+        await savePresentation(data);
+        await this.$toastSuccess('슬라이드를 저장하였습니다.');
+        // this.$router.go();
+      } catch (exp) {
+        console.log(exp);
+        this.$toastError('슬라이드 저장에 실패했습니다.');
+      }
     },
+    // 현재 선택한 Idx 설정하기 (Effect 저장시에 필요)
     setIdx(num) {
       this.idx = num;
     },
@@ -379,18 +323,21 @@ export default {
     updateItemOrder: function () {
       // get your info then...
       let items = this.slideList.map(function (slide, index) {
-        return { slide: slide, order: index };
+        return {
+          script: slide.script,
+          sequence: index,
+          slideId: slide.slideId,
+          effect: slide.effect,
+        };
       });
       console.log(items);
+      this.sendSlideList = items;
       if (this.debounce) return;
-      this.debounce = setTimeout(
-        function (items) {
-          this.debounce = false;
-          // send it to your db
-          console.log(items);
-        }.bind(this, items),
-        2000,
-      );
+      this.debounce = function (items) {
+        this.debounce = false;
+        // send it to your db
+        console.log(items);
+      }.bind(this, items);
     },
     saveEditorText() {
       let curEditorText = this.$refs.toastuiEditor.invoke('getHTML');
