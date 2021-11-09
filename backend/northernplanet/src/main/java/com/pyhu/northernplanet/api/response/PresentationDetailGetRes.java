@@ -20,4 +20,5 @@ public class PresentationDetailGetRes {
 
   private List<SlideDto> slideList;
 
+  private Integer effect;
 }

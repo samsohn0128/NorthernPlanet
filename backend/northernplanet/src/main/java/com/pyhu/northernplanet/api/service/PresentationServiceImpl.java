@@ -27,8 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -128,7 +126,7 @@ public class PresentationServiceImpl implements PresentationService {
         .orElseThrow(() -> new RuntimeException());
     List<PresentationDto> presentationDtoList = new ArrayList<>();
     presentationList.forEach(presentation -> {
-      Slide slide = slideRepository.findByPresentation_presentationId(
+      Slide slide = slideRepository.findByPresentation_presentationIdOrderBySequence(
           presentation.getPresentationId()).orElseThrow(() -> new RuntimeException()).get(0);
       byte[] slideByteArray = null;
       try (InputStream inputStream = new FileInputStream(slide.getDirectory())) {
@@ -159,7 +157,7 @@ public class PresentationServiceImpl implements PresentationService {
         presentationId);
     Presentation presentation = presentationRepository.findById(presentationId)
         .orElseThrow(() -> new NullPointerException());
-    List<Slide> slideList = slideRepository.findByPresentation_presentationId(presentationId)
+    List<Slide> slideList = slideRepository.findByPresentation_presentationIdOrderBySequence(presentationId)
         .orElseThrow(() -> new NullPointerException());
     List<SlideDto> slideDtoList = new ArrayList<>();
     slideList.forEach(slide -> {
@@ -177,6 +175,7 @@ public class PresentationServiceImpl implements PresentationService {
           .sequence(slide.getSequence())
           .script(slide.getScript())
           .slideFile(slideByteArray)
+          .effect(slide.getEffect())
           .build();
       slideDtoList.add(slideDto);
     });
@@ -345,12 +344,12 @@ public class PresentationServiceImpl implements PresentationService {
   public int updatePresentation(PresentationUpdateReq presentationUpdateReq) {
     log.info("[updatePresentation - service] userId : {}, presentationId : {}",
         presentationUpdateReq.getUserId(), presentationUpdateReq.getPresentationId());
-    List<Slide> slides = slideRepository.findByPresentation_presentationId(
+    List<Slide> slides = slideRepository.findByPresentation_presentationIdOrderBySequence(
         presentationUpdateReq.getPresentationId()).orElseThrow(() -> new RuntimeException());
     ConcurrentHashMap<Long, Slide> slideMap = new ConcurrentHashMap<>();
     slides.forEach(slide -> slideMap.put(slide.getSlideId(), slide));
     List<SlideUpdateReq> slideUpdateReqs = presentationUpdateReq.getSlides();
-    String folderDirecotry = getPresentationDirectory(presentationUpdateReq.getUserId(),
+    String folderDirectory = getPresentationDirectory(presentationUpdateReq.getUserId(),
         presentationUpdateReq.getPresentationId());
 
     slideUpdateReqs.forEach(slideUpdateReq -> {
@@ -360,7 +359,7 @@ public class PresentationServiceImpl implements PresentationService {
         String extensionName = slide.getSaveName()
             .substring(slide.getSaveName().lastIndexOf('.'));
         File slideTempFile = new File(
-            folderDirecotry + File.separator + "temp" + slideUpdateReq.getSequence()
+            folderDirectory + File.separator + "temp" + slideUpdateReq.getSequence()
                 + extensionName);
         slideOldFile.renameTo(slideTempFile);
         log.info("[updatePresentation - service] {} file is renamed to {}", slideOldFile.getName(),
@@ -374,20 +373,18 @@ public class PresentationServiceImpl implements PresentationService {
         String extensionName = slide.getSaveName()
             .substring(slide.getSaveName().lastIndexOf('.'));
         File slideTempFile = new File(
-            folderDirecotry + File.separator + "temp" + slideUpdateReq.getSequence()
+            folderDirectory + File.separator + "temp" + slideUpdateReq.getSequence()
                 + extensionName);
         File slideNewFile = new File(
-            folderDirecotry + File.separator + slideUpdateReq.getSequence() + extensionName);
+            folderDirectory + File.separator + slideUpdateReq.getSequence() + extensionName);
         slideTempFile.renameTo(slideNewFile);
+        slide.setSequence(slideUpdateReq.getSequence());
+        slide.setDirectory(folderDirectory + File.separator + slideUpdateReq.getSequence() + extensionName);
+        slideMap.replace(slideUpdateReq.getSlideId(), slide);
         log.info("[updatePresentation - service] {} file is renamed to {}", slideTempFile.getName(),
             slideNewFile.getName());
       }
-    });
-    slideUpdateReqs.forEach(slideUpdateReq -> {
-      Slide slide = slideMap.get(slideUpdateReq.getSlideId());
-      slide.setSequence(slideUpdateReq.getSequence());
       slide.setEffect(slideUpdateReq.getEffect());
-      slideMap.replace(slideUpdateReq.getSlideId(), slide);
     });
     slideRepository.saveAll(slideMap.values());
     return 0;
@@ -420,13 +417,16 @@ public class PresentationServiceImpl implements PresentationService {
     presentation.setSize(presentation.getSize() + 1);
     presentationRepository.save(presentation);
     //save slide
-    List<Slide> slides = slideRepository.findByPresentation_presentationId(
+    List<Slide> slides = slideRepository.findByPresentation_presentationIdOrderBySequence(
             slidePatchReq.getPresentationId())
         .orElseThrow(() -> new RuntimeException());
-    Collections.sort(slides, Comparator.comparingInt(Slide::getSequence));
     String originalFileName = slidePatchReq.getSlideFile().getOriginalFilename();
     String extensionName = originalFileName.substring(originalFileName.lastIndexOf('.'));
-    Integer sequence = slides.get(slides.size() - 1).getSequence() + 1;
+    int maxSequence = 0;
+    for (Slide slide : slides) {
+      maxSequence = Math.max(maxSequence, slide.getSequence());
+    }
+    Integer sequence = maxSequence + 1;
     String saveName = sequence + extensionName;
     Slide slide = Slide.builder()
         .saveName(saveName)
@@ -437,6 +437,7 @@ public class PresentationServiceImpl implements PresentationService {
         .sequence(sequence)
         .presentation(presentation)
         .build();
+    slideRepository.save(slide);
 
     // save presentation files
     String folderDirectory =
@@ -476,7 +477,7 @@ public class PresentationServiceImpl implements PresentationService {
     Presentation presentation = presentationRepository.findById(presentationId)
         .orElseThrow(() -> new RuntimeException());
     //delete slides
-    List<Slide> slides = slideRepository.findByPresentation_presentationId(presentationId)
+    List<Slide> slides = slideRepository.findByPresentation_presentationIdOrderBySequence(presentationId)
         .orElseThrow(() -> new RuntimeException());
     slides.forEach(slide -> {
       File slideFile = new File(slide.getDirectory());
@@ -484,6 +485,8 @@ public class PresentationServiceImpl implements PresentationService {
       slideRepository.delete(slide);
       log.info("[deletePresentation - service] {} was deleted.", slide.getSaveName());
     });
+    //delete presentation
+    presentationRepository.delete(presentation);
     //delete presentation folder
     File presentationFolder = new File(
         presentationDirectory + presentation.getUser().getUserId() + presentationId);

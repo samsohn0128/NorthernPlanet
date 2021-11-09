@@ -15,6 +15,7 @@ const file = axios.create({
   },
   withCredentials: true,
 });
+
 function getPresentations(userId) {
   return instance.get('/' + userId);
 }
@@ -28,25 +29,32 @@ function addPptpdf(userData) {
 }
 
 function modifyPresentationName(presentationId, userData) {
-  return instance.put('/' + presentationId, userData);
+  return instance.patch('/' + presentationId, userData);
 }
 
 function deletePresentation(presentationId) {
-  return instance.delete(presentationId);
+  return instance.delete('/' + presentationId);
 }
 
 function getPresentationDetail(userId, presentationId) {
   return instance.get('/' + userId + '/' + presentationId);
 }
 
-function presentationAddDelete(presentationId, data) {
-  return instance.put('/' + presentationId, data);
-  // return instance.patch(`/${presentationId}`, data);
-}
+// function presentationAddDelete(presentationId, data) {
+//   return instance.put('/' + presentationId, data);
+//   // return instance.patch(`/${presentationId}`, data);
+// }
 
 function savePresentation(data) {
-  let presentationId = data.slides[0].slideId;
-  return instance.put('/' + presentationId, data);
+  return instance.put('/', data);
+}
+
+function addSlide(data) {
+  return file.post('/slide', data);
+}
+
+function deleteSlide(slideId) {
+  return instance.delete(`/slide/${slideId}`);
 }
 
 export {
@@ -56,6 +64,8 @@ export {
   modifyPresentationName,
   deletePresentation,
   getPresentationDetail,
-  presentationAddDelete,
+  // presentationAddDelete,
   savePresentation,
+  addSlide,
+  deleteSlide,
 };

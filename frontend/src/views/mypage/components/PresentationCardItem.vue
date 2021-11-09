@@ -1,14 +1,18 @@
 <template>
   <div>
-    <div class="card card-presentation z-index-1">
+    <div
+      class="card card-presentation z-index-1"
+      @click="changeInfo(presentationInfo)"
+    >
       <div
         class="card-header p-0 mx-3 mt-3 position-relative move-on-hover"
         @click="goToModifyPresentation()"
       >
         <a href="javascript:;" class="d-block">
           <img
-            src="https://images.unsplash.com/photo-1517303650219-83c8b1788c4c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd4c162d27ea317ff8c67255e955e3c8&auto=format&fit=crop&w=2691&q=80"
+            :src="presentationInfo.thumbnail"
             class="img-fluid border-radius-lg"
+            alt="thumbnail"
           />
         </a>
       </div>
@@ -47,6 +51,8 @@
                 class="dropdown-item"
                 href="#ModifyPPTNameModal"
                 data-bs-toggle="modal"
+                :name="presentationInfo.presentationName"
+                :id="presentationInfo.presentationId"
                 >이름 변경</a
               >
             </li>
@@ -55,6 +61,7 @@
                 class="dropdown-item"
                 href="#DeletePPTModal"
                 data-bs-toggle="modal"
+                :id="presentationInfo.presentationId"
                 >삭제</a
               >
             </li>
@@ -64,10 +71,12 @@
     </div>
   </div>
 </template>
+
 <script>
+import store from '@/store';
+
 export default {
   name: 'PresentationCardItem',
-
   props: { presentationInfo: Object },
   data() {
     return {};
@@ -83,6 +92,12 @@ export default {
         },
       });
     },
+    async changeInfo(presentationInfo) {
+      await store.dispatch(
+        'mypage/setCurrentPresenatationInfo',
+        presentationInfo,
+      );
+    },
   },
 };
 </script>
@@ -90,6 +105,15 @@ export default {
 .card-presentation {
   width: 200px;
   height: 220px;
+}
+.card-title {
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  white-space: nowrap; /* 한 줄 제한*/
+  overflow: hidden; /* 넘어가는 글자 숨기기 */
+  /* overflow: scroll; /* 넘어가는 글자 넘기기 */
+  text-overflow: ellipsis; /* 말 줄임표 추가 */
 }
 .ni:hover {
   color: rgb(139, 0, 116);

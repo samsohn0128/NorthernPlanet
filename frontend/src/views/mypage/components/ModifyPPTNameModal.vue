@@ -47,7 +47,7 @@
           <button
             type="button"
             class="btn bg-gradient-danger"
-            @click="modifyPPT()"
+            @click="modifyPPTName()"
             data-bs-dismiss="modal"
           >
             Modify
@@ -65,7 +65,6 @@ import store from '@/store';
 
 export default {
   name: 'ModifyPPTNameModal',
-  props: { name: String, id: Number },
   data() {
     return {
       presentationId: store.getters['mypage/getCurrentId'],
@@ -76,25 +75,27 @@ export default {
   },
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
   methods: {
-    async modifyPPT() {
-      console.log('data', this.presentationName);
-      console.log('presentation', this.presentationId);
-      // console.log(this.presentationName);
+    async modifyPPTName() {
+      this.presentationId = store.getters['mypage/getCurrentId'];
       // Error: modal 열 때마다 새로고침하지 않으면 아래 아이디, Name 맨 처음에 고른 값이 들어가는 에러 발생
-      let userData = {
-        presentationId: this.$store.getters['mypage/getCurrentId'],
-        presentationName: this.presentationName,
-      };
+
+      // let userData = {
+      //   presentationId: this.presentationId,
+      //   presentationName: this.presentationName,
+      // };
+      let userData = this.presentationName;
       // 제목이 비어있을 경우 튕겨내기
-      if (userData.presentationName === '') {
-        this.$alertify.error('제목을 입력해주세요.');
+      if (userData === '') {
+        this.$toastError('제목을 입력해주세요.');
         return;
       }
       try {
-        console.log(userData);
         await modifyPresentationName(this.presentationId, userData);
+        await this.$toastSuccess('이름을 변경했습니다.');
+        this.$router.go();
       } catch (exp) {
-        this.$alertify.error('프레젠테이션 추가에 실패했습니다.');
+        console.log(exp);
+        this.$toastError('이름 변경에 실패했습니다.');
       }
     },
     // getInfo() {

@@ -57,29 +57,34 @@ import store from '@/store';
 
 export default {
   name: 'DeletePPTModal',
+  props: { id: Number },
   data() {
     return {
-      presentationId: null,
+      presentationId: this.id,
     };
   },
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
   methods: {
     async deletePPT() {
       // Error: modal 열 때마다 새로고침하지 않으면 아래 아이디도 맨 처음에 고른 id가 들어가는 에러 발생
-      console.log(this.presentationId);
+      this.presentationId = store.getters['mypage/getCurrentId'];
       try {
         await deletePresentation(this.presentationId);
+        this.$toastSuccess('프레젠테이션을 삭제했습니다.');
+        this.$router.go();
       } catch (exp) {
-        this.$alertify.error('프레젠테이션 삭제에 실패했습니다.');
+        console.log(exp);
+        this.$toastError('프레젠테이션 삭제에 실패했습니다.');
       }
     },
-    getInfo() {
-      this.presentationId = store.getters['mypage/getCurrentId'];
-    },
+    // getInfo() {
+    //   this.presentationId = store.getters['mypage/getCurrentId'];
+    //   console.log(this.presentationId);
+    // },
   },
-  mounted() {
-    this.getInfo();
-  },
+  // mounted() {
+  //   this.getInfo();
+  // },
 };
 </script>
 

@@ -1,16 +1,16 @@
 <template>
   <div
     class="modal fade"
-    id="AddPPTPictureModal"
+    id="AddSlideModal"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="ModalChangePassword"
+    aria-labelledby="ModalAddSlide"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="modal-title" id="ModalWithdraw">사진 등록하기</h6>
+          <h6 class="modal-title" id="ModalAdd">슬라이드 추가하기</h6>
           <button
             type="button"
             class="btn-close"
@@ -20,21 +20,24 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <label class="input-file-button" for="input-file">파일 추가하기</label>
-        <div id="showFileName"></div>
-        <input
-          type="file"
-          multiple="multiple"
-          id="input-file"
-          style="display: none"
-          @change="selectFile"
-        />
-        <img
-          class="image"
-          :src="imgUrl.first"
-          alt=""
-          @click="dialogVisible.first = true"
-        />
+        <div>
+          <label class="input-file-button" for="input-picture"
+            >사진 추가하기</label
+          >
+          <div id="showFileName"></div>
+          <input
+            type="file"
+            id="input-picture"
+            style="display: none"
+            @change="selectFile"
+          />
+          <img
+            class="image thumbnail-setting"
+            :src="imgUrl.first"
+            alt=""
+            @click="dialogVisible.first = true"
+          />
+        </div>
         <div class="modal-footer">
           <button
             type="button"
@@ -58,35 +61,44 @@
 </template>
 
 <script>
-import { presentationAddDelete } from '@/api/presentation.js';
+import { addSlide } from '@/api/presentation.js';
 import store from '@/store';
 
 export default {
-  name: 'AddPPTPictureModal',
+  name: 'AddSlideModal',
   data() {
     return {
       dialogVisible: { first: false },
       imgUrl: { first: '' },
+      userId: store.getters['users/getUserId'],
+      presentationId: this.$route.params.presentation_id,
     };
   },
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
   methods: {
     async addPPT() {
       let formData = new FormData();
-      let imgFile = document.getElementById('input-file').files;
-      formData.append('file', imgFile);
-      // formData.append('user_id', store.getters['users/getUser'].userId);
-      formData.append('user_id', store.state.users.userId);
-      formData.append('slideId', this.$route.params.presentation_id);
-      formData.append('sequenceNum', store.state.mypage.sequenceNum);
-      // let userData = {
-      //   user_id: store.getters['users/getUser'].userId,
-      //   formData,
-      // };
+      let imgFile = document.getElementById('input-picture').files;
+      // console.log(imgFile);
+      if (imgFile.length == 0) {
+        return;
+      }
+      formData.append('userId', this.userId);
+      formData.append('presentationId', this.presentationId);
+      formData.append('slideFile', imgFile[0]);
+      // formData 보기
+      // for (let key of formData.keys()) {
+      //   console.log('key: ', key);
+      // }
+      // for (let value of formData.values()) {
+      //   console.log('value: ', value);
+      // }
       try {
-        await presentationAddDelete(formData);
+        await addSlide(formData);
+        await this.$toastSuccess('사진을 추가했습니다.');
+        this.$router.go();
       } catch (exp) {
-        this.$alertify.error('파일 추가에 실패했습니다.');
+        this.$toastError('사진 추가에 실패했습니다.');
       }
     },
     selectFile(e) {
@@ -95,14 +107,18 @@ export default {
         URL.createObjectURL(file);
       this.imageChanged = true;
       this.imgUrl.first = URL.createObjectURL(file);
-
-      let imgFile = document.getElementById('input-file').files;
+      let imgFile = document.getElementById('input-picture').files;
+      // console.log(imgFile);
       let fileList = '';
       for (let i = 0; i < imgFile.length; i++) {
         fileList += imgFile[i].name + '<br>';
       }
       let target2 = document.getElementById('showFileName');
       target2.innerHTML = fileList;
+    },
+    change() {
+      // this.dialog = false;
+      window.location.reload();
     },
   },
 };
@@ -123,5 +139,9 @@ export default {
   font-size: 15px;
   font-weight: bold;
   text-align: center;
+}
+.thumbnail-setting {
+  max-width: 200px;
+  max-height: 150px;
 }
 </style>

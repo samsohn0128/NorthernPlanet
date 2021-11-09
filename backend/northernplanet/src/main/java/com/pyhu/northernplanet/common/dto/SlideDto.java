@@ -14,4 +14,6 @@ public class SlideDto {
   private String script;
 
   private byte[] slideFile;
+
+  private Integer effect;
 }
