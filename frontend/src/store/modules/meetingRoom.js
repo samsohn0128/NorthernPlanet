@@ -19,6 +19,8 @@ export default {
     roomNumber: null,
     participants: null,
     myName: null,
+    chat: null,
+    messageList: null,
     /* nowImageUrl: null, */
     currentPage: null,
     manager: null,
@@ -99,6 +101,8 @@ export default {
       state.roomNumber = null;
       state.participants = null;
       state.myName = null;
+      state.chat = null;
+      state.messageList = null;
       /* state.nowImageUrl = null; */
       state.currentPage = null;
       state.manager = null;
@@ -136,6 +140,16 @@ export default {
     /* SET_SELECTED_CONTENT_ID(state, id) {
       state.selectedContentId = id;
     }, */
+    ADD_CHAT(state, { time, name, chatContent }) {
+      state.chat = { time, name, chatContent };
+    },
+    ADD_CHAT_MESSAGE(state, chatMessage) {
+      if (state.messageList === null) {
+        state.messageList = [];
+      }
+
+      state.messageList.push(chatMessage);
+    },
   },
   // actions
   actions: {
@@ -197,6 +211,10 @@ export default {
               }
             },
           );
+          break;
+        }
+        case 'addChat': {
+          context.dispatch('addChat', message);
           break;
         }
         default: {
@@ -307,6 +325,7 @@ export default {
       context.commit('DISPOSE_PARTICIPANT', participantName);
     },
     leaveRoom(context) {
+      window.location.reload(); // 새로고침
       router.push({ path: '/dashboard' });
       console.log(context.state.roomNumber);
       if (context.state.myName === context.state.manager) {
@@ -387,6 +406,23 @@ export default {
           context.commit('SET_ONGOING_PRESENTATION', { message, imageSrcs });
         });
       }
+    },
+    addChat(context, message) {
+      context.commit('ADD_CHAT', message);
+    },
+    addChatMessage(context, chatMessage) {
+      context.commit('ADD_CHAT_MESSAGE', chatMessage);
+    },
+  },
+  getters: {
+    getChat(state) {
+      return state.chat;
+    },
+    getMessageList(state) {
+      return state.messageList;
+    },
+    getMyName(state) {
+      return state.myName;
     },
   },
 };

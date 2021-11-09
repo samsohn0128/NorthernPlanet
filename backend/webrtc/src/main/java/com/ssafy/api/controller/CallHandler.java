@@ -100,6 +100,16 @@ public class CallHandler extends TextWebSocketHandler {
 					presentationLocation, presentationSize);
 			break;
 		}
+		case "addChat": {
+			log.trace("addChat");
+			UserSession userSession = registry.getBySession(session);
+			Room room = roomManager.getRoom(userSession.getRoomName(), userSession.getName());
+
+			for (UserSession participant : room.getParticipants()) {
+				participant.sendMessage(jsonMessage);
+			}
+			break;
+		}
 		default:
 			break;
 		}

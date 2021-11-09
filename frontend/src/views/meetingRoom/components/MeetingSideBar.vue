@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- navigator -->
-    <div class="d-flex justify-content-center navigator">
+    <div class="d-flex justify-content-center navigator fixed-navigator">
       <button
         :class="[
           { 'navigator-button-active': participantShow },
@@ -14,22 +14,34 @@
       </button>
       <button
         :class="[
-          { 'navigator-button-active': !participantShow },
-          { 'navigator-button-inactive': participantShow },
+          { 'navigator-button-active': presentationShow },
+          { 'navigator-button-inactive': !presentationShow },
           'navigator-presentation-button',
         ]"
         @click="selectPresentationMenu"
       >
         Presentation
       </button>
+      <button
+        :class="[
+          { 'navigator-button-active': chatShow },
+          { 'navigator-button-inactive': !chatShow },
+          'navigator-chat-button',
+        ]"
+        @click="selectChatMenu"
+      >
+        Chat
+      </button>
     </div>
     <!-- navigator -->
     <!-- SideBar Items -->
     <MeetingParticipants v-if="participantShow" class="meeting-participants" />
     <PresentationController
-      v-if="!participantShow"
+      v-if="presentationShow"
       class="presentation-controller"
     />
+    <Chat v-if="chatShow" :messageList="messageList" class="chat" />
+
     <!-- SideBar Items -->
     <!-- access alert -->
     <transition name="fade">
@@ -43,16 +55,19 @@
 <script>
 import MeetingParticipants from './MeetingParticipants.vue';
 import PresentationController from './PresentationController.vue';
+import Chat from './Chat.vue';
 
 export default {
   name: 'MeetingSideBar',
-  components: { MeetingParticipants, PresentationController },
+  components: { MeetingParticipants, PresentationController, Chat },
   // : props
   props: {},
   // : data
   data() {
     return {
       participantShow: true,
+      presentationShow: false,
+      chatShow: false,
       alertShow: false,
     };
   },
@@ -64,6 +79,25 @@ export default {
     presenter() {
       return this.$store.state.meetingRoom.presenter;
     },
+    user() {
+      return this.$store.getters['users/getUser'];
+    },
+    chat() {
+      return this.$store.getters['meetingRoom/getChat'];
+    },
+    messageList() {
+      return this.$store.getters['meetingRoom/getMessageList'];
+    },
+  },
+  watch: {
+    chat(value) {
+      console.log('watch chat', value);
+
+      this.$store.dispatch('meetingRoom/addChatMessage', value);
+    },
+    messageList(value) {
+      console.log('watch messageList', value);
+    },
   },
   // : lifecycle hook
   mounted() {},
@@ -71,13 +105,22 @@ export default {
   methods: {
     selectParticipantMenu: function () {
       this.participantShow = true;
+      this.presentationShow = false;
+      this.chatShow = false;
     },
     selectPresentationMenu: function () {
       if (this.myName === this.presenter) {
         this.participantShow = false;
+        this.presentationShow = true;
+        this.chatShow = false;
       } else {
         this.activateAlert();
       }
+    },
+    selectChatMenu: function () {
+      this.participantShow = false;
+      this.presentationShow = false;
+      this.chatShow = true;
     },
     activateAlert: function () {
       this.alertShow = true;
@@ -97,7 +140,7 @@ export default {
 .navigator-participant-button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border: none;
-  width: 175px;
+  width: 130px;
   height: 35px;
   border-radius: 30px 0px 0px 30px;
   color: white;
@@ -106,7 +149,16 @@ export default {
 .navigator-presentation-button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border: none;
-  width: 175px;
+  width: 130px;
+  height: 35px;
+  border-radius: 0px;
+  color: white;
+  font-weight: bold;
+}
+.navigator-chat-button {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: none;
+  width: 130px;
   height: 35px;
   border-radius: 0px 30px 30px 0px;
   color: white;
@@ -123,6 +175,9 @@ export default {
 }
 .presentation-controller {
   margin: 30px 25px 0;
+}
+.chat {
+  margin: 25px 25px;
 }
 .access-alert {
   position: absolute;
@@ -146,4 +201,9 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
+/* 사이드바 상단바 고정 css*/
+/* .fixed-navigator {
+  position: fixed;
+  top: 0;
+} */
 </style>
