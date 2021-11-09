@@ -275,6 +275,7 @@ body {
   position: fixed;
   bottom: 0;
   border-top: 2px solid #fff;
+  width: 300px;
 }
 
 .chat-input-div {
