@@ -29,28 +29,77 @@
         </div>
       </div>
 
-      <div id="ppt-image-setting">
-        <img
-          v-if="idx == 0"
-          src="@/assets/presentationTemplates/first-slide.png"
-          id="img-setting"
-          alt="prev-image"
-          class="size-4"
-        />
-        <img
-          v-else-if="idx == slideList.length - 1"
-          src="@/assets/presentationTemplates/last-slide.png"
-          id="img-setting"
-          alt="next-image"
-          class="size-4"
-        />
-        <img
-          v-else
-          :src="slideList[idx].slideFile"
-          id="img-setting"
-          alt="current-slide"
-          class="size-4"
-        />
+      <div class="main-body-div">
+        <div class="webrtc-body-div">
+          <!-- WebRTC 관련 -->
+          <!-- local video element -->
+          <i class="bi bi-mic-fill"></i>
+          <!-- <button
+            type="button"
+            class="btn"
+            :class="{
+              'bg-gradient-dark': isMicOn,
+              'bg-gradient-secondary': !isMicOn,
+            }"
+            @click="micOnOff"
+          >
+            <span
+              class="fas"
+              :class="{
+                'fa-microphone': isMicOn,
+                'fa-microphone-slash': !isMicOn,
+              }"
+            ></span>
+          </button> -->
+          <button
+            type="button"
+            class="btn btn-setting"
+            :class="{
+              'bg-gradient-dark': isVideoOn,
+              'bg-gradient-secondary': !isVideoOn,
+            }"
+            @click="videoOnOff"
+          >
+            <span
+              class="fas fa-video"
+              :class="{
+                'fa-video': isVideoOn,
+                'fa-video-slash': !isVideoOn,
+              }"
+            ></span>
+          </button>
+
+          <!-- local video element -->
+          <video
+            width="100%"
+            :id="'local-video' + roomId"
+            autoplay="true"
+            poster="@/assets/img/logos/focus_camera3.jpg"
+          ></video>
+        </div>
+        <div id="ppt-image-setting">
+          <img
+            v-if="idx == 0"
+            src="@/assets/presentationTemplates/first-slide.png"
+            id="img-setting"
+            alt="prev-image"
+            class="size-4"
+          />
+          <img
+            v-else-if="idx == slideList.length - 1"
+            src="@/assets/presentationTemplates/last-slide.png"
+            id="img-setting"
+            alt="next-image"
+            class="size-4"
+          />
+          <img
+            v-else
+            :src="slideList[idx].slideFile"
+            id="img-setting"
+            alt="current-slide"
+            class="size-4"
+          />
+        </div>
       </div>
 
       <!-- right side bar control buttons -->
@@ -92,6 +141,8 @@
 <script>
 import MeetingSideBar from './preview/MeetingSideBar.vue';
 import { getPresentationDetail } from '@/api/presentation.js';
+import { getRoom } from '@/api/rooms.js';
+
 export default {
   name: 'PresentationPreview',
   components: {
@@ -121,6 +172,15 @@ export default {
       min: '00', // 분 표시하기
       sec: '00', // 초 표시하기
       milisec: '00', // ms 표시하기
+
+      // WebRTC 관련
+      roomInfo: null,
+      roomName: null,
+      manager: null,
+      userName: null,
+      roomDescription: null,
+      isMicOn: false,
+      isVideoOn: false,
     };
   },
   // : watch
@@ -136,11 +196,33 @@ export default {
       );
       return this.participants[mainParticipantName];
     },
+
+    // WebRTC 관련
+    roomId() {
+      return this.$route.params.room_id;
+    },
   },
   // : lifecycle hook
-  created() {
+  async created() {
     this.getPresentationData();
     console.log(this.$route.params);
+
+    // WebRTC 관련
+    try {
+      //websocket init
+      const url = 'wss://' + location.host + '/groupcall';
+      console.log(url);
+      this.$store.dispatch('meetingRoom/wsInit', url);
+
+      //roomId로 roomInfo 받아와서 data setting 하기
+      this.roomInfo = await getRoom(this.roomId);
+      this.roomName = this.roomInfo.data.name;
+      this.manager =
+        this.roomInfo.data.managerName + '-' + this.roomInfo.data.managerId;
+      this.roomDescription = this.roomInfo.data.description;
+    } catch (error) {
+      console.log(error);
+    }
   },
   mounted() {
     document.addEventListener('keydown', e => {
@@ -305,16 +387,89 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
+
+    // WebRTC 관련
+    // micOnOff: function () {
+    //   if (this.isMicOn) {
+    //     this.isMicOn = false;
+    //   } else {
+    //     this.isMicOn = true;
+    //   }
+    // },
+    videoOnOff: function () {
+      if (this.isVideoOn) {
+        this.isVideoOn = false;
+        this.stopVideoFromCamera();
+      } else {
+        this.isVideoOn = true;
+        this.playVideoFromCamera();
+      }
+    },
+    sendMsgToKurento() {
+      if (!this.userName) {
+        this.$toastError('이름을 입력해주세요!');
+        return;
+      }
+      const myNameId = this.userName + '-' + this.userId;
+      const roomNameId = this.roomName + '-' + this.roomId;
+      const message = {
+        id: 'joinRoom',
+        name: myNameId,
+        room: roomNameId,
+      };
+      const meetingInfo = {
+        myName: myNameId,
+        roomName: roomNameId,
+        manager: this.manager,
+        startWithMic: this.isMicOn,
+        startWithVideo: this.isVideoOn,
+      };
+      console.log('message: ', message);
+      console.log('meetingInfo: ', meetingInfo);
+      this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
+      this.$store.dispatch('meetingRoom/sendMessage', message);
+    },
+    playVideoFromCamera: async function () {
+      try {
+        const constraints = { video: true, audio: false };
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const videoElement = document.getElementById(
+          'local-video' + this.roomId,
+        );
+        videoElement.srcObject = stream;
+      } catch (error) {
+        console.error('Error opening video camera.', error);
+      }
+    },
+    stopVideoFromCamera: async function () {
+      try {
+        const videoElement = document.getElementById(
+          'local-video' + this.roomId,
+        );
+        var stream = videoElement.srcObject;
+        var tracks = stream.getTracks();
+
+        for (var i = 0; i < tracks.length; i++) {
+          var track = tracks[i];
+          track.stop();
+        }
+        videoElement.srcObject = null;
+      } catch (err) {
+        console.error('Error stop video camera.', err);
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
 #ppt-image-setting {
-  max-width: 60vw;
-  height: 80vh;
+  margin-top: 57px;
+  width: 70vw;
+  height: 81vh;
   display: flex;
   align-items: center;
+  position: absolute;
 }
 .meetingroom-container {
   height: 100vh;
@@ -322,6 +477,11 @@ export default {
   padding: 20px 20px;
   background: linear-gradient(90deg, #dbecec 0%, #f165d3 100%);
 }
+/* RGB
+93 244 237 #5df4ec
+dbecec
+
+253 206 30 #fdce1e */
 .left-side-bar {
   background: none;
   height: 100vh;
@@ -345,6 +505,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  height: 11vh;
 }
 .upside-ppt-inside {
   width: 20vw;
@@ -377,6 +538,21 @@ export default {
   font-size: 18px;
   padding: 5px;
   border-radius: 0px 0px 10px 10px;
+}
+.main-body-div {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.webrtc-body-div {
+  position: absolute;
+  width: 70vw;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+.btn-setting {
+  width: 20%;
 }
 .script-inside {
   justify-content: center;
