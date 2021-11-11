@@ -549,7 +549,7 @@ dbecec
   width: 70vw;
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: flex-end;
 }
 .btn-setting {
   width: 20%;
