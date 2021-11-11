@@ -29,26 +29,26 @@
       <div class="small-img-container">
         <span>
           <img
-            v-if="presentationIdx == 1"
+            v-if="idx == 1"
             src="@/assets/presentationTemplates/first-slide.png"
             class="small-img-setting"
             alt="prev_image" />
           <img
-            v-else-if="presentationIdx > 1"
-            :src="slideList[presentationIdx - 1].slideFile"
+            v-else-if="idx > 1"
+            :src="slideList[idx - 1].slideFile"
             class="small-img-setting"
             alt="prev_image"
             @click="prevImage"
         /></span>
         <span>
           <img
-            v-if="presentationIdx == slideList.length - 2"
+            v-if="idx == slideList.length - 2"
             src="@/assets/presentationTemplates/last-slide.png"
             class="small-img-setting"
             alt="next_image" />
           <img
-            v-else-if="presentationIdx < slideList.length - 2"
-            :src="slideList[presentationIdx + 1].slideFile"
+            v-else-if="idx < slideList.length - 2"
+            :src="slideList[idx + 1].slideFile"
             class="small-img-setting"
             alt="next_image"
             @click="nextImage"
@@ -137,13 +137,13 @@
       <div v-else>
         <div class="head-animation">
           <div
-            v-for="(effect, idx) in effects"
+            v-for="(effect, index) in effects"
             :class="['effect-container']"
-            :key="idx"
-            :id="idx"
-            @click="showExample(effect, idx)"
+            :key="index"
+            :id="index"
+            @click="showExample(effect, index)"
           >
-            <h6>{{ idx }}</h6>
+            <h6>{{ index }}</h6>
           </div>
         </div>
       </div>
@@ -188,7 +188,6 @@ export default {
       LocationSizeShow: true,
       selectedSize: null,
       selectedLocation: null,
-      presentationIdx: this.idx,
       effects: {
         default: 0,
         fadein: 1,
@@ -256,14 +255,14 @@ export default {
       }, 1000);
     },
     prevImage() {
-      if (this.presentationIdx > 1) {
-        this.presentationIdx -= 1;
+      if (this.idx > 1) {
+        this.idx -= 1;
         this.emitImage();
       }
     },
     nextImage() {
-      if (this.presentationIdx < this.slideList.length - 2) {
-        this.presentationIdx += 1;
+      if (this.idx < this.slideList.length - 2) {
+        this.idx += 1;
         this.emitImage();
       }
     },
@@ -274,7 +273,7 @@ export default {
       this.$emit('selectedLocation', this.selectedLocation);
     },
     emitImage() {
-      this.$emit('selectIdx', this.presentationIdx);
+      this.$emit('selectIdx', this.idx);
     },
   },
 };

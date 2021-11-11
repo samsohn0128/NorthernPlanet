@@ -225,6 +225,7 @@ export default {
         slideId: -2,
       });
       console.log('시작 slideList: ', this.slideList);
+      this.idx = 1;
     },
     // Size 세팅
     setSize(selectedSize) {
@@ -242,7 +243,9 @@ export default {
     },
     // PPT 인덱스번호 세팅
     setIdx(selectedIdx) {
-      this.idx = selectedIdx;
+      if (selectedIdx > 0 && selectedIdx < this.slideList.length - 1) {
+        this.idx = selectedIdx;
+      }
       console.log(this.idx);
     },
     // 시작
