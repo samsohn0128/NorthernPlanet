@@ -200,17 +200,6 @@ export default {
       this.isManager = true;
     }
     console.log('am I manager? ', this.isManager);
-    // const formData = new FormData();
-    // formData.append('userId', this.user.userId);
-    // formData.append('roomId', this.room.roomId);
-    // showfiledetail(formData)
-    //   .then(data => {
-    //     this.files = data.data;
-    //   })
-    //   .catch(() => {
-    //     console.log('error');
-    //     this.$alertify.error('파일을 가져오지 못했습니다.');
-    //   });
   },
   computed: {
     getParticipants() {
@@ -224,19 +213,6 @@ export default {
     },
   },
   methods: {
-    // deletefile() {
-    //   const formDa = new FormData();
-    //   formDa.append('userId', this.user.userId);
-    //   formDa.append('roomId', this.room.roomId);
-    //   deletetot(formDa)
-    //     .then(data => {
-    //       console.log(data);
-    //       this.$router.go();
-    //     })
-    //     .catch(() => {
-    //       this.$alertify.error('error! catch');
-    //     });
-    // },
     addParticipant() {
       let msg = '';
       if (!this.participantAccount) {

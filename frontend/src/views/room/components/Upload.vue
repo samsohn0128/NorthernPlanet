@@ -95,12 +95,12 @@ export default {
           if (status != 200) {
             return;
           } else {
-            this.$alertify.success('파일이 업로드 됐습니다.');
+            this.$toastSuccess('파일이 업로드 됐습니다.');
             this.$emit('change');
           }
         })
         .catch(() => {
-          this.$alertify.error('error! catch');
+          this.$toastError('error! catch');
         });
     },
   },

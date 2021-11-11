@@ -148,26 +148,21 @@ export default {
         // setRoomOnLive(roomData)
         //   .then(({ status }) => {
         //     if (status != 200) {
-        //       this.$alertify.error('방 상태변경에 실패했습니다.');
         //       return;
         //     }
-        //     // this.$alertify.success('방 상태를 활동중으로 변경했습니다.');
         //     this.sendMsgToKurento();
         //   })
         //   .catch(() => {
-        //     this.$alertify.error('setRoomOnLive error!');
         //   });
       } else {
         // getRoomIsOnLive(this.roomId)
         //   .then(({ status }) => {
         //     if (status != 200) {
-        //       this.$alertify.error('Manager 가 아직 방을 시작하지 않았습니다.');
         //       return;
         //     }
         //     this.sendMsgToKurento();
         //   })
         //   .catch(() => {
-        //     this.$alertify.error('get room is on live error!');
         //   });
       }
     },
