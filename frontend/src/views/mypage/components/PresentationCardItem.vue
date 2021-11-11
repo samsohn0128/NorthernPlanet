@@ -36,7 +36,7 @@
           >
             {{ presentationInfo.presentationName }}
           </a>
-          <button
+          <div
             class="col"
             type="button"
             id="dropdownMenuButton"
@@ -44,7 +44,7 @@
             aria-expanded="false"
           >
             <i class="ni ni-bold-down z-index: 5"></i>
-          </button>
+          </div>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li>
               <a
