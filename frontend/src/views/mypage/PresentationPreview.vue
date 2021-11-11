@@ -298,7 +298,7 @@ export default {
 <style scoped>
 #ppt-image-setting {
   max-width: 60vw;
-  max-height: 50vh;
+  height: 80vh;
   display: flex;
   align-items: center;
 }
@@ -306,7 +306,7 @@ export default {
   height: 100vh;
   width: 100vw;
   padding: 20px 20px;
-  background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
+  background: linear-gradient(90deg, #5df4ec 0%, #fdce1e 100%);
 }
 .left-side-bar {
   background: none;
