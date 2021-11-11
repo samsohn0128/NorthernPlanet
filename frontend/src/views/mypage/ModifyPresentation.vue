@@ -3,7 +3,7 @@
     <AppNav />
     <nav
       class="
-        navbar navbar-expand-lg
+        navbar navbar-expand-sm
         blur blur-rounded
         top-0
         border-bottom
@@ -11,7 +11,6 @@
         shadow
         w-100
         mt-1
-        d-none d-lg-block
         my-1
         py-1
       "
