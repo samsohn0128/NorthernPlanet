@@ -57,7 +57,7 @@
                 <popper
                   ref="popper"
                   :prevent-default="true"
-                  :force-show="ture"
+                  :force-show="true"
                   :options="{
                     placement: 'top',
                     modifiers: { offset: { offset: '0,10px' } },
@@ -191,7 +191,7 @@ export default {
       let msg = '';
       if (!this.participantAccount) {
         msg = '추가하려는 사용자 이메일을 입력해주세요';
-        this.$alertify.error(msg);
+        this.$toastError(msg);
         return;
       }
 
@@ -200,14 +200,14 @@ export default {
 
       for (let i = 0; i < size; i++) {
         if (this.participants[i].email == this.participantAccount) {
-          this.$alertify.error('이미 등록된 사용자입니다.');
+          this.$toastError('이미 등록된 사용자입니다.');
           return;
         }
       }
 
       this.getUsername().then(() => {
         if (!this.participants) {
-          this.$alertify.error('사용자 계정이 없습니다.');
+          this.$toastError('사용자 계정이 없습니다.');
         } else {
           this.participants.push({
             name: this.participant.data.name,
@@ -242,7 +242,7 @@ export default {
       }
 
       if (err) {
-        this.$alertify.error(msg);
+        this.$toastError(msg);
         return;
       } else {
         let roomData = {
@@ -256,15 +256,15 @@ export default {
         createRoom(roomData)
           .then(({ status }) => {
             if (status != 200) {
-              this.$alertify.error('방 생성 실패했습니다.');
+              this.$toastError('방 생성 실패했습니다.');
               return;
             } else {
-              this.$alertify.success('방이 생성됐습니다.');
+              this.$toastSuccess('방이 생성됐습니다.');
               this.$router.push('/dashboard');
             }
           })
           .catch(() => {
-            this.$alertify.error('error! catch');
+            this.$toastError('error! catch');
           });
       }
     },
@@ -273,7 +273,7 @@ export default {
       try {
         this.participant = await findUser(this.participantAccount);
       } catch (err) {
-        this.$alertify.error('사용자 확인이 실패했습니다..', err);
+        this.$toastError('사용자 확인이 실패했습니다..: ' + err);
       }
     },
 
