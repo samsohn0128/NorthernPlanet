@@ -213,8 +213,8 @@ export default {
             name: this.participant.data.name,
             email: this.participantAccount,
             code: {
-              codeId: this.roleSelected.split('-')[0],
-              codeName: this.roleSelected.split('-')[1],
+              codeId: '002',
+              codeName: 'Presenter',
             },
           });
         }
