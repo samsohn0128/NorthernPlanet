@@ -376,11 +376,12 @@ export default {
     changeContent(context, message) {
       axios({
         method: 'get',
-        url: `${API_SERVER_URL}/board/image/${context.state.roomNumber}/${message.presentationUserId}`,
+        url: `${API_SERVER_URL}/presentation/${context.state.myId}/${message.presentationUserId}`,
       }).then(res => {
         const imageSrcs = [];
-        res.data.forEach(imageStr => {
-          let imageSrc = 'data:image/jpeg;base64,' + imageStr;
+        console.log('slidelist: ', res.data.slideList);
+        res.data.slideList.forEach(data => {
+          let imageSrc = 'data:image/jpeg;base64,' + data.slideFile;
           imageSrcs.push(imageSrc);
         });
         context.commit('SET_IMAGE_SRCS', imageSrcs);

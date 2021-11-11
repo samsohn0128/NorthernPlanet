@@ -8,7 +8,7 @@
     >
       <img :src="firstImgUrl" alt="" class="content-insert img-fluid" />
       <div class="overlay" @click="selectContent()">
-        <span>{{ contentUserName }}님의 발표자료</span>
+        <span>{{ content.presentationName }}</span>
       </div>
     </div>
   </div>
@@ -16,7 +16,7 @@
 
 <script>
 // import "./template.scss";
-import _ from 'lodash';
+//import _ from 'lodash';
 //import { FILE_PATH } from '@/constant/index.js';
 
 export default {
@@ -51,12 +51,12 @@ export default {
     participants() {
       return this.$store.state.meetingRoom.participants;
     },
-    contentUserName() {
-      const userName = Object.keys(this.participants).find(
-        userName => _.split(userName, '-')[1] == this.content.user_id,
-      );
-      return _.split(userName, '-')[0];
-    },
+    // contentUserName() {
+    //   const userName = Object.keys(this.participants).find(
+    //     userName => _.split(userName, '-')[1] == this.content.user_id,
+    //   );
+    //   return _.split(userName, '-')[0];
+    // },
   },
   // : lifecycle hook
   mounted() {},
@@ -90,7 +90,7 @@ export default {
       // Websocket에 Content 변경 정보 보내주기
       const message = {
         id: 'changeContent',
-        presentationUserId: this.content.user_id,
+        presentationUserId: this.content.presentationId,
       };
       this.$store.dispatch('meetingRoom/sendMessage', message);
     },
