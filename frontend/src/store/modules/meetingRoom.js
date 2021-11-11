@@ -19,6 +19,7 @@ export default {
     roomNumber: null,
     participants: null,
     myName: null,
+    myId: null,
     chat: null,
     messageList: null,
     /* nowImageUrl: null, */
@@ -48,6 +49,7 @@ export default {
     }, */
     SET_MEETING_INFO(state, meetingInfo) {
       state.myName = meetingInfo.myName;
+      state.myId = meetingInfo.myId;
       state.roomName = meetingInfo.roomName;
       state.manager = meetingInfo.manager;
       state.roomNumber = _.split(meetingInfo.roomName, '-')[1];
@@ -351,7 +353,7 @@ export default {
     setContents(context) {
       axios({
         method: 'get',
-        url: `${API_SERVER_URL}/board/room/${context.state.roomNumber}`,
+        url: `${API_SERVER_URL}/presentation/${context.state.myId}`,
       })
         .then(res => {
           context.commit('SET_CONTENTS', res);

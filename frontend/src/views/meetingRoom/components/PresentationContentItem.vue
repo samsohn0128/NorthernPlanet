@@ -2,7 +2,7 @@
   <div>
     <div
       :class="[
-        { 'container-border': content.user_id === selectedContentId },
+        { 'container-border': content.presentationId === selectedContentId },
         'content-container',
       ]"
     >
@@ -17,9 +17,7 @@
 <script>
 // import "./template.scss";
 import _ from 'lodash';
-
-const FILE_PATH = 'https://i5a107.p.ssafy.io:8446/board/image';
-// const FILE_PATH = '/home/ubuntu/presentations';
+//import { FILE_PATH } from '@/constant/index.js';
 
 export default {
   name: 'PresentationContentItem',
@@ -38,7 +36,7 @@ export default {
       return this.$store.state.meetingRoom.roomNumber;
     },
     firstImgUrl() {
-      return `${FILE_PATH}/${this.roomNumber}/${this.content.user_id}/1`;
+      return 'data:image/png;base64,' + this.content.thumbnail;
     },
     /*     imageSize() {
       return this.$store.state.meetingRoom.size;

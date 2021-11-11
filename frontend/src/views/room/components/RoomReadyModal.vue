@@ -182,6 +182,7 @@ export default {
       };
       const meetingInfo = {
         myName: myNameId,
+        myId: this.userId,
         roomName: roomNameId,
         manager: this.manager,
         startWithMic: this.isMicOn,
