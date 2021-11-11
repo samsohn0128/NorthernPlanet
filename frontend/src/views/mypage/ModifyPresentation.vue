@@ -69,13 +69,13 @@
         <div class="container-fluid">
           <div class="head-animation" v-if="showAnimation == true">
             <div
-              v-for="(idx, effect) in effects"
+              v-for="(effect, idx) in effects"
               :class="['effect-container']"
-              :key="effect"
-              :id="effect"
-              @click="showExample(idx, effect)"
+              :key="idx"
+              :id="idx"
+              @click="showExample(effect, idx)"
             >
-              <h6>{{ effect }}</h6>
+              <h6>{{ idx }}</h6>
             </div>
           </div>
         </div>
@@ -85,11 +85,11 @@
           <!-- 자동 업데이트 싫으면 @end="updateItemOrder 없애기-->
           <!-- <draggable v-model="slideList" @end="updateItemOrder"> -->
           <draggable v-model="slideList">
-            <transition-group>
+            <transition-group tag="div" class="choose-ppt card">
               <div
                 class="choose-ppt card"
                 v-for="(slide, idx) in slideList"
-                :key="slide.slideId"
+                :key="`key-${slide.slideId}`"
                 @click="setIdx(idx)"
               >
                 <div class="choose-ppt-icons">
@@ -200,7 +200,15 @@ export default {
       presentationName: null,
       size: null,
       uploadTime: null,
-      slideList: [],
+      slideList: [
+        {
+          effect: null,
+          script: null,
+          sequence: null,
+          slideFile: null,
+          slideId: null,
+        },
+      ],
       sendSlideList: [],
       items: [{ title: 'PPT 추가' }, { title: 'PPT 삭제' }],
       editorOptions: {
@@ -268,9 +276,15 @@ export default {
       let num = this.idx;
       this.slideList[num].effect = effect;
     },
-    // 전체 보기 화면으로 이동. 아직 구현하지 않음.
+    // 전체 보기 화면으로 이동
     showAllPPT() {
-      console.log('showAllPPT');
+      this.$router.push({
+        name: 'PresentationPreview',
+        params: {
+          userId: this.userId,
+          presentationId: this.presentationId,
+        },
+      });
     },
     // 슬라이드를 저장한다.
     async savePPT() {
@@ -288,7 +302,7 @@ export default {
         console.log('끝 data: ', data);
         await savePresentation(data);
         await this.$toastSuccess('슬라이드를 저장하였습니다.');
-        // this.$router.go();
+        this.$router.go();
       } catch (exp) {
         console.log(exp);
         this.$toastError('슬라이드 저장에 실패했습니다.');
@@ -344,7 +358,7 @@ export default {
       if (this.editorText === curEditorText) return;
 
       let updateScriptReq = {
-        slideId: 1,
+        slideId: this.idx,
         script: this.$refs.toastuiEditor.invoke('getHTML'),
       };
 
