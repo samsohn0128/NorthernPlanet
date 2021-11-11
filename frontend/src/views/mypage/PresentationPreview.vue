@@ -8,7 +8,10 @@
         </div>
         <div class="upside-ppt-inside script-setting">
           <div class="move-sequence" @click="setIdx(idx - 1)">&lt;</div>
-          <div class="script-inside">{{ slideList[idx].script }}</div>
+          <div v-if="slideList[idx].script == null" class="script-inside">
+            대본을<br />설정해주세요.
+          </div>
+          <div v-else class="script-inside">{{ slideList[idx].script }}</div>
           <div class="move-sequence" @click="setIdx(idx + 1)">&gt;</div>
         </div>
         <div class="upside-ppt-inside set-timer-location">
@@ -19,7 +22,7 @@
             .
             <span id="showMilisec">00</span>
           </div>
-          <div class="time-space">
+          <div class="time-button-space">
             <button id="startButton" @click="startButton">start</button>
             <button id="resetButton" @click="resetButton">reset</button>
           </div>
@@ -99,8 +102,16 @@ export default {
       rightSideShow: true,
       presentationId: this.$route.params.presentationId,
       userId: this.$route.params.userId,
-      slideList: [],
-      idx: 1,
+      slideList: [
+        {
+          effect: null,
+          script: null,
+          sequence: null,
+          slideFile: null,
+          slideId: null,
+        },
+      ],
+      idx: 0,
       size: 2,
       selectedLocation: 'top',
       timerWork: null, // 타이머가 0.01초마다 돌아가는 곳
@@ -193,12 +204,12 @@ export default {
         this.presentationId,
       );
       // ByteArray를 img로 변경
-      let imgByteArray = response.data.slideList;
+      let imgByteArray = await response.data.slideList;
       imgByteArray.forEach(element => {
         element.slideFile = 'data:image/png;base64,' + element.slideFile;
       });
       // slideList 대입
-      this.slideList = response.data.slideList;
+      this.slideList = await response.data.slideList;
       this.slideList.unshift({
         effect: null,
         script: null,
@@ -306,7 +317,7 @@ export default {
   height: 100vh;
   width: 100vw;
   padding: 20px 20px;
-  background: linear-gradient(90deg, #5df4ec 0%, #fdce1e 100%);
+  background: linear-gradient(90deg, #dbecec 0%, #f165d3 100%);
 }
 .left-side-bar {
   background: none;
@@ -353,6 +364,16 @@ export default {
   color: black;
   font-size: 18px;
   padding: 5px;
+  border-radius: 10px 10px 0px 0px;
+}
+.time-button-space {
+  width: 12vw;
+  text-align: center;
+  background: rgb(141, 235, 177);
+  color: black;
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 0px 0px 10px 10px;
 }
 .script-inside {
   justify-content: center;
