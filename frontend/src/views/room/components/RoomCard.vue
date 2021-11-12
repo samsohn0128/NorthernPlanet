@@ -102,12 +102,8 @@
   <!--카드 유닛-->
 </template>
 <script>
-import Vue from 'vue';
-import VueAlertify from 'vue-alertify';
 import RoomReadyModal from './RoomReadyModal.vue';
 import { mapGetters } from 'vuex';
-Vue.use(VueAlertify);
-
 export default {
   name: 'RoomCard',
   components: { RoomReadyModal },

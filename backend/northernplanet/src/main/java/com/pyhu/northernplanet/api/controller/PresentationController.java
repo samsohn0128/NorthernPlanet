@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +47,7 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> createPresentation(
       @ModelAttribute PresentationPostReq presentationPostReq) {
     log.info("[createPresentation - controller] presentationPostReq userId : {}",
@@ -123,6 +125,7 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> updatePresentation(
       @RequestBody PresentationUpdateReq presentationUpdateReq) {
     log.info("[updatePresentation - controller] ");
@@ -136,11 +139,12 @@ public class PresentationController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @PatchMapping("/{presentationId}")
+  @PutMapping("/{presentationId}")
   @ApiOperation(value = "발표 자료 수정")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> updatePresentationName(@PathVariable Long presentationId,
       @RequestBody String presentationName) {
     log.info("[updatePresentationName - controller] presentationId : {}, presentationName : {}",
@@ -161,6 +165,7 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> addSlide(@ModelAttribute SlidePatchReq slidePatchReq) {
     log.info("[addSlide - controller] presentationId: {}, slideFileName: {}",
             slidePatchReq.getPresentationId(), slidePatchReq.getSlideFile().getOriginalFilename());
@@ -178,6 +183,7 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> createPptPdf(@ModelAttribute PptPdf2PngReq pptPdf2PngReq) {
     log.info("[createPpt - controller]");
     String originalFilename = pptPdf2PngReq.getPptPdf().getOriginalFilename();
@@ -201,6 +207,7 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> deleteSlide(@PathVariable Long slideId) {
     log.info("[deleteSlide - controller] slideId : {}", slideId);
     try {
@@ -218,6 +225,7 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> deletePresentation(@PathVariable Long presentationId) {
     log.info("[deleteSlide - controller] presentationId : {}", presentationId);
     try {

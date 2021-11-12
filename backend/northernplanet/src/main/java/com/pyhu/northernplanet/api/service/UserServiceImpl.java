@@ -28,6 +28,16 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public UserDetails loadUserByEmail(String email) {
+    User user = userRepository.findByEmail(email).orElseThrow(
+        () -> new UsernameNotFoundException("User not found with email : " + email));
+
+    log.info("loadUserByOauthId: {}", user);
+
+    return UserPrincipal.create(user);
+  }
+
+  @Override
   public UserOauthDto getOauthUserByOauthId(String oauthId) {
     User user = userRepository.findByOauthId(oauthId).orElseThrow(
         () -> new UsernameNotFoundException("User not found with oauthId : " + oauthId));

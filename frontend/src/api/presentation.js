@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { BASE_URL } from '@/constant/index.js';
+import store from '@/store';
 const instance = axios.create({
   baseURL: BASE_URL + '/presentation',
   headers: {
@@ -12,6 +13,16 @@ const file = axios.create({
   baseURL: BASE_URL + '/presentation',
   headers: {
     'Content-type': 'multipart/form-data',
+    Authorization: `Bearer ${store.getters['users/getToken']}`,
+  },
+  withCredentials: true,
+});
+
+const oauth = axios.create({
+  baseURL: `${BASE_URL}/presentation`,
+  headers: {
+    'Content-type': 'application/json',
+    Authorization: `Bearer ${store.getters['users/getToken']}`,
   },
   withCredentials: true,
 });
@@ -20,20 +31,20 @@ function getPresentations(userId) {
   return instance.get('/' + userId);
 }
 
-function addPresentation(userData) {
-  return file.post('/', userData);
+function addPresentation(presentationData) {
+  return file.post('/', presentationData);
 }
 
-function addPptpdf(userData) {
-  return file.post('/pptpdf', userData);
+function addPptpdf(pptpdfData) {
+  return file.post('/pptpdf', pptpdfData);
 }
 
-function modifyPresentationName(presentationId, userData) {
-  return instance.patch('/' + presentationId, userData);
+function modifyPresentationName(presentationId, presentationName) {
+  return oauth.put('/' + presentationId, presentationName);
 }
 
 function deletePresentation(presentationId) {
-  return instance.delete('/' + presentationId);
+  return oauth.delete('/' + presentationId);
 }
 
 function getPresentationDetail(userId, presentationId) {
@@ -46,7 +57,7 @@ function getPresentationDetail(userId, presentationId) {
 // }
 
 function savePresentation(data) {
-  return instance.put('/', data);
+  return oauth.put('/', data);
 }
 
 function addSlide(data) {
@@ -54,7 +65,7 @@ function addSlide(data) {
 }
 
 function deleteSlide(slideId) {
-  return instance.delete(`/slide/${slideId}`);
+  return oauth.delete(`/slide/${slideId}`);
 }
 
 export {
