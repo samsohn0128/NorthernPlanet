@@ -44,9 +44,9 @@
     <!-- slider alert: 첫 슬라이드, 마지막 슬라이드 alert -->
   </div>
 </template>
-
 <script>
 import PresentationSlideItem from './PresentationSlideItem.vue';
+import store from '@/store';
 
 export default {
   name: 'PresentationSlider.vue',
@@ -104,31 +104,35 @@ export default {
   },
   // : lifecycle hook
   mounted() {
-    this.prev = this.currentPage - 1;
-    this.now = this.currentPage;
-    this.next = this.currentPage + 1;
+    store.state.meetingRoom.prev = this.currentPage - 1;
+    store.state.meetingRoom.now = this.currentPage;
+    store.state.meetingRoom.next = this.currentPage + 1;
   },
   // : methods
   methods: {
     progressPrev: function () {
-      if (this.now > 0) {
-        this.prev -= 1;
-        this.now -= 1;
-        this.next -= 1;
-      } else {
-        this.alertMessage = '첫 번째 슬라이드입니다.';
-        this.activeAlert();
-      }
+      store.dispatch('meetingRoom/goPrev');
+
+      // if (this.now > 0) {
+      //   this.prev -= 1;
+      //   this.now -= 1;
+      //   this.next -= 1;
+      // } else {
+      //   this.alertMessage = '첫 번째 슬라이드입니다.';
+      //   this.activeAlert();
+      // }
     },
     progressNext: function () {
-      if (this.now < this.slideUrls.length - 1) {
-        this.prev += 1;
-        this.now += 1;
-        this.next += 1;
-      } else {
-        this.alertMessage = '마지막 슬라이드입니다.';
-        this.activeAlert();
-      }
+      store.dispatch('meetingRoom/goNext');
+
+      // if (this.now < this.slideUrls.length - 1) {
+      //   this.prev += 1;
+      //   this.now += 1;
+      //   this.next += 1;
+      // } else {
+      //   this.alertMessage = '마지막 슬라이드입니다.';
+      //   this.activeAlert();
+      // }
     },
     activeAlert: function () {
       this.alertShow = true;

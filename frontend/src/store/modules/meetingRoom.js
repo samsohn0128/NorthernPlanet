@@ -36,6 +36,9 @@ export default {
     // 초기 카메라, 마이크 세팅
     startWithMic: null,
     startWithVideo: null,
+    prev: null,
+    now: null,
+    next: null,
   }),
   // mutations
   mutations: {
@@ -149,6 +152,16 @@ export default {
       }
 
       state.messageList.push(chatMessage);
+    },
+    GO_PREV(state) {
+      state.prev -= 1;
+      state.now -= 1;
+      state.next -= 1;
+    },
+    GO_NEXT(state) {
+      state.next += 1;
+      state.now += 1;
+      state.prev += 1;
     },
   },
   // actions
@@ -413,6 +426,16 @@ export default {
     addChatMessage(context, chatMessage) {
       context.commit('ADD_CHAT_MESSAGE', chatMessage);
     },
+    goPrev(context) {
+      if (this.now > 0) {
+        context.commit('GO_PREV');
+      }
+    },
+    goNext(context) {
+      if (this.now < this.imageSrcs.length - 1) {
+        context.commit('GO_NEXT');
+      }
+    },
   },
   getters: {
     getChat(state) {
@@ -423,6 +446,15 @@ export default {
     },
     getMyName(state) {
       return state.myName;
+    },
+    getPrev(state) {
+      return state.prev;
+    },
+    getNext(state) {
+      return state.next;
+    },
+    getNow(state) {
+      return state.now;
     },
   },
 };

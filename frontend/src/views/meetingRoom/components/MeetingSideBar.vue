@@ -32,6 +32,16 @@
       >
         Chat
       </button>
+      <button
+        :class="[
+          { 'navigator-button-active': handactive },
+          { 'navigator-button-inactive': !handactive },
+          'navigator-hand-button',
+        ]"
+        @click="handAct"
+      >
+        손짓
+      </button>
     </div>
     <!-- navigator -->
     <!-- SideBar Items -->
@@ -41,6 +51,7 @@
       class="presentation-controller"
     />
     <Chat v-if="chatShow" :messageList="messageList" class="chat" />
+    <Hand v-if="handactive" class="hand" />
 
     <!-- SideBar Items -->
     <!-- access alert -->
@@ -56,10 +67,11 @@
 import MeetingParticipants from './MeetingParticipants.vue';
 import PresentationController from './PresentationController.vue';
 import Chat from './Chat.vue';
+import Hand from './Hand.vue';
 
 export default {
   name: 'MeetingSideBar',
-  components: { MeetingParticipants, PresentationController, Chat },
+  components: { MeetingParticipants, PresentationController, Chat, Hand },
   // : props
   props: {},
   // : data
@@ -69,6 +81,7 @@ export default {
       presentationShow: false,
       chatShow: false,
       alertShow: false,
+      handactive: false,
     };
   },
   // : computed
@@ -128,6 +141,9 @@ export default {
     },
     inactivateAlert: function () {
       this.alertShow = false;
+    },
+    handAct: function () {
+      this.handactive = true;
     },
   },
 };
