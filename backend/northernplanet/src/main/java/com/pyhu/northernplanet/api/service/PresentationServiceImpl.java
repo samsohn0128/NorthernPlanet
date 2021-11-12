@@ -53,7 +53,7 @@ public class PresentationServiceImpl implements PresentationService {
   private final SlideRepository slideRepository;
 
   // ubuntu
-//  private final String presentationDirectory = "/home/ubuntu/presentation";
+  private final String presentationDirectory = "/home/ubuntu/presentation";
   // dongwoo
 //  private final String presentationDirectory = "/Users/dongwoosohn/presentation";
   // aeeun
@@ -61,7 +61,7 @@ public class PresentationServiceImpl implements PresentationService {
   // juyeop
 //  private final String presentationDirectory = "C:\\Users\\JuYeop\\pjt3-picture";
   // minji
-  private final String presentationDirectory = "C:\\Users\\multicampus\\ssafy-2-semester\\free-pjt\\presentation";
+//  private final String presentationDirectory = "C:\\Users\\multicampus\\ssafy-2-semester\\free-pjt\\presentation";
 
   @Override
   public int createPresentation(PresentationPostReq presentationPostReq) throws IOException {
