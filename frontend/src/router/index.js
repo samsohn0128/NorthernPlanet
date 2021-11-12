@@ -20,7 +20,7 @@ router.beforeEach(function (to, from, next) {
     // console.log('isLogin : ' + store.state.users.login.isLogin);
     next();
   } else {
-    alert('로그인이 필요합니다');
+    this.$toastInfo('로그인이 필요합니다');
     router.push('/login');
     // console.log('authRequired : ' + authRequired);
     // console.log('isLogin : ' + store.state.users.login.isLogin);
