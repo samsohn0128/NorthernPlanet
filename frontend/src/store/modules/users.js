@@ -1,7 +1,3 @@
-// import Vue from 'vue';
-//import { searchUsers } from '@/api/users.js';
-// import router from '@/router/index.js';
-
 import router from '../../router';
 export default {
   namespaced: true,
@@ -50,15 +46,6 @@ export default {
     },
   },
   actions: {
-    // GET_ALL_USERS(context, payload) {
-    //   searchUsers(payload)
-    //     .then(({ data }) => {
-    //       context.commit('SET_ALL_USERS', data);
-    //     })
-    //     .catch(err => {
-    //       console.log('get all users actions err ', err);
-    //     });
-    // },
     SET_NAME({ commit }, username) {
       commit('SET_NAME', username);
     },

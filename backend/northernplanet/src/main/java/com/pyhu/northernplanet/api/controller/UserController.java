@@ -3,7 +3,6 @@ package com.pyhu.northernplanet.api.controller;
 import com.pyhu.northernplanet.api.request.UserPutReq;
 import com.pyhu.northernplanet.api.service.UserService;
 import com.pyhu.northernplanet.common.dto.UserOauthDto;
-import com.pyhu.northernplanet.db.entity.User;
 import com.pyhu.northernplanet.security.CurrentUser;
 import com.pyhu.northernplanet.security.UserPrincipal;
 import io.swagger.annotations.Api;
@@ -34,13 +33,12 @@ public class UserController {
 
   private final UserService userService;
 
-
+  @GetMapping("/oauth2/login")
   @ApiOperation(value = "사용자 정보", notes = "인증된 사용자의 정보를 반환합니다.")
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "페이지 없음"),
       @ApiResponse(code = 500, message = "서버 오류")})
   @PreAuthorize("hasRole('USER')")
-  @GetMapping("/oauth2/login")
   public ResponseEntity<UserOauthDto> getCurrentUser(
       @ApiIgnore @CurrentUser UserPrincipal userPrincipal) {
     log.info("getCurrentUser: userPrincipal - {}", userPrincipal);
@@ -63,6 +61,7 @@ public class UserController {
       @ApiResponse(code = 404, message = "사용자 없음"),
       @ApiResponse(code = 500, message = "서버 오류")
   })
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<UserOauthDto> getUserByEmail(@PathVariable("email") String email) {
     UserOauthDto userOauthDto = null;
     try {
@@ -84,6 +83,7 @@ public class UserController {
       @ApiResponse(code = 404, message = "사용자 없음"),
       @ApiResponse(code = 500, message = "서버 오류")
   })
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<?> updateName(@PathVariable("userId") Long userId,
       @RequestBody @ApiParam(value = "수정", required = true) UserPutReq updateInfo) {
     try{
@@ -104,6 +104,7 @@ public class UserController {
       @ApiResponse(code = 404, message = "사용자 없음"),
       @ApiResponse(code = 500, message = "서버 오류")
   })
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId) {
 
     try{

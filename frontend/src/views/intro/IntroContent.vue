@@ -51,7 +51,7 @@
             </h4>
             <div class="buttons text-center">
               <router-link
-                to="/login"
+                to="/dashboard"
                 class="btn bg-gradient-dark mt-4 w-20 text-lg"
               >
                 Start

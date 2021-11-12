@@ -50,8 +50,7 @@ export default [
   {
     path: '/dashboard',
     component: RoomPage,
-    meta: { authRequired: false },
-    // meta: { authRequired: true },
+    meta: { authRequired: true },
     children: [
       {
         path: '',
@@ -80,13 +79,12 @@ export default [
     path: '/meetingroom',
     name: 'MeetingRoom',
     component: MeetingRoom,
-    meta: { authRequired: false },
+    meta: { authRequired: true },
   },
   {
     path: '/mypage',
     component: MyPage,
-    meta: { authRequired: false },
-    // meta: { authRequired: true },
+    meta: { authRequired: true },
     children: [
       {
         path: '',
@@ -104,12 +102,14 @@ export default [
     path: '/mypage/presentation/:presentation_id/:name',
     name: 'ModifyPresentation',
     component: ModifyPresentation,
+    meta: { authRequired: true },
   },
   {
     // path: '/mypage/presentationpreview/:presentation_id/:name',
     path: '/mypage/presentationpreview/:userId/:presentationId',
     name: 'PresentationPreview',
     component: PresentationPreview,
+    meta: { authRequired: true },
   },
   {
     path: '/script',
