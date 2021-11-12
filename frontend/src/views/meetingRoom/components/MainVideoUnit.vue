@@ -12,8 +12,14 @@
         id="presentation-image"
       />
     </transition>
-
-    <div class="overlay">
+    <div
+      v-html="scriptList[currentPage]"
+      class="script"
+      v-if="currentPage !== null"
+    >
+      {{ scriptList[currentPage] }}
+    </div>
+    <div class="overlay" style="z-index: 5">
       <span>{{ mainParticipantName }}</span>
     </div>
   </div>
@@ -40,6 +46,9 @@ export default {
   computed: {
     imageSrcs: function () {
       return this.$store.state.meetingRoom.imageSrcs;
+    },
+    scriptList: function () {
+      return this.$store.state.meetingRoom.scriptList;
     },
     currentPage: function () {
       return this.$store.state.meetingRoom.currentPage;
@@ -107,9 +116,28 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 5;
 }
 .main-video-container:hover .overlay {
   opacity: 1;
+}
+/* script */
+.script {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  width: 50%;
+  height: 10%;
+  transition: 0.3s ease;
+  color: white;
+  font-size: 1.5rem;
+  line-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
 }
 /* location presets */
 .presentation-right {

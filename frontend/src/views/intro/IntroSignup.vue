@@ -142,12 +142,7 @@
   </div>
 </template>
 <script>
-import Vue from 'vue';
 import { registerUser, checkUser } from '@/api/users.js';
-import VueAlertify from 'vue-alertify';
-
-Vue.use(VueAlertify);
-
 export default {
   name: 'IntroSignup',
   data() {
@@ -167,7 +162,7 @@ export default {
   methods: {
     submitForm() {
       if (!this.checkPwd) {
-        this.$alertify.error('비밀번호확인이 틀렸습니다.');
+        this.$toastError('비밀번호확인이 틀렸습니다.');
         return;
       }
 
@@ -178,15 +173,15 @@ export default {
       try {
         await checkUser(this.useremail).then(({ status }) => {
           if (status != 200) {
-            this.$alertify.error('사용자 계정 확인 실패했습니다.');
+            this.$toastError('사용자 계정 확인 실패했습니다.');
           } else {
             this.registerInfo();
-            this.$alertify.success('회원가입 성공했습니다.');
+            this.$toastSuccess('회원가입 성공했습니다.');
             this.$router.push('/', () => {});
           }
         });
       } catch (err) {
-        this.$alertify.error('이미 가입된 계정입니다.');
+        this.$toastError('이미 가입된 계정입니다.');
       }
     },
 

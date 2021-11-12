@@ -200,17 +200,6 @@ export default {
       this.isManager = true;
     }
     console.log('am I manager? ', this.isManager);
-    // const formData = new FormData();
-    // formData.append('userId', this.user.userId);
-    // formData.append('roomId', this.room.roomId);
-    // showfiledetail(formData)
-    //   .then(data => {
-    //     this.files = data.data;
-    //   })
-    //   .catch(() => {
-    //     console.log('error');
-    //     this.$alertify.error('파일을 가져오지 못했습니다.');
-    //   });
   },
   computed: {
     getParticipants() {
@@ -224,24 +213,11 @@ export default {
     },
   },
   methods: {
-    // deletefile() {
-    //   const formDa = new FormData();
-    //   formDa.append('userId', this.user.userId);
-    //   formDa.append('roomId', this.room.roomId);
-    //   deletetot(formDa)
-    //     .then(data => {
-    //       console.log(data);
-    //       this.$router.go();
-    //     })
-    //     .catch(() => {
-    //       this.$alertify.error('error! catch');
-    //     });
-    // },
     addParticipant() {
       let msg = '';
       if (!this.participantAccount) {
         msg = '추가하려는 사용자 이메일 및 역할을 입력해주세요';
-        this.$alertify.error(msg);
+        this.$toastError(msg);
         return;
       }
 
@@ -250,14 +226,14 @@ export default {
 
       for (let i = 0; i < size; i++) {
         if (this.participants[i].email == this.participantAccount) {
-          this.$alertify.error('이미 등록된 사용자입니다.');
+          this.$$toastError('이미 등록된 사용자입니다.');
           return;
         }
       }
 
       this.getUsername().then(() => {
         if (!this.participants) {
-          this.$alertify.error('사용자 게정이 없습니다.');
+          this.$toastError('사용자 게정이 없습니다.');
         } else {
           this.participants.push({
             name: this.participant.data.name,
@@ -290,7 +266,7 @@ export default {
       }
 
       if (err) {
-        this.$alertify.error(msg);
+        this.$toastError(msg);
         return;
       } else {
         let roomData = {
@@ -305,15 +281,15 @@ export default {
         updateRoom(roomData)
           .then(({ status }) => {
             if (status != 200) {
-              this.$alertify.error('방 정보 수정중 실패했습니다.');
+              this.$toastError('방 정보 수정중 실패했습니다.');
               return;
             } else {
-              this.$alertify.success('방 정보가 수정됐습니다.');
+              this.$toastSuccess('방 정보가 수정됐습니다.');
               store.dispatch('rooms/setRoom', roomData);
             }
           })
           .catch(() => {
-            this.$alertify.error('방 정보 수정 실패했습니다.');
+            this.$toastError('방 정보 수정 실패했습니다.');
           });
       }
     },
@@ -322,7 +298,7 @@ export default {
       try {
         this.participant = await findUser(this.participantAccount);
       } catch (err) {
-        this.$alertify.error('사용자 확인이 실패했습니다..', err);
+        this.$toastError('사용자 확인이 실패했습니다..', err);
       }
     },
 

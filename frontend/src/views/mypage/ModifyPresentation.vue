@@ -101,7 +101,7 @@
                 <div class="PPTbox">
                   <div style="width: 100%; height: 150px">
                     <img
-                      :src="slideList[idx].slideFile"
+                      :src="slide.slideFile"
                       style="max-width: 20vw; max-height: 9vw"
                       alt="thumbnail"
                     />
@@ -170,7 +170,7 @@ import {
   deleteSlide,
 } from '@/api/presentation.js';
 import { mapActions } from 'vuex';
-import { getSlide, updateScript } from '@/api/slide.js';
+import { updateScript } from '@/api/slide.js';
 import { Editor } from '@toast-ui/vue-editor';
 import store from '@/store';
 
@@ -255,6 +255,10 @@ export default {
       // slideList 대입
       this.slideList = response.data.slideList;
       console.log('시작 slideList: ', this.slideList);
+      // 시작대본 설정
+      if (this.slideList[0].slideId === null) return;
+      this.editorText = this.slideList[0].script;
+      this.$refs.toastuiEditor.invoke('setHTML', this.editorText);
     },
     // Presentation으로 돌아간다.
     goBackPresentation() {
@@ -310,6 +314,21 @@ export default {
     // 현재 선택한 Idx 설정하기 (Effect 저장시에 필요)
     setIdx(num) {
       this.idx = num;
+
+      console.log('before getslide slidelist: ', this.slideList);
+      // getSlide(this.slideList[this.idx].slideId).then(res => {
+      //   if (res.status != 200) {
+      //     this.$toastError(
+      //       '슬라이드 정보를 가져오는 중에 오류가 발생했습니다.',
+      //     );
+      //     return;
+      //   } else {
+      //     this.editorText = res.data.script;
+      //     this.$refs.toastuiEditor.invoke('setHTML', res.data.script);
+      //   }
+      // });
+      this.editorText = this.slideList[this.idx].script;
+      this.$refs.toastuiEditor.invoke('setHTML', this.editorText);
     },
     // PPT를 새로 추가한다.
     addnewSlide() {
@@ -357,7 +376,7 @@ export default {
       if (this.editorText === curEditorText) return;
 
       let updateScriptReq = {
-        slideId: this.idx,
+        slideId: this.slideList[this.idx].slideId,
         script: this.$refs.toastuiEditor.invoke('getHTML'),
       };
 
@@ -370,6 +389,7 @@ export default {
         } else {
           this.$toastSuccess('대본이 수정되었습니다.');
           this.editorText = curEditorText;
+          this.slideList[this.idx].script = curEditorText;
         }
       });
     },
@@ -379,17 +399,7 @@ export default {
       console.log('show animation: ', this.showAnimation);
     },
   },
-  created() {
-    getSlide(this.slideId).then(res => {
-      if (res.status != 200) {
-        this.$toastError('슬라이드 정보를 가져오는 중에 오류가 발생했습니다.');
-        return;
-      } else {
-        this.editorText = res.data.script;
-        this.$refs.toastuiEditor.invoke('setHTML', res.data.script);
-      }
-    });
-  },
+  created() {},
   // 백엔드 연결 뒤에 주석 해제
   mounted() {
     this.getPresentationData();

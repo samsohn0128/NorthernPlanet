@@ -33,17 +33,13 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VueAlertify from 'vue-alertify';
-Vue.use(VueAlertify);
-
 export default {
   name: 'AppNav',
   computed: {},
 
   methods: {
     userLogout() {
-      this.$alertify.success('안녕히 가세요');
+      this.$toastSuccess('안녕히 가세요');
       this.$store.commit('users/SET_LOGOUT');
       console.log('logout');
       // this.$router.push('/', () => {});
