@@ -210,7 +210,7 @@ export default {
     // WebRTC 관련
     try {
       //websocket init
-      const url = 'wss://' + location.host + '/groupcall';
+      const url = 'ws://' + location.host + '/groupcall';
       console.log(url);
       this.$store.dispatch('meetingRoom/wsInit', url);
 

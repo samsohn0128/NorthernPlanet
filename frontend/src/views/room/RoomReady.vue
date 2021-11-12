@@ -121,7 +121,7 @@ export default {
   async created() {
     try {
       //websocket init
-      const url = 'wss://' + location.host + '/groupcall';
+      const url = 'ws://' + location.host + '/groupcall';
       console.log(url);
       this.$store.dispatch('meetingRoom/wsInit', url);
 
