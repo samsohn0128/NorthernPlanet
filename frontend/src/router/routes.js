@@ -40,7 +40,7 @@ export default [
         component: IntroSignup,
       },
       {
-        path: '/oauth2/redirect',
+        path: '/front/oauth2/redirect',
         name: 'Oauth2Redirect',
         component: Oauth2Redirect,
       },
