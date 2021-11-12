@@ -327,7 +327,9 @@ export default {
       //     this.$refs.toastuiEditor.invoke('setHTML', res.data.script);
       //   }
       // });
-      this.editorText = this.slideList[this.idx].script;
+      this.editorText = this.slideList[this.idx].script
+        ? this.slideList[this.idx].script
+        : '';
       this.$refs.toastuiEditor.invoke('setHTML', this.editorText);
     },
     // PPT를 새로 추가한다.
