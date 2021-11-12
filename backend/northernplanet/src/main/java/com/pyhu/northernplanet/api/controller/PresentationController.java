@@ -67,7 +67,6 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
-  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<List<PresentationListGetRes>> getPresentationList(
       @PathVariable @ApiParam(value = "사용자 ID", required = true) Long userId) {
     log.info("[getPresentationList - controller] userId : {}", userId);
@@ -97,7 +96,6 @@ public class PresentationController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
-  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<PresentationDetailGetRes> getPresentationDetail(
       @PathVariable @ApiParam(value = "사용자 ID", required = true) Long userId,
       @PathVariable @ApiParam(value = "발표자료 ID", required = true) Long presentationId) {

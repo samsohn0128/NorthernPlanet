@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { BASE_URL } from '@/constant/index.js';
 import store from '@/store';
-// const instance = axios.create({
-//   baseURL: BASE_URL + '/presentation',
-//   headers: {
-//     'Content-type': 'application/json',
-//   },
-//   withCredentials: true,
-// });
+const instance = axios.create({
+  baseURL: BASE_URL + '/presentation',
+  headers: {
+    'Content-type': 'application/json',
+  },
+  withCredentials: true,
+});
 
 const file = axios.create({
   baseURL: BASE_URL + '/presentation',
@@ -28,7 +28,7 @@ const oauth = axios.create({
 });
 
 function getPresentations(userId) {
-  return oauth.get('/' + userId);
+  return instance.get('/' + userId);
 }
 
 function addPresentation(presentationData) {
@@ -48,7 +48,7 @@ function deletePresentation(presentationId) {
 }
 
 function getPresentationDetail(userId, presentationId) {
-  return oauth.get('/' + userId + '/' + presentationId);
+  return instance.get('/' + userId + '/' + presentationId);
 }
 
 // function presentationAddDelete(presentationId, data) {
