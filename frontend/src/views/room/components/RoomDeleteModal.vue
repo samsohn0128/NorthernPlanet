@@ -56,10 +56,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VueAlertify from 'vue-alertify';
 import { deleteRoom } from '@/api/rooms.js';
-Vue.use(VueAlertify);
 export default {
   name: 'RoomDeleteModal',
   components: {},
@@ -71,9 +68,9 @@ export default {
     deleteRoom() {
       deleteRoom(this.roomId).then(({ status }) => {
         if (status != 200) {
-          this.$alertify.error('방 삭제에 실패했습니다.');
+          this.$toastError('방 삭제에 실패했습니다.');
         } else {
-          this.$alertify.success('방 삭제 성공했습니다.');
+          this.$toastSuccess('방 삭제 성공했습니다.');
           this.$router.push('/dashboard');
         }
       });

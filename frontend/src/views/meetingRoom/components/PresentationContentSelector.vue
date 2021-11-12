@@ -2,7 +2,7 @@
   <div>
     <PresentationContentItem
       v-for="content in contentList"
-      :key="content.user_id"
+      :key="content.presentationId"
       :content="content"
     />
   </div>

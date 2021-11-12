@@ -20,8 +20,6 @@ const router = new VueRouter({
 //     // console.log('isLogin : ' + store.state.users.login.isLogin);
 //     next();
 //   } else {
-//     // VueAlertify.error('로그인이 필요합니다');
-//     // this.$alertify.error('로그인이 필요합니다');
 //     alert('로그인이 필요합니다');
 //     router.push('/login');
 //     // console.log('authRequired : ' + authRequired);

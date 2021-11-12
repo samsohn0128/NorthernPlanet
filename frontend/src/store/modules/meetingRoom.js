@@ -19,6 +19,7 @@ export default {
     roomNumber: null,
     participants: null,
     myName: null,
+    myId: null,
     chat: null,
     messageList: null,
     /* nowImageUrl: null, */
@@ -31,6 +32,7 @@ export default {
     presentationContents: null, // 최초 API 요청으로 콘텐츠들의 size, user_id 받아옴
     /* imageUrls: null, */
     imageSrcs: null,
+    scriptList: null,
     selectedContentId: null,
     transition: null,
     // 초기 카메라, 마이크 세팅
@@ -48,6 +50,7 @@ export default {
     }, */
     SET_MEETING_INFO(state, meetingInfo) {
       state.myName = meetingInfo.myName;
+      state.myId = meetingInfo.myId;
       state.roomName = meetingInfo.roomName;
       state.manager = meetingInfo.manager;
       state.roomNumber = _.split(meetingInfo.roomName, '-')[1];
@@ -125,6 +128,9 @@ export default {
       state.size = state.size === null ? '2' : state.size;
       state.transition =
         state.transition === null ? 'default' : state.transition;
+    },
+    SET_SCRIPTS(state, scriptList) {
+      state.scriptList = scriptList;
     },
     SET_ONGOING_PRESENTATION(state, { message, imageSrcs }) {
       state.imageSrcs = imageSrcs;
@@ -351,7 +357,7 @@ export default {
     setContents(context) {
       axios({
         method: 'get',
-        url: `${API_SERVER_URL}/board/room/${context.state.roomNumber}`,
+        url: `${API_SERVER_URL}/presentation/${context.state.myId}`,
       })
         .then(res => {
           context.commit('SET_CONTENTS', res);
@@ -374,14 +380,18 @@ export default {
     changeContent(context, message) {
       axios({
         method: 'get',
-        url: `${API_SERVER_URL}/board/image/${context.state.roomNumber}/${message.presentationUserId}`,
+        url: `${API_SERVER_URL}/presentation/${context.state.myId}/${message.presentationUserId}`,
       }).then(res => {
         const imageSrcs = [];
-        res.data.forEach(imageStr => {
-          let imageSrc = 'data:image/jpeg;base64,' + imageStr;
+        const scriptList = [];
+        console.log('slidelist: ', res.data.slideList);
+        res.data.slideList.forEach(data => {
+          let imageSrc = 'data:image/jpeg;base64,' + data.slideFile;
           imageSrcs.push(imageSrc);
+          scriptList.push(data.script);
         });
         context.commit('SET_IMAGE_SRCS', imageSrcs);
+        context.commit('SET_SCRIPTS', scriptList);
       });
       context.commit('CHANGE_CONTENT', message);
     },
@@ -396,11 +406,12 @@ export default {
       if (message.presentationUserId !== null) {
         axios({
           method: 'get',
-          url: `${API_SERVER_URL}/board/image/${context.state.roomNumber}/${message.presentationUserId}`,
+          url: `${API_SERVER_URL}/presentation/${context.state.myId}/${message.presentationUserId}`,
         }).then(res => {
           const imageSrcs = [];
-          res.data.forEach(imageStr => {
-            let imageSrc = 'data:image/jpeg;base64,' + imageStr;
+
+          res.data.forEach(data => {
+            let imageSrc = 'data:image/jpeg;base64,' + data.slideFile;
             imageSrcs.push(imageSrc);
           });
           context.commit('SET_ONGOING_PRESENTATION', { message, imageSrcs });
