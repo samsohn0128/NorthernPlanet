@@ -14,7 +14,7 @@
       >
         <PresentationCardItem
           :presentationInfo="data"
-          :key="data"
+          :key="data.presentationId"
         ></PresentationCardItem>
         <ModifyPPTNameModal />
         <DeletePPTModal :id="data.presentationId" />
