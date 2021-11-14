@@ -74,7 +74,7 @@
                   <div style="width: 100%; height: 150px">
                     <img
                       :src="slide.slideFile"
-                      style="max-width: 20vw; max-height: 12vh"
+                      style="max-width: 20vw; max-height: 18vh"
                       alt="thumbnail"
                     />
                   </div>
@@ -517,7 +517,7 @@ export default {
 }
 .thumbnail-setting {
   max-width: 200px;
-  max-height: 150px;
+  max-height: 120px;
 }
 .body-margin-top {
   margin-top: 2vh;
