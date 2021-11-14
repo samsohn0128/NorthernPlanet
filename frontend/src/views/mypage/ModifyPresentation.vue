@@ -1,67 +1,39 @@
 <template>
   <div>
     <AppNav />
-    <nav
-      class="
-        navbar navbar-expand-sm
-        blur blur-rounded
-        top-0
-        border-bottom
-        z-index-3
-        shadow
-        w-100
-        mt-1
-        my-1
-        py-1
-      "
-      style="cursor: pointer"
-    >
-      <div class="container-fluid">
-        <a
-          class="navbar-brand font-weight-bolder ms-3"
-          rel="tooltip"
-          data-placement="bottom"
-          target="_blank"
-        >
-          {{ $route.params.name }}
-        </a>
+    <div class="nav-setting">
+      <div class="nav-detail-left-setting">
         <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navigation"
-          aria-controls="navigation"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
+          @click="goBackPresentation()"
         >
-          <span class="navbar-toggler-icon"></span>
+          Back to the list
         </button>
-        <div class="collapse navbar-collapse" id="navigation">
-          <ul class="navbar-nav navbar-nav-hover mx-auto">
-            <li class="nav-item px-3" @click="savePPT()">
-              <a class="nav-link"> Save all</a>
-            </li>
-
-            <li class="nav-item px-3" @click="goBackPresentation()">
-              <a class="nav-link"> Back to the list </a>
-            </li>
-
-            <li class="nav-item px-3" @click="showAllPPT()">
-              <a class="nav-link"> Preview </a>
-            </li>
-          </ul>
-
-          <ul class="navbar-nav">
-            <button
-              class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
-              @click="animationTabToggle('hi')"
-            >
-              Animation
-            </button>
-          </ul>
-        </div>
       </div>
-    </nav>
+      <div class="nav-detail-setting">
+        {{ $route.params.name }}
+      </div>
+      <div class="nav-detail-right-setting">
+        <button
+          class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
+          @click="showAllPPT()"
+        >
+          Preview
+        </button>
+        <button
+          class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
+          @click="animationTabToggle('hi')"
+        >
+          Select Animation
+        </button>
+        <button
+          class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
+          @click="savePPT()"
+        >
+          Save all
+        </button>
+      </div>
+    </div>
     <!-- End Navbar -->
     <div id="modify-ppt">
       <div class="head-ppt">
@@ -102,7 +74,7 @@
                   <div style="width: 100%; height: 150px">
                     <img
                       :src="slide.slideFile"
-                      style="max-width: 20vw; max-height: 9vw"
+                      style="max-width: 20vw; max-height: 12vh"
                       alt="thumbnail"
                     />
                   </div>
@@ -111,23 +83,36 @@
             </transition-group>
           </draggable>
           <div class="choose-ppt card">
-            <div class="PPTbox">
-              <div style="width: 100%; height: 150px">
-                <label
-                  >Add new slide
-                  <button
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#AddSlideModal"
-                  />
-                </label>
-                <img
-                  class="image thumbnail-setting"
-                  :src="imgUrl.first"
-                  alt=""
-                  @click="dialogVisible.first = true"
-                />
-              </div>
+            <div
+              class="PPTbox-select"
+              style="
+                width: 100%;
+                height: 150px;
+                display: flex;
+                justify-content: center;
+              "
+            >
+              <button
+                class="
+                  PPTbox-select-detail
+                  btn btn-sm
+                  bg-gradient-dark
+                  btn-round
+                  mb-0
+                  me-1
+                "
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#AddSlideModal"
+              >
+                Click to Add new slide
+              </button>
+              <img
+                class="image thumbnail-setting"
+                :src="imgUrl.first"
+                alt=""
+                @click="dialogVisible.first = true"
+              />
             </div>
           </div>
         </div>
@@ -151,7 +136,7 @@
               @blur="saveEditorText"
             />
           </div>
-          <img id="ItemPreview" src="" />
+          <!-- <img id="ItemPreview" src="" /> -->
         </div>
       </div>
     </div>
@@ -414,6 +399,39 @@ export default {
   margin-right: 2%;
   padding: 0%;
 }
+.nav-setting {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background: rgb(222, 221, 226);
+  padding: 5px 0px;
+}
+.nav-detail-left-setting {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  width: 30vw;
+  padding-left: 10px;
+}
+.nav-detail-setting {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 20vw;
+  font-weight: bold;
+}
+.nav-detail-right-setting {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  width: 30vw;
+}
 .effect-container {
   position: relative;
   cursor: pointer;
@@ -449,12 +467,30 @@ export default {
 }
 
 .PPTbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-
   /* flex-direction: row; */
   /* justify-content: space-between; */
   /* align-items: top; */
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+}
+.PPTbox-select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  /* flex-direction: row; */
+  /* justify-content: space-between; */
+  /* align-items: top; */
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+}
+.PPTbox-select:hover {
+  cursor: default;
+}
+.PPTbox-select-detail:hover {
+  cursor: pointer;
 }
 
 .head-ppt-center {
