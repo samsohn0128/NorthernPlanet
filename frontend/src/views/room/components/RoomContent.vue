@@ -105,27 +105,30 @@
             </tbody>
           </table>
 
-          <div class="col-md-12 justify-content-between" v-if="isManager">
+          <div class="room-button-setting" v-if="isManager">
             <span>
               <button
                 type="button"
-                class="btn bg-gradient-dark w-30 ms-8"
+                class="button-setting btn bg-gradient-dark"
                 @click="updateHandler"
               >
                 Update Room
               </button>
-
+            </span>
+            <span>
               <button
                 type="button"
-                class="btn btn-outline-danger text-danger w-30 ms-3"
+                class="button-setting btn btn-outline-danger text-danger"
                 data-bs-toggle="modal"
                 data-bs-target="#modal-notification"
               >
                 Delete Room
               </button>
+            </span>
+            <span>
               <button
                 type="button"
-                class="btn bg-gradient-warning w-100 ms-3"
+                class="button-setting btn bg-gradient-warning"
                 data-bs-toggle="modal"
                 data-bs-target="#modal-link"
               >
@@ -328,3 +331,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.room-button-setting {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.button-setting {
+  width: 140px;
+  height: 40px;
+  padding: 5px;
+  margin: 5px;
+}
+</style>
