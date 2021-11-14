@@ -4,15 +4,32 @@
     <div :class="[{ 'main-right-margin': rightSideShow }, 'main']">
       <div class="upside-ppt">
         <div class="upside-ppt-inside">
-          <button @click="goBack()">뒤로가기</button>
+          <button
+            class="btn btn-sm bg-gradient-dark btn-round mb-1 me-1"
+            @click="goBack()"
+          >
+            뒤로가기
+          </button>
+          <button
+            id="script-button-text"
+            class="btn btn-sm bg-gradient-dark btn-round mb-1 me-1"
+            @click="showScript()"
+          >
+            대본 숨기기
+          </button>
         </div>
-        <div class="upside-ppt-inside script-setting">
-          <div class="move-sequence" @click="setIdx(idx - 1)">&lt;</div>
-          <div v-if="slideList[idx].script == null" class="script-inside">
+        <div id="script-show" class="upside-ppt-inside script-setting">
+          <div class="move-sequence" @click="setIdxminus()">&lt;</div>
+          <div
+            v-if="slideList[idx].script == null || slideList[idx].script == ''"
+            class="script-inside"
+          >
             대본을<br />설정해주세요.
           </div>
-          <div v-else class="script-inside">{{ slideList[idx].script }}</div>
-          <div class="move-sequence" @click="setIdx(idx + 1)">&gt;</div>
+          <div v-else class="script-inside">
+            {{ slideList[idx].script }}
+          </div>
+          <div class="move-sequence" @click="setIdxplus()">&gt;</div>
         </div>
         <div class="upside-ppt-inside set-timer-location">
           <div class="time-space">
@@ -23,8 +40,12 @@
             <span id="showMilisec">00</span>
           </div>
           <div class="time-button-space">
-            <button id="startButton" @click="startButton">start</button>
-            <button id="resetButton" @click="resetButton">reset</button>
+            <button id="startButton" class="settingStart" @click="startButton">
+              start
+            </button>
+            <button id="resetButton" class="settingReset" @click="resetButton">
+              reset
+            </button>
           </div>
         </div>
       </div>
@@ -132,7 +153,8 @@
         :idx="idx"
         @selectedLocation="setLocation"
         @selectedSize="setSize"
-        @selectIdx="setIdx"
+        @selectIdxplus="setIdxplus"
+        @selectIdxminus="setIdxminus"
       />
     </transition>
   </div>
@@ -141,7 +163,8 @@
 <script>
 import MeetingSideBar from './preview/MeetingSideBar.vue';
 import { getPresentationDetail } from '@/api/presentation.js';
-import { getRoom } from '@/api/rooms.js';
+// import { getRoom } from '@/api/rooms.js';
+// import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 
 export default {
   name: 'PresentationPreview',
@@ -181,6 +204,8 @@ export default {
       roomDescription: null,
       isMicOn: false,
       isVideoOn: false,
+
+      content: null,
     };
   },
   // : watch
@@ -203,26 +228,26 @@ export default {
     },
   },
   // : lifecycle hook
-  async created() {
+  created() {
     this.getPresentationData();
     console.log(this.$route.params);
 
     // WebRTC 관련
-    try {
-      //websocket init
-      const url = 'wss://' + location.host + '/groupcall';
-      console.log(url);
-      this.$store.dispatch('meetingRoom/wsInit', url);
+    // try {
+    //   //websocket init
+    //   const url = 'wss://' + location.host + '/groupcall';
+    //   console.log(url);
+    //   this.$store.dispatch('meetingRoom/wsInit', url);
 
-      //roomId로 roomInfo 받아와서 data setting 하기
-      this.roomInfo = await getRoom(this.roomId);
-      this.roomName = this.roomInfo.data.name;
-      this.manager =
-        this.roomInfo.data.managerName + '-' + this.roomInfo.data.managerId;
-      this.roomDescription = this.roomInfo.data.description;
-    } catch (error) {
-      console.log(error);
-    }
+    //   //roomId로 roomInfo 받아와서 data setting 하기
+    //   this.roomInfo = await getRoom(this.roomId);
+    //   this.roomName = this.roomInfo.data.name;
+    //   this.manager =
+    //     this.roomInfo.data.managerName + '-' + this.roomInfo.data.managerId;
+    //   this.roomDescription = this.roomInfo.data.description;
+    // } catch (error) {
+    //   console.log(error);
+    // }
   },
   mounted() {
     document.addEventListener('keydown', e => {
@@ -231,13 +256,13 @@ export default {
         case 'ArrowLeft':
           if (this.idx > 1) {
             this.idx -= 1;
-            this.setIdx(this.idx);
+            this.setIdxminus();
           }
           break;
         case 'ArrowRight':
           if (this.idx < this.slideList.length - 2) {
             this.idx += 1;
-            this.setIdx(this.idx);
+            this.setIdxplus();
           }
           break;
         case 'a':
@@ -308,6 +333,20 @@ export default {
       });
       console.log('시작 slideList: ', this.slideList);
       this.idx = 1;
+      // 정규식 이용하여 <p>, <strong> 등등 제거
+      for (let i = 0; i < this.slideList.length; i++) {
+        if (this.slideList[i].script != null) {
+          this.slideList[i].script = this.slideList[i].script.replace(
+            /<br\/>/gi,
+            '\n',
+          );
+          this.slideList[i].script = this.slideList[i].script.replace(
+            /<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/gi,
+            '',
+          );
+        }
+      }
+      this.content = this.slideList[1].script;
     },
     // Size 세팅
     setSize(selectedSize) {
@@ -324,11 +363,19 @@ export default {
         .setAttribute('class', 'img-' + selectedLocation);
     },
     // PPT 인덱스번호 세팅
-    setIdx(selectedIdx) {
-      if (selectedIdx > 0 && selectedIdx < this.slideList.length - 1) {
-        this.idx = selectedIdx;
+    setIdxplus() {
+      if (this.idx < this.slideList.length - 1) {
+        this.idx += 1;
       }
-      console.log(this.idx);
+      this.content = this.slideList[this.idx].script;
+      // console.log(this.content);
+    },
+    setIdxminus() {
+      if (this.idx > 0) {
+        this.idx -= 1;
+      }
+      this.content = this.slideList[this.idx].script;
+      // console.log(this.content);
     },
     // 시작
     startButton() {
@@ -336,6 +383,8 @@ export default {
       if (this.timerStart == false) {
         this.timerStart = true;
         document.getElementById('startButton').innerText = 'pause';
+        document.getElementById('startButton').style.background = '#ef6262';
+        document.getElementById('startButton').style.borderColor = '#ef6262';
         // 0.001초마다 시간 갱신
         this.timerWork = setInterval(() => {
           let nowTime = new Date(Date.now() - this.stTime);
@@ -355,6 +404,8 @@ export default {
         this.endTime = Date.now();
         this.timerStart = false;
         document.getElementById('startButton').innerText = 'start';
+        document.getElementById('startButton').style.background = '#4aae71';
+        document.getElementById('startButton').style.borderColor = '#4aae71';
         clearInterval(this.timerWork);
       }
       // 시간 체크
@@ -387,6 +438,17 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
+    showScript() {
+      let scriptshow = document.getElementById('script-show');
+
+      if (scriptshow.style.display != 'none') {
+        scriptshow.style.display = 'none';
+        document.getElementById('script-button-text').innerText = '대본 보이기';
+      } else {
+        scriptshow.style.display = 'flex';
+        document.getElementById('script-button-text').innerText = '대본 숨기기';
+      }
+    },
 
     // WebRTC 관련
     // micOnOff: function () {
@@ -405,30 +467,30 @@ export default {
         this.playVideoFromCamera();
       }
     },
-    sendMsgToKurento() {
-      if (!this.userName) {
-        this.$toastError('이름을 입력해주세요!');
-        return;
-      }
-      const myNameId = this.userName + '-' + this.userId;
-      const roomNameId = this.roomName + '-' + this.roomId;
-      const message = {
-        id: 'joinRoom',
-        name: myNameId,
-        room: roomNameId,
-      };
-      const meetingInfo = {
-        myName: myNameId,
-        roomName: roomNameId,
-        manager: this.manager,
-        startWithMic: this.isMicOn,
-        startWithVideo: this.isVideoOn,
-      };
-      console.log('message: ', message);
-      console.log('meetingInfo: ', meetingInfo);
-      this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
-      this.$store.dispatch('meetingRoom/sendMessage', message);
-    },
+    // sendMsgToKurento() {
+    //   if (!this.userName) {
+    //     this.$toastError('이름을 입력해주세요!');
+    //     return;
+    //   }
+    //   const myNameId = this.userName + '-' + this.userId;
+    //   const roomNameId = this.roomName + '-' + this.roomId;
+    //   const message = {
+    //     id: 'joinRoom',
+    //     name: myNameId,
+    //     room: roomNameId,
+    //   };
+    //   const meetingInfo = {
+    //     myName: myNameId,
+    //     roomName: roomNameId,
+    //     manager: this.manager,
+    //     startWithMic: this.isMicOn,
+    //     startWithVideo: this.isVideoOn,
+    //   };
+    //   console.log('message: ', message);
+    //   console.log('meetingInfo: ', meetingInfo);
+    //   this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
+    //   this.$store.dispatch('meetingRoom/sendMessage', message);
+    // },
     playVideoFromCamera: async function () {
       try {
         const constraints = { video: true, audio: false };
@@ -475,7 +537,7 @@ export default {
   height: 100vh;
   width: 100vw;
   padding: 20px 20px;
-  background: linear-gradient(90deg, #dbecec 0%, #f165d3 100%);
+  background: rgb(176, 167, 211);
 }
 /* RGB
 93 244 237 #5df4ec
@@ -514,7 +576,9 @@ dbecec
 .script-setting {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
+  width: 50vw;
 }
 .set-timer-location {
   display: flex;
@@ -524,7 +588,7 @@ dbecec
 .time-space {
   width: 12vw;
   text-align: center;
-  background: rgb(141, 235, 177);
+  background: rgb(222, 221, 226);
   color: black;
   font-size: 18px;
   padding: 5px;
@@ -533,11 +597,21 @@ dbecec
 .time-button-space {
   width: 12vw;
   text-align: center;
-  background: rgb(141, 235, 177);
+  background: rgb(222, 221, 226);
   color: black;
   font-size: 18px;
   padding: 5px;
   border-radius: 0px 0px 10px 10px;
+}
+.settingStart {
+  background: #4aae71;
+  border-color: #4aae71;
+  width: 65px;
+}
+.settingReset {
+  background: #fbad10;
+  border-color: #fbad10;
+  width: 65px;
 }
 .main-body-div {
   position: relative;
@@ -549,15 +623,20 @@ dbecec
   width: 70vw;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 .btn-setting {
   width: 20%;
 }
 .script-inside {
+  display: flex;
   justify-content: center;
-  text-align: center;
-  background: gray;
+  width: 40vw;
+  height: 120px;
+  overflow: auto;
+  background: rgb(222, 221, 226);
+  border-radius: 10px;
+  padding: 5px;
   font: 24px bold;
   color: black;
 }
@@ -566,7 +645,7 @@ dbecec
   height: 32px;
   justify-content: center;
   text-align: center;
-  background: gray;
+  background: rgb(222, 221, 226);
   color: black;
   font-size: 20px;
   cursor: pointer;
@@ -650,9 +729,6 @@ dbecec
   border: solid black;
   background: black;
 }
-.room-title {
-  color: white;
-}
 /* .left-slide-enter-active {
   animation: slideInLeft 0.3s;
 }
@@ -669,7 +745,23 @@ dbecec
   animation-delay: 0.3s;
   visibility: hidden;
 }
+
+/* scroll bar*/
+/* 스크롤바 설정*/
 ::-webkit-scrollbar {
-  display: none;
+  width: 5px;
+}
+
+/* 스크롤바 막대 설정*/
+::-webkit-scrollbar-thumb {
+  height: 5px;
+  background-color: #303f9f;
+  /* 스크롤바 둥글게 설정    */
+  border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.33);
 }
 </style>
