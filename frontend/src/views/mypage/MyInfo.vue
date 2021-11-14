@@ -11,7 +11,6 @@
               d-flex
               justify-content-center
               flex-column
-              px-6
               py-7
             "
           >
@@ -19,11 +18,11 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-md-12 pt-5">
-                  <label><h6>Email</h6></label>
+                  <label><h6 class="name-margin-setting">Email</h6></label>
                   <div class="input-group">
                     <input
                       type="email"
-                      class="form-control"
+                      class="form-control readonly-setting"
                       :value="user.email"
                       readonly
                     />
@@ -31,8 +30,8 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-12">
-                  <label><h6>Name</h6></label>
+                <div class="col-md-12 pt-3">
+                  <label><h6 class="name-margin-setting">Name</h6></label>
                   <div class="input-group row">
                     <div class="col-9">
                       <input
@@ -125,6 +124,7 @@ export default {
 <style scoped>
 #make-margin {
   padding-left: 100px !important;
+  width: 500px;
 }
 .left-wing {
   display: inline-block;
@@ -133,5 +133,11 @@ export default {
 .my-info-box {
   display: flex;
   justify-content: center;
+}
+.name-margin-setting {
+  margin: 0px;
+}
+.readonly-setting:hover {
+  cursor: default;
 }
 </style>
