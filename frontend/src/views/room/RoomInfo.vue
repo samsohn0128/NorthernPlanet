@@ -10,7 +10,6 @@
               d-flex
               justify-content-center
               flex-column
-              px-10
             "
           >
             <h3 class="text-center">Room Info</h3>
