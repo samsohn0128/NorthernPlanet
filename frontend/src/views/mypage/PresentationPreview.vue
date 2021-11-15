@@ -27,7 +27,11 @@
             대본을<br />설정해주세요.
           </div>
           <div v-else class="script-inside">
-            {{ slideList[idx].script }}
+            <!-- {{ slideList[idx].script }} -->
+            <Viewer
+              id="changeinitialValue"
+              :initialValue="slideList[idx].script"
+            />
           </div>
           <div class="move-sequence" @click="setIdxplus()">&gt;</div>
         </div>
@@ -164,12 +168,14 @@
 import MeetingSideBar from './preview/MeetingSideBar.vue';
 import { getPresentationDetail } from '@/api/presentation.js';
 // import { getRoom } from '@/api/rooms.js';
-// import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import { Viewer } from '@toast-ui/vue-editor';
 
 export default {
   name: 'PresentationPreview',
   components: {
     MeetingSideBar,
+    Viewer,
   },
   data() {
     return {
@@ -334,18 +340,18 @@ export default {
       console.log('시작 slideList: ', this.slideList);
       this.idx = 1;
       // 정규식 이용하여 <p>, <strong> 등등 제거
-      for (let i = 0; i < this.slideList.length; i++) {
-        if (this.slideList[i].script != null) {
-          this.slideList[i].script = this.slideList[i].script.replace(
-            /<br\/>/gi,
-            '\n',
-          );
-          this.slideList[i].script = this.slideList[i].script.replace(
-            /<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/gi,
-            '',
-          );
-        }
-      }
+      // for (let i = 0; i < this.slideList.length; i++) {
+      //   if (this.slideList[i].script != null) {
+      //     this.slideList[i].script = this.slideList[i].script.replace(
+      //       /<br\/>/gi,
+      //       '\n',
+      //     );
+      //     this.slideList[i].script = this.slideList[i].script.replace(
+      //       /<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/gi,
+      //       '',
+      //     );
+      //   }
+      // }
       this.content = this.slideList[1].script;
     },
     // Size 세팅
@@ -364,17 +370,25 @@ export default {
     },
     // PPT 인덱스번호 세팅
     setIdxplus() {
-      if (this.idx < this.slideList.length - 1) {
+      if (this.idx < this.slideList.length - 2) {
         this.idx += 1;
+        this.content = this.slideList[this.idx].script;
+        if (this.content != null) {
+          document.getElementById('changeinitialValue').innerHTML =
+            this.content;
+        }
       }
-      this.content = this.slideList[this.idx].script;
       // console.log(this.content);
     },
     setIdxminus() {
-      if (this.idx > 0) {
+      if (this.idx > 1) {
         this.idx -= 1;
+        this.content = this.slideList[this.idx].script;
+        if (this.content != null) {
+          document.getElementById('changeinitialValue').innerHTML =
+            this.content;
+        }
       }
-      this.content = this.slideList[this.idx].script;
       // console.log(this.content);
     },
     // 시작
