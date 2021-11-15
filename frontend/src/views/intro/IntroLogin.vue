@@ -65,11 +65,7 @@
   </div>
 </template>
 <script>
-import Vue from 'vue';
 import { googleLoginUser } from '@/api/users.js';
-import VueAlertify from 'vue-alertify';
-Vue.use(VueAlertify);
-
 export default {
   name: 'IntroLogin',
   components: {},

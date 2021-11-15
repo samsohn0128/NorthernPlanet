@@ -3,7 +3,7 @@
     <AppNav />
     <nav
       class="
-        navbar navbar-expand-lg
+        navbar navbar-expand-sm
         blur blur-rounded
         top-0
         border-bottom
@@ -11,7 +11,6 @@
         shadow
         w-100
         mt-1
-        d-none d-lg-block
         my-1
         py-1
       "
@@ -69,13 +68,13 @@
         <div class="container-fluid">
           <div class="head-animation" v-if="showAnimation == true">
             <div
-              v-for="(idx, effect) in effects"
+              v-for="(effect, idx) in effects"
               :class="['effect-container']"
-              :key="effect"
-              :id="effect"
-              @click="showExample(idx, effect)"
+              :key="idx"
+              :id="idx"
+              @click="showExample(effect, idx)"
             >
-              <h6>{{ effect }}</h6>
+              <h6>{{ idx }}</h6>
             </div>
           </div>
         </div>
@@ -85,11 +84,11 @@
           <!-- 자동 업데이트 싫으면 @end="updateItemOrder 없애기-->
           <!-- <draggable v-model="slideList" @end="updateItemOrder"> -->
           <draggable v-model="slideList">
-            <transition-group>
+            <transition-group tag="div" class="choose-ppt card">
               <div
                 class="choose-ppt card"
                 v-for="(slide, idx) in slideList"
-                :key="slide.slideId"
+                :key="`key-${slide.slideId}`"
                 @click="setIdx(idx)"
               >
                 <div class="choose-ppt-icons">
@@ -102,7 +101,7 @@
                 <div class="PPTbox">
                   <div style="width: 100%; height: 150px">
                     <img
-                      :src="slideList[idx].slideFile"
+                      :src="slide.slideFile"
                       style="max-width: 20vw; max-height: 9vw"
                       alt="thumbnail"
                     />
@@ -171,7 +170,7 @@ import {
   deleteSlide,
 } from '@/api/presentation.js';
 import { mapActions } from 'vuex';
-import { getSlide, updateScript } from '@/api/slide.js';
+import { updateScript } from '@/api/slide.js';
 import { Editor } from '@toast-ui/vue-editor';
 import store from '@/store';
 
@@ -200,7 +199,15 @@ export default {
       presentationName: null,
       size: null,
       uploadTime: null,
-      slideList: [],
+      slideList: [
+        {
+          effect: null,
+          script: null,
+          sequence: null,
+          slideFile: null,
+          slideId: null,
+        },
+      ],
       sendSlideList: [],
       items: [{ title: 'PPT 추가' }, { title: 'PPT 삭제' }],
       editorOptions: {
@@ -248,6 +255,10 @@ export default {
       // slideList 대입
       this.slideList = response.data.slideList;
       console.log('시작 slideList: ', this.slideList);
+      // 시작대본 설정
+      if (this.slideList[0].slideId === null) return;
+      this.editorText = this.slideList[0].script;
+      this.$refs.toastuiEditor.invoke('setHTML', this.editorText);
     },
     // Presentation으로 돌아간다.
     goBackPresentation() {
@@ -268,9 +279,15 @@ export default {
       let num = this.idx;
       this.slideList[num].effect = effect;
     },
-    // 전체 보기 화면으로 이동. 아직 구현하지 않음.
+    // 전체 보기 화면으로 이동
     showAllPPT() {
-      console.log('showAllPPT');
+      this.$router.push({
+        name: 'PresentationPreview',
+        params: {
+          userId: this.userId,
+          presentationId: this.presentationId,
+        },
+      });
     },
     // 슬라이드를 저장한다.
     async savePPT() {
@@ -288,7 +305,7 @@ export default {
         console.log('끝 data: ', data);
         await savePresentation(data);
         await this.$toastSuccess('슬라이드를 저장하였습니다.');
-        // this.$router.go();
+        this.$router.go();
       } catch (exp) {
         console.log(exp);
         this.$toastError('슬라이드 저장에 실패했습니다.');
@@ -297,6 +314,21 @@ export default {
     // 현재 선택한 Idx 설정하기 (Effect 저장시에 필요)
     setIdx(num) {
       this.idx = num;
+
+      console.log('before getslide slidelist: ', this.slideList);
+      // getSlide(this.slideList[this.idx].slideId).then(res => {
+      //   if (res.status != 200) {
+      //     this.$toastError(
+      //       '슬라이드 정보를 가져오는 중에 오류가 발생했습니다.',
+      //     );
+      //     return;
+      //   } else {
+      //     this.editorText = res.data.script;
+      //     this.$refs.toastuiEditor.invoke('setHTML', res.data.script);
+      //   }
+      // });
+      this.editorText = this.slideList[this.idx].script;
+      this.$refs.toastuiEditor.invoke('setHTML', this.editorText);
     },
     // PPT를 새로 추가한다.
     addnewSlide() {
@@ -344,7 +376,7 @@ export default {
       if (this.editorText === curEditorText) return;
 
       let updateScriptReq = {
-        slideId: 1,
+        slideId: this.slideList[this.idx].slideId,
         script: this.$refs.toastuiEditor.invoke('getHTML'),
       };
 
@@ -357,6 +389,7 @@ export default {
         } else {
           this.$toastSuccess('대본이 수정되었습니다.');
           this.editorText = curEditorText;
+          this.slideList[this.idx].script = curEditorText;
         }
       });
     },
@@ -366,17 +399,7 @@ export default {
       console.log('show animation: ', this.showAnimation);
     },
   },
-  created() {
-    getSlide(this.slideId).then(res => {
-      if (res.status != 200) {
-        this.$toastError('슬라이드 정보를 가져오는 중에 오류가 발생했습니다.');
-        return;
-      } else {
-        this.editorText = res.data.script;
-        this.$refs.toastuiEditor.invoke('setHTML', res.data.script);
-      }
-    });
-  },
+  created() {},
   // 백엔드 연결 뒤에 주석 해제
   mounted() {
     this.getPresentationData();

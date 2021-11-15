@@ -42,7 +42,7 @@ export default {
       })
       .catch(() => {
         console.log('error');
-        this.$alertify.error('파일 목록을 가져오는 데 에러가 발생했습니다.');
+        this.$toastError('파일 목록을 가져오는 데 에러가 발생했습니다.');
       });
   },
 };

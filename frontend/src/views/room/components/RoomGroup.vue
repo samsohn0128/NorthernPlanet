@@ -62,13 +62,9 @@
   <!--now-->
 </template>
 <script>
-import Vue from 'vue';
-import VueAlertify from 'vue-alertify';
 import RoomCard from '@/views/room/components/RoomCard';
 import RoomNew from '@/views/room/components/RoomNew';
 import { mapGetters } from 'vuex';
-Vue.use(VueAlertify);
-
 export default {
   name: 'RoomGroup',
   props: ['title'],

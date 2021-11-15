@@ -1,7 +1,14 @@
 <template>
   <div>
     <!-- prev -->
-    <PresentationSlideItem v-if="prev >= 0" :slideUrl="slideUrls[prev]" />
+    {{ this.$store.state.meetingRoom.now }}
+    {{ this.$store.state.meetingRoom.prev }}
+    {{ this.$store.state.meetingRoom.next }}
+
+    <PresentationSlideItem
+      v-if="prev >= 0"
+      :slideUrl="slideUrls[this.$store.state.meetingRoom.prev]"
+    />
     <img
       v-else
       src="@/assets/presentationTemplates/first-slide.png"
@@ -10,13 +17,17 @@
     />
     <!-- now -->
     <div style="position: relative">
-      <PresentationSlideItem :slideUrl="slideUrls[now]" />
-      <div class="overlay"><span>Now</span></div>
+      <PresentationSlideItem
+        :slideUrl="slideUrls[this.$store.state.meetingRoom.now]"
+      />
+      <div class="overlay">
+        <span>Now</span>
+      </div>
     </div>
     <!-- next -->
     <PresentationSlideItem
       v-if="next < slideUrls.length"
-      :slideUrl="slideUrls[next]"
+      :slideUrl="slideUrls[this.$store.state.meetingRoom.next]"
     />
     <img
       v-else
@@ -29,7 +40,7 @@
       <button class="slider-prev-button" @click="progressPrev">prev</button>
       <button @keyup.right="progressNext" @keyup.left="progressPrev">
         <div class="slider-progress-indicator">
-          {{ now + 1 }}/{{ slideUrls.length }}
+          {{ this.$store.state.meetingRoom.now + 1 }}/{{ slideUrls.length }}
         </div>
       </button>
       <button class="slider-next-button" @click="progressNext">next</button>
@@ -104,35 +115,39 @@ export default {
   },
   // : lifecycle hook
   mounted() {
-    store.state.meetingRoom.prev = this.currentPage - 1;
-    store.state.meetingRoom.now = this.currentPage;
-    store.state.meetingRoom.next = this.currentPage + 1;
+    this.$store.state.meetingRoom.prev = this.currentPage - 1;
+    this.$store.state.meetingRoom.now = this.currentPage;
+    this.$store.state.meetingRoom.next = this.currentPage + 1;
+    console.log(this.$store.state.meetingRoom.now);
   },
   // : methods
   methods: {
     progressPrev: function () {
-      store.dispatch('meetingRoom/goPrev');
+      if (this.$store.state.meetingRoom.now > 0) {
+        store.dispatch('meetingRoom/goPrev');
 
-      // if (this.now > 0) {
-      //   this.prev -= 1;
-      //   this.now -= 1;
-      //   this.next -= 1;
-      // } else {
-      //   this.alertMessage = '첫 번째 슬라이드입니다.';
-      //   this.activeAlert();
-      // }
+        this.prev -= 1;
+        this.now -= 1;
+        this.next -= 1;
+      } else {
+        this.alertMessage = '첫 번째 슬라이드입니다.';
+        this.activeAlert();
+      }
     },
     progressNext: function () {
-      store.dispatch('meetingRoom/goNext');
+      if (
+        this.$store.state.meetingRoom.now <
+        this.$store.state.meetingRoom.imgLength - 1
+      ) {
+        store.dispatch('meetingRoom/goNext');
 
-      // if (this.now < this.slideUrls.length - 1) {
-      //   this.prev += 1;
-      //   this.now += 1;
-      //   this.next += 1;
-      // } else {
-      //   this.alertMessage = '마지막 슬라이드입니다.';
-      //   this.activeAlert();
-      // }
+        this.prev += 1;
+        this.now += 1;
+        this.next += 1;
+      } else {
+        this.alertMessage = '마지막 슬라이드입니다.';
+        this.activeAlert();
+      }
     },
     activeAlert: function () {
       this.alertShow = true;
