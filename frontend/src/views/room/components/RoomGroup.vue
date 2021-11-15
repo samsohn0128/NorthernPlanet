@@ -137,6 +137,10 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 @import './room-style.css';
+.card-body {
+  display: flex;
+  justify-content: center;
+}
 </style>
