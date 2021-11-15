@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-center navigator">
       <button
         :class="[
-          { 'navigator-button-active': GestureShow },
+          { 'button-setting': GestureShow },
           { 'navigator-button-inactive': !GestureShow },
           'navigator-Gesture-button',
         ]"
@@ -14,7 +14,7 @@
       </button>
       <button
         :class="[
-          { 'navigator-button-active': !GestureShow },
+          { 'button-setting': !GestureShow },
           { 'navigator-button-inactive': GestureShow },
           'navigator-script-button',
         ]"
@@ -150,7 +150,7 @@
       <div class="d-flex justify-content-center navigator">
         <button
           :class="[
-            { 'navigator-button-active': LocationSizeShow },
+            { 'button-setting': LocationSizeShow },
             { 'navigator-button-inactive': !LocationSizeShow },
             'navigator-Gesture-button',
           ]"
@@ -160,7 +160,7 @@
         </button>
         <button
           :class="[
-            { 'navigator-button-active': !LocationSizeShow },
+            { 'button-setting': !LocationSizeShow },
             { 'navigator-button-inactive': LocationSizeShow },
             'navigator-script-button',
           ]"
@@ -318,6 +318,10 @@ export default {
 }
 .navigator-button-inactive {
   background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
+}
+.button-setting {
+  background: #4ba3c7;
+  color: white;
 }
 .access-alert {
   position: absolute;

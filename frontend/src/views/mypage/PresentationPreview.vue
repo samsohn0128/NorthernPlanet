@@ -5,14 +5,14 @@
       <div class="upside-ppt">
         <div class="upside-ppt-inside">
           <button
-            class="btn btn-sm bg-gradient-dark btn-round mb-1 me-1"
+            class="button-setting btn btn-sm btn-round mb-1 me-1"
             @click="goBack()"
           >
             뒤로가기
           </button>
           <button
             id="script-button-text"
-            class="btn btn-sm bg-gradient-dark btn-round mb-1 me-1"
+            class="button-setting btn btn-sm btn-round mb-1 me-1"
             @click="showScript()"
           >
             대본 숨기기
@@ -80,7 +80,7 @@
             type="button"
             class="btn btn-setting"
             :class="{
-              'bg-gradient-dark': isVideoOn,
+              'button-setting': isVideoOn,
               'bg-gradient-secondary': !isVideoOn,
             }"
             @click="videoOnOff"
@@ -542,7 +542,7 @@ export default {
 #ppt-image-setting {
   margin-top: 57px;
   width: 70vw;
-  height: 81vh;
+  height: 60vh;
   display: flex;
   align-items: center;
   position: absolute;
@@ -551,7 +551,7 @@ export default {
   height: 100vh;
   width: 100vw;
   padding: 20px 20px;
-  background: rgb(176, 167, 211);
+  background: #f9fbe7;
 }
 /* RGB
 93 244 237 #5df4ec
@@ -593,6 +593,10 @@ dbecec
   justify-content: center;
   align-items: center;
   width: 50vw;
+}
+.button-setting {
+  background: #4ba3c7;
+  color: white;
 }
 .set-timer-location {
   display: flex;
@@ -648,7 +652,7 @@ dbecec
   width: 40vw;
   height: 120px;
   overflow: auto;
-  background: rgb(222, 221, 226);
+  background: #d7ffd9;
   border-radius: 10px;
   padding: 5px;
   font: 16x bold;
