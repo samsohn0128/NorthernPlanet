@@ -74,7 +74,7 @@
                   <div style="width: 100%; height: 150px">
                     <img
                       :src="slide.slideFile"
-                      style="max-width: 20vw; max-height: 18vh"
+                      style="max-width: 20vw; max-height: 12vh"
                       alt="thumbnail"
                     />
                   </div>
