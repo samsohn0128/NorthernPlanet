@@ -651,7 +651,7 @@ dbecec
   background: rgb(222, 221, 226);
   border-radius: 10px;
   padding: 5px;
-  font: 24px bold;
+  font: 16x bold;
   color: black;
 }
 .move-sequence {
