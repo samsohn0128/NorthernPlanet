@@ -2,6 +2,9 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from './routes';
 import store from '@/store';
+import 'vue-toastification/dist/index.css';
+import { methods } from '../util/toast.js';
+Vue.prototype.$toastInfo = methods.toastInfo;
 
 Vue.use(VueRouter);
 const router = new VueRouter({
