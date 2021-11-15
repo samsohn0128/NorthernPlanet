@@ -9,7 +9,6 @@
             d-flex
             justify-content-center
             flex-column
-            px-10
           "
         >
           <h3 class="text-center">Create new room</h3>
@@ -67,9 +66,9 @@
                     참가자 이메일과 역할을 지정해 주세요.
                   </div>
 
-                  <button slot="reference" disable>
+                  <span slot="reference" disable>
                     <i class="far fa-question-circle"></i>
-                  </button>
+                  </span>
                 </popper>
                 <div class="row">
                   <div class="col-md-10">

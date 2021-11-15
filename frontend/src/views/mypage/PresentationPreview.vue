@@ -551,7 +551,7 @@ export default {
   height: 100vh;
   width: 100vw;
   padding: 20px 20px;
-  background: #f9fbe7;
+  background: #eeffff;
 }
 /* RGB
 93 244 237 #5df4ec
@@ -652,7 +652,7 @@ dbecec
   width: 40vw;
   height: 120px;
   overflow: auto;
-  background: #d7ffd9;
+  background: #f9fbe7;
   border-radius: 10px;
   padding: 5px;
   font: 16x bold;

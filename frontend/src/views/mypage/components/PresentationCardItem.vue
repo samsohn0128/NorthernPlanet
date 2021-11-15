@@ -20,7 +20,7 @@
       <div class="card-body pt-4">
         <span
           class="
-            text-gradient text-primary text-uppercase text-xs
+            text-setting text-gradient text-primary text-uppercase text-xs
             font-weight-bold
             my-2
             dropdown
@@ -118,6 +118,9 @@ export default {
 .card-header {
   max-width: 180px;
   height: 100px;
+}
+.text-setting {
+  color: linear-gradient(90deg, #4ba3c7 0%, black 100%);
 }
 .ni:hover {
   color: rgb(139, 0, 116);

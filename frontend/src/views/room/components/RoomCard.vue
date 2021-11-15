@@ -8,7 +8,7 @@
       v-if="!isHistory"
     >
       <div
-        class="card-body content text-white ps-0"
+        class="card-body content text-white"
         data-bs-toggle="modal"
         :data-bs-target="'#RoomReadyModal' + roomInfo.roomId"
         style="cursor: pointer"
@@ -160,11 +160,6 @@ export default {
   mounted() {},
 };
 </script>
-<style scoped>
+<style>
 @import './room-style.css';
-.card-body {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-}
 </style>

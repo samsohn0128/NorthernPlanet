@@ -211,6 +211,9 @@ export default {
     selectedSize: function () {
       this.selectSize(this.selectedSize);
     },
+    idx() {
+      this.sidebaridx = this.idx;
+    },
   },
   // : lifecycle hook
   mounted() {},

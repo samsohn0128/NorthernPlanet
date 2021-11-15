@@ -6,9 +6,5 @@ const GOOGLE_OAUTH_URL =
 //8443포트
 // const GOOGLE_OAUTH_URL =
 //   'https://localhost:8446/oauth2/authorize/google?redirect_uri=https://localhost:8443/oauth2/redirect';
-<<<<<<< Updated upstream
 
 export { BASE_URL, GOOGLE_OAUTH_URL, FILE_PATH };
-=======
-export { BASE_URL, GOOGLE_OAUTH_URL };
->>>>>>> Stashed changes
