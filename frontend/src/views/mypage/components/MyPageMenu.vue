@@ -16,7 +16,7 @@
       <ul class="nav nav-pills nav-fill flex-column p-1" role="tablist">
         <li class="nav-item">
           <a
-            class="nav-link mb-0 px-0 py-1"
+            class="button-setting nav-link mb-0 px-0 py-1"
             data-bs-toggle="tab"
             role="tab"
             aria-controls="preview"
@@ -28,7 +28,7 @@
         </li>
         <li class="nav-item">
           <a
-            class="nav-link mb-0 px-0 py-1"
+            class="button-setting nav-link mb-0 px-0 py-1"
             data-bs-toggle="tab"
             role="tab"
             aria-controls="code"
@@ -96,7 +96,7 @@ export default {
 <style scoped>
 .main-square {
   width: 200px;
-  height: 90%;
+  height: 80vh;
   text-align: center;
   border-style: solid;
   border-width: 1.5px;
@@ -117,5 +117,8 @@ export default {
 }
 .router:hover {
   color: darkblue;
+}
+.button-setting:hover {
+  cursor: pointer;
 }
 </style>

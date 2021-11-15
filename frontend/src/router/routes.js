@@ -18,6 +18,7 @@ import MyInfo from '@/views/mypage/MyInfo.vue';
 import Presentation from '@/views/mypage/Presentation.vue';
 import PresentationPreview from '@/views/mypage/PresentationPreview.vue';
 import ModifyPresentation from '@/views/mypage/ModifyPresentation.vue';
+import PageNotFound from '@/components/common/PageNotFound.vue';
 
 import Script from '@/views/Script.vue';
 
@@ -40,7 +41,7 @@ export default [
         component: IntroSignup,
       },
       {
-        path: '/oauth2/redirect',
+        path: '/front/oauth2/redirect',
         name: 'Oauth2Redirect',
         component: Oauth2Redirect,
       },
@@ -115,5 +116,10 @@ export default [
     path: '/script',
     component: Script,
     meta: { authRequired: true },
+  },
+  {
+    path: '/*',
+    name: 'PageNotFound',
+    component: PageNotFound,
   },
 ];
