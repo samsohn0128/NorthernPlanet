@@ -53,9 +53,9 @@ public class PresentationServiceImpl implements PresentationService {
   private final SlideRepository slideRepository;
 
   // ubuntu
-  private final String presentationDirectory = "/home/ubuntu/presentation";
+//  private final String presentationDirectory = "/home/ubuntu/presentation";
   // dongwoo
-//  private final String presentationDirectory = "/Users/dongwoosohn/presentation";
+  private final String presentationDirectory = "/Users/dongwoosohn/presentation";
   // aeeun
 //  private final String presentationDirectory = "/Users/gim-aeeun/file";
   // juyeop
@@ -159,7 +159,8 @@ public class PresentationServiceImpl implements PresentationService {
         presentationId);
     Presentation presentation = presentationRepository.findById(presentationId)
         .orElseThrow(() -> new NullPointerException());
-    List<Slide> slideList = slideRepository.findByPresentation_presentationIdOrderBySequence(presentationId)
+    List<Slide> slideList = slideRepository.findByPresentation_presentationIdOrderBySequence(
+            presentationId)
         .orElseThrow(() -> new NullPointerException());
     List<SlideDto> slideDtoList = new ArrayList<>();
     slideList.forEach(slide -> {
@@ -381,7 +382,8 @@ public class PresentationServiceImpl implements PresentationService {
             folderDirectory + File.separator + slideUpdateReq.getSequence() + extensionName);
         slideTempFile.renameTo(slideNewFile);
         slide.setSequence(slideUpdateReq.getSequence());
-        slide.setDirectory(folderDirectory + File.separator + slideUpdateReq.getSequence() + extensionName);
+        slide.setDirectory(
+            folderDirectory + File.separator + slideUpdateReq.getSequence() + extensionName);
         slideMap.replace(slideUpdateReq.getSlideId(), slide);
         log.info("[updatePresentation - service] {} file is renamed to {}", slideTempFile.getName(),
             slideNewFile.getName());
@@ -479,7 +481,8 @@ public class PresentationServiceImpl implements PresentationService {
     Presentation presentation = presentationRepository.findById(presentationId)
         .orElseThrow(() -> new RuntimeException());
     //delete slides
-    List<Slide> slides = slideRepository.findByPresentation_presentationIdOrderBySequence(presentationId)
+    List<Slide> slides = slideRepository.findByPresentation_presentationIdOrderBySequence(
+            presentationId)
         .orElseThrow(() -> new RuntimeException());
     slides.forEach(slide -> {
       File slideFile = new File(slide.getDirectory());
