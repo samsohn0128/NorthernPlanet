@@ -119,6 +119,11 @@ export default {
   max-width: 180px;
   height: 100px;
 }
+.card-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .ni:hover {
   color: rgb(139, 0, 116);
 }
