@@ -6,5 +6,8 @@ const FILE_PATH = BASE_URL + '/presentation';
 //8443포트
 const GOOGLE_OAUTH_URL =
   'https://localhost:8446/oauth2/authorize/google?redirect_uri=https://localhost:8443/oauth2/redirect';
+//배포
+// const GOOGLE_OAUTH_URL =
+//   'https://k5a204.p.ssafy.io/oauth2/authorize/google?redirect_uri=https://k5a204.p.ssafy.io/front/oauth2/redirect';
 
 export { BASE_URL, GOOGLE_OAUTH_URL, FILE_PATH };
