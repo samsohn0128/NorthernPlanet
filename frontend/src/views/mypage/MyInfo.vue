@@ -98,6 +98,9 @@ export default {
         message = '변경할 이름을 입력하세요';
         this.$toastError(message);
         return;
+      } else if (!this.$nameValidate(this.userName)) {
+        this.$toastError('특수문자 - 는 사용할 수 없습니다.');
+        return;
       }
       let userData = {
         name: this.userName,
