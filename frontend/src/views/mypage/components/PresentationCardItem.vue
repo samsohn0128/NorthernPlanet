@@ -101,7 +101,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .card-presentation {
   width: 200px;
   height: 220px;
@@ -118,11 +118,6 @@ export default {
 .card-header {
   max-width: 180px;
   height: 100px;
-}
-.card-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .ni:hover {
   color: rgb(139, 0, 116);
