@@ -101,7 +101,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .card-presentation {
   width: 200px;
   height: 220px;
@@ -114,6 +114,10 @@ export default {
   overflow: hidden; /* 넘어가는 글자 숨기기 */
   /* overflow: scroll; /* 넘어가는 글자 넘기기 */
   text-overflow: ellipsis; /* 말 줄임표 추가 */
+}
+.card-header {
+  max-width: 180px;
+  height: 100px;
 }
 .ni:hover {
   color: rgb(139, 0, 116);

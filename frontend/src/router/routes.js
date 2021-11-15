@@ -18,6 +18,7 @@ import MyInfo from '@/views/mypage/MyInfo.vue';
 import Presentation from '@/views/mypage/Presentation.vue';
 import PresentationPreview from '@/views/mypage/PresentationPreview.vue';
 import ModifyPresentation from '@/views/mypage/ModifyPresentation.vue';
+import PageNotFound from '@/components/common/PageNotFound.vue';
 
 import Script from '@/views/Script.vue';
 
@@ -40,7 +41,7 @@ export default [
         component: IntroSignup,
       },
       {
-        path: '/oauth2/redirect',
+        path: '/front/oauth2/redirect',
         name: 'Oauth2Redirect',
         component: Oauth2Redirect,
       },
@@ -50,8 +51,7 @@ export default [
   {
     path: '/dashboard',
     component: RoomPage,
-    meta: { authRequired: false },
-    // meta: { authRequired: true },
+    meta: { authRequired: true },
     children: [
       {
         path: '',
@@ -80,13 +80,12 @@ export default [
     path: '/meetingroom',
     name: 'MeetingRoom',
     component: MeetingRoom,
-    meta: { authRequired: false },
+    meta: { authRequired: true },
   },
   {
     path: '/mypage',
     component: MyPage,
-    meta: { authRequired: false },
-    // meta: { authRequired: true },
+    meta: { authRequired: true },
     children: [
       {
         path: '',
@@ -104,16 +103,23 @@ export default [
     path: '/mypage/presentation/:presentation_id/:name',
     name: 'ModifyPresentation',
     component: ModifyPresentation,
+    meta: { authRequired: true },
   },
   {
     // path: '/mypage/presentationpreview/:presentation_id/:name',
     path: '/mypage/presentationpreview/:userId/:presentationId',
     name: 'PresentationPreview',
     component: PresentationPreview,
+    meta: { authRequired: true },
   },
   {
     path: '/script',
     component: Script,
     meta: { authRequired: true },
+  },
+  {
+    path: '/*',
+    name: 'PageNotFound',
+    component: PageNotFound,
   },
 ];

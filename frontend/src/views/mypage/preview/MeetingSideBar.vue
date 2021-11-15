@@ -29,26 +29,26 @@
       <div class="small-img-container">
         <span>
           <img
-            v-if="idx == 1"
+            v-if="sidebaridx == 1"
             src="@/assets/presentationTemplates/first-slide.png"
             class="small-img-setting"
             alt="prev_image" />
           <img
-            v-else-if="idx > 1"
-            :src="slideList[idx - 1].slideFile"
+            v-else-if="sidebaridx > 1"
+            :src="slideList[sidebaridx - 1].slideFile"
             class="small-img-setting"
             alt="prev_image"
             @click="prevImage"
         /></span>
         <span>
           <img
-            v-if="idx == slideList.length - 2"
+            v-if="sidebaridx == slideList.length - 2"
             src="@/assets/presentationTemplates/last-slide.png"
             class="small-img-setting"
             alt="next_image" />
           <img
-            v-else-if="idx < slideList.length - 2"
-            :src="slideList[idx + 1].slideFile"
+            v-else-if="sidebaridx < slideList.length - 2"
+            :src="slideList[sidebaridx + 1].slideFile"
             class="small-img-setting"
             alt="next_image"
             @click="nextImage"
@@ -201,6 +201,7 @@ export default {
         flipy: 9,
         rotatein: 10,
       },
+      sidebaridx: this.idx + 1,
     };
   },
   // : computed
@@ -209,7 +210,6 @@ export default {
   watch: {
     selectedSize: function () {
       this.selectSize(this.selectedSize);
-      console.log('watch ', this.selectedSize);
     },
   },
   // : lifecycle hook
@@ -230,7 +230,6 @@ export default {
     },
     selectSize: function (selectedSize) {
       this.selectedSize = selectedSize;
-      console.log('selectSize ', this.selectedSize);
       this.emitSize();
     },
     selectRight: function () {
@@ -247,7 +246,6 @@ export default {
     },
     // Effect의 예시를 보여준다.
     showExample(idx, effect) {
-      console.log(effect);
       const el = document.getElementById(effect);
       el.classList.add(effect);
       setTimeout(function () {
@@ -255,15 +253,15 @@ export default {
       }, 1000);
     },
     prevImage() {
-      if (this.idx > 1) {
-        this.idx -= 1;
-        this.emitImage();
+      if (this.sidebaridx > 1) {
+        this.sidebaridx -= 1;
+        this.emitImageminus();
       }
     },
     nextImage() {
-      if (this.idx < this.slideList.length - 2) {
-        this.idx += 1;
-        this.emitImage();
+      if (this.sidebaridx < this.slideList.length - 2) {
+        this.sidebaridx += 1;
+        this.emitImageplus();
       }
     },
     emitSize() {
@@ -272,8 +270,11 @@ export default {
     emitLocation() {
       this.$emit('selectedLocation', this.selectedLocation);
     },
-    emitImage() {
-      this.$emit('selectIdx', this.idx);
+    emitImageminus() {
+      this.$emit('selectIdxminus');
+    },
+    emitImageplus() {
+      this.$emit('selectIdxplus');
     },
   },
 };
@@ -342,7 +343,7 @@ export default {
 .small-img-setting {
   max-width: 190px;
   max-height: 100px;
-  margin: 5px;
+  padding: 5px;
   cursor: pointer;
 }
 .text-center {

@@ -5,7 +5,7 @@
       <div class="card m-5">
         <div class="card-header pb-0 ps-5">
           <!--props값에 따라 title 출력 [Now, Future, History]-->
-          <div class="row">
+          <div class="row" style="width: 200px">
             <div class="col-11">
               <h3 class="mb-1 ps-3">
                 {{ title }}
@@ -137,6 +137,10 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 @import './room-style.css';
+.card-body {
+  display: flex;
+  justify-content: center;
+}
 </style>

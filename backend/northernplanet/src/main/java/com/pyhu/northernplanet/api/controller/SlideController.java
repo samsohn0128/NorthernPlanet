@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +33,7 @@ public class SlideController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity getSlide(@RequestParam(required = true) Long slideId) {
     log.info("[getSlide - controller]");
     try {
@@ -48,6 +50,7 @@ public class SlideController {
   @ApiResponses({@ApiResponse(code = 200, message = "성공"),
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> updateScript(@RequestBody ScriptReq scriptReq) {
     log.info("[updateScript - controller]");
     try {

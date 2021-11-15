@@ -31,12 +31,17 @@ export default {
   methods: {},
 };
 </script>
-<style>
+<style scoped>
 .card-presentation {
   width: 200px;
   height: 220px;
 }
 .new-presentation {
   text-align: center;
+}
+.card-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -57,7 +57,7 @@
       style="position: relative"
       v-if="isHistory"
     >
-      <div class="card-body content text-white ps-0" style="cursor: pointer">
+      <div class="card-body content text-white" style="cursor: pointer">
         <h4 class="text-white" style="cursor: pointer; float: left">
           {{ roomInfo.name }}
         </h4>
@@ -102,12 +102,8 @@
   <!--카드 유닛-->
 </template>
 <script>
-import Vue from 'vue';
-import VueAlertify from 'vue-alertify';
 import RoomReadyModal from './RoomReadyModal.vue';
 import { mapGetters } from 'vuex';
-Vue.use(VueAlertify);
-
 export default {
   name: 'RoomCard',
   components: { RoomReadyModal },
@@ -164,6 +160,11 @@ export default {
   mounted() {},
 };
 </script>
-<style>
+<style scoped>
 @import './room-style.css';
+.card-body {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
 </style>
