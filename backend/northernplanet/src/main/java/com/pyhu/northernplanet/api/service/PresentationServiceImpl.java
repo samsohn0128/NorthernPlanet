@@ -58,11 +58,7 @@ public class PresentationServiceImpl implements PresentationService {
 //  private final String presentationDirectory = "/Users/dongwoosohn/presentation";
   // aeeun
 //  private final String presentationDirectory = "/Users/gim-aeeun/file";
-<<<<<<< Updated upstream
   // juyeop
-=======
-//   juyeop
->>>>>>> Stashed changes
   private final String presentationDirectory = "C:\\Users\\JuYeop\\pjt3-picture";
   // minji
 //  private final String presentationDirectory = "C:\\Users\\multicampus\\ssafy-2-semester\\free-pjt\\presentation";
