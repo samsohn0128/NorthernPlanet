@@ -18,13 +18,7 @@
       </div>
 
       <div class="card-body pt-4">
-        <span
-          class="
-            text-setting text-gradient text-primary text-uppercase text-xs
-            font-weight-bold
-            my-2
-            dropdown
-          "
+        <span class="text-setting text-xs font-weight-bold my-2 dropdown"
           >PPT or PDF or IMAGE</span
         >
 
@@ -120,7 +114,7 @@ export default {
   height: 100px;
 }
 .text-setting {
-  color: linear-gradient(90deg, #4ba3c7 0%, black 100%);
+  color: #89abc6;
 }
 .ni:hover {
   color: rgb(139, 0, 116);

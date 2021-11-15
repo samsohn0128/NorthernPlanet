@@ -37,10 +37,7 @@
         </div>
         <div class="upside-ppt-inside set-timer-location">
           <div class="time-space">
-            <span id="showMin">00</span>
-            :
-            <span id="showSec">00</span>
-            .
+            <span id="showMin">00</span>: <span id="showSec">00</span>.
             <span id="showMilisec">00</span>
           </div>
           <div class="time-button-space">
@@ -97,6 +94,7 @@
           <!-- local video element -->
           <video
             width="100%"
+            height="750vh"
             :id="'local-video' + roomId"
             autoplay="true"
             poster="@/assets/img/logos/focus_camera3.jpg"
@@ -606,7 +604,7 @@ dbecec
 .time-space {
   width: 12vw;
   text-align: center;
-  background: rgb(222, 221, 226);
+  background: #e8f5e9;
   color: black;
   font-size: 18px;
   padding: 5px;
@@ -615,7 +613,7 @@ dbecec
 .time-button-space {
   width: 12vw;
   text-align: center;
-  background: rgb(222, 221, 226);
+  background: #e8f5e9;
   color: black;
   font-size: 18px;
   padding: 5px;
@@ -625,11 +623,15 @@ dbecec
   background: #4aae71;
   border-color: #4aae71;
   width: 65px;
+  border-radius: 20px;
+  box-shadow: 0.5px 0.5px 1px;
 }
 .settingReset {
   background: #fbad10;
   border-color: #fbad10;
   width: 65px;
+  border-radius: 20px;
+  box-shadow: 0.5px 0.5px 1px;
 }
 .main-body-div {
   position: relative;
@@ -652,7 +654,7 @@ dbecec
   width: 40vw;
   height: 120px;
   overflow: auto;
-  background: #f9fbe7;
+  background: #e8f5e9;
   border-radius: 10px;
   padding: 5px;
   font: 16x bold;
