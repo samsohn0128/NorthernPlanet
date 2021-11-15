@@ -6,7 +6,7 @@ import store from '@/store';
 Vue.use(VueRouter);
 const router = new VueRouter({
   //8443포트에서 테스트할때는 history 모드 주석처리하세요.
-  mode: 'history',
+  //mode: 'history',
   routes,
 });
 
@@ -20,7 +20,6 @@ router.beforeEach(function (to, from, next) {
     // console.log('isLogin : ' + store.state.users.login.isLogin);
     next();
   } else {
-    // this.$toastInfo('로그인이 필요합니다');
     router.push('/login');
     // console.log('authRequired : ' + authRequired);
     // console.log('isLogin : ' + store.state.users.login.isLogin);
