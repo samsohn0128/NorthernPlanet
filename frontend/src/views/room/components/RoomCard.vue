@@ -57,7 +57,7 @@
       style="position: relative"
       v-if="isHistory"
     >
-      <div class="card-body content text-white ps-0" style="cursor: pointer">
+      <div class="card-body content text-white" style="cursor: pointer">
         <h4 class="text-white" style="cursor: pointer; float: left">
           {{ roomInfo.name }}
         </h4>
@@ -160,6 +160,11 @@ export default {
   mounted() {},
 };
 </script>
-<style>
+<style scoped>
 @import './room-style.css';
+.card-body {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
 </style>

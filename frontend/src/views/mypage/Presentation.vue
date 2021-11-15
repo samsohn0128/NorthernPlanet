@@ -85,7 +85,7 @@ export default {
 <style scoped>
 #houseScroll {
   overflow: auto;
-  margin: 10px 0 0 0;
+  margin: 12px 0 0 0;
 }
 .my-page-container {
   width: 100%;
@@ -94,16 +94,16 @@ export default {
   border-radius: 5px;
 }
 .card-presentation {
-  margin: 2%;
+  margin: 2% 2% 60px 2%;
 }
 .container-box {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
-  height: 90%;
+  height: 80vh;
   border: 2px solid rgb(235, 233, 233);
-  border-radius: 5px;
+  border-radius: 10px;
 }
 .box {
   display: flex;
