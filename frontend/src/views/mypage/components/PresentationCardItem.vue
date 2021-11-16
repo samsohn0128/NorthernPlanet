@@ -18,13 +18,7 @@
       </div>
 
       <div class="card-body pt-4">
-        <span
-          class="
-            text-gradient text-primary text-uppercase text-xs
-            font-weight-bold
-            my-2
-            dropdown
-          "
+        <span class="text-setting text-xs font-weight-bold my-2 dropdown"
           >PPT or PDF or IMAGE</span
         >
 
@@ -118,6 +112,9 @@ export default {
 .card-header {
   max-width: 180px;
   height: 100px;
+}
+.text-setting {
+  color: #89abc6;
 }
 .ni:hover {
   color: rgb(139, 0, 116);
