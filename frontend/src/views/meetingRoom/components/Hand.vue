@@ -5,22 +5,26 @@
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
 
 <script>
-import store from '@/store';
-import _ from 'lodash';
+import store from "@/store";
+import _ from "lodash";
 
-const URL = 'https://teachablemachine.withgoogle.com/models/sHKstMnIt/';
+const URL = "https://teachablemachine.withgoogle.com/models/sHKstMnIt/";
 let model, webcam, ctx, labelContainer, maxPredictions;
 export default {
-  name: 'handcolntroler',
+  name: "handcolntroler",
   props: {},
-  data() {},
+  data() {
+    return {
+      predictFlag: true,
+    };
+  },
   mounted() {
     this.init();
   },
   methods: {
     async init() {
-      const modelURL = URL + 'model.json';
-      const metadataURL = URL + 'metadata.json';
+      const modelURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
 
       // load the model and metadata
       // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
@@ -35,12 +39,13 @@ export default {
       await webcam.setup(); // request access to the webcam
       await webcam.play();
       window.requestAnimationFrame(this.loop);
-      console.log('come');
+      console.log("come");
     },
 
     async loop(timestamp) {
       webcam.update(); // update the webcam frame
-      await this.predict();
+      if (this.predictFlag) await this.predict();
+      else setTimeout(() => (this.predictFlag = true), 3000);
 
       // window.requestAnimationFrame(_.throttle(this.loop), 6000);
       window.requestAnimationFrame(this.loop);
@@ -49,16 +54,17 @@ export default {
     async predict() {
       // Prediction #1: run input through posenet
       // estimatePose can take in an image, video or canvas html element
-      console.log('qwwert');
+      console.log("ready to predict");
       const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
       // Prediction 2: run input through teachable machine classification model
       const prediction = await model.predict(posenetOutput);
 
       if (prediction[1].probability.toFixed(2) > 0.99) {
-        console.log('second');
-        setTimeout(store.dispatch('meetingRoom/goNext'), 1000);
+        console.log("nextPage");
+        this.predictFlag = false;
+        console.log("predictFlag = false");
+        //setTimeout(store.dispatch('meetingRoom/goNext'), 1000);
         //_.throttle(store.dispatch('meetingRoom/goNext'), 1000);
-        console.log('ggggggg');
 
         // const classPrediction =
         //     prediction[i].className + ": " + prediction[i].probability.toFixed(2);
