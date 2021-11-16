@@ -55,13 +55,13 @@ public class PresentationServiceImpl implements PresentationService {
   // ubuntu
 //  private final String presentationDirectory = "/home/ubuntu/presentation";
   // dongwoo
-//  private final String presentationDirectory = "/Users/dongwoosohn/presentation";
+  private final String presentationDirectory = "/Users/dongwoosohn/presentation";
   // aeeun
 //  private final String presentationDirectory = "/Users/gim-aeeun/file";
   // juyeop
   // private final String presentationDirectory = "C:\\Users\\JuYeop\\pjt3-picture";
   // minji
- private final String presentationDirectory = "C:\\Users\\multicampus\\ssafy-2-semester\\free-pjt\\presentation";
+//  private final String presentationDirectory = "C:\\Users\\multicampus\\ssafy-2-semester\\free-pjt\\presentation";
 
   @Override
   public int createPresentation(PresentationPostReq presentationPostReq) throws IOException {
@@ -159,7 +159,8 @@ public class PresentationServiceImpl implements PresentationService {
         presentationId);
     Presentation presentation = presentationRepository.findById(presentationId)
         .orElseThrow(() -> new NullPointerException());
-    List<Slide> slideList = slideRepository.findByPresentation_presentationIdOrderBySequence(presentationId)
+    List<Slide> slideList = slideRepository.findByPresentation_presentationIdOrderBySequence(
+            presentationId)
         .orElseThrow(() -> new NullPointerException());
     List<SlideDto> slideDtoList = new ArrayList<>();
     slideList.forEach(slide -> {
@@ -381,7 +382,8 @@ public class PresentationServiceImpl implements PresentationService {
             folderDirectory + File.separator + slideUpdateReq.getSequence() + extensionName);
         slideTempFile.renameTo(slideNewFile);
         slide.setSequence(slideUpdateReq.getSequence());
-        slide.setDirectory(folderDirectory + File.separator + slideUpdateReq.getSequence() + extensionName);
+        slide.setDirectory(
+            folderDirectory + File.separator + slideUpdateReq.getSequence() + extensionName);
         slideMap.replace(slideUpdateReq.getSlideId(), slide);
         log.info("[updatePresentation - service] {} file is renamed to {}", slideTempFile.getName(),
             slideNewFile.getName());
@@ -479,7 +481,8 @@ public class PresentationServiceImpl implements PresentationService {
     Presentation presentation = presentationRepository.findById(presentationId)
         .orElseThrow(() -> new RuntimeException());
     //delete slides
-    List<Slide> slides = slideRepository.findByPresentation_presentationIdOrderBySequence(presentationId)
+    List<Slide> slides = slideRepository.findByPresentation_presentationIdOrderBySequence(
+            presentationId)
         .orElseThrow(() -> new RuntimeException());
     slides.forEach(slide -> {
       File slideFile = new File(slide.getDirectory());
