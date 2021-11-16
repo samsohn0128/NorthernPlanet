@@ -13,8 +13,8 @@
             h-100
             z-index-0
             ms-n9
+            intro-cover
           "
-          style="background-image: url(../../assets/img/gradient/Sky.jpg)"
         ></div>
       </div>
       <div
@@ -52,7 +52,7 @@
             <div class="buttons text-center">
               <router-link
                 to="/dashboard"
-                class="btn bg-gradient-dark mt-4 w-20 text-lg"
+                class="btn btn-outline-dark mt-4 w-20 text-lg"
               >
                 Start
               </router-link>
@@ -79,6 +79,13 @@ export default {
   z-index: 1;
 }
 .text-gradient.text-focus {
-  background-image: linear-gradient(310deg, #141727, #3f92be);
+  background-image: linear-gradient(310deg, #141727, #5d918a);
 }
+.intro-cover {
+  background: linear-gradient(90deg, #98ddc1, white);
+}
+/* .button-setting {
+  background: #d8da90;
+  color: white;
+} */
 </style>

@@ -43,7 +43,7 @@
                     <div class="col-3">
                       <button
                         type="button"
-                        class="btn bg-gradient-dark"
+                        class="btn button-setting"
                         @click="modifyName"
                       >
                         Modify
@@ -57,7 +57,7 @@
                   <br />
                   <button
                     type="button"
-                    class="text-danger btn btn-outline-danger w-50"
+                    class="btn button-danger-setting w-50"
                     data-bs-toggle="modal"
                     data-bs-target="#modal-notification"
                   >
@@ -142,5 +142,13 @@ export default {
 }
 .readonly-setting:hover {
   cursor: default;
+}
+.button-setting {
+  background: #66806a;
+  color: white;
+}
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
 }
 </style>

@@ -70,11 +70,7 @@ export default {
   justify-content: space-around;
   width: 100%;
   height: 45px;
-  background: linear-gradient(
-    90deg,
-    rgb(119, 223, 222) 0%,
-    rgb(219, 214, 74) 100%
-  );
+  background: linear-gradient(90deg, #6d9e8a, #6d9e8a);
 }
 .navbar-texts {
   display: flex;

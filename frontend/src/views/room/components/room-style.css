@@ -36,6 +36,11 @@
 
 .card-new-parrent {
   position: relative;
+  background: linear-gradient(
+    180deg,
+    #9C6C48,
+    #308F9C
+  )
 }
 .card-new {
   position: absolute;
@@ -87,4 +92,12 @@
   float: right;
   top: 23px;
   right: -14px;
+}
+
+.card-unit {
+    background: linear-gradient(
+    180deg,
+    #DBC194,
+    #90DA96
+  )
 }
