@@ -167,7 +167,7 @@ export default {
       }
     },
 
-    sendMsgToKurento() {
+    async sendMsgToKurento() {
       const myNameId = this.userName + '-' + this.userId;
       const roomNameId = this.roomName + '-' + this.roomId;
       const message = {
@@ -183,8 +183,8 @@ export default {
         startWithMic: this.isMicOn,
         startWithVideo: this.isVideoOn,
       };
-      this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
-      this.$store.dispatch('meetingRoom/sendMessage', message);
+      await this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
+      await this.$store.dispatch('meetingRoom/sendMessage', message);
     },
 
     playVideoFromCamera: async function () {
