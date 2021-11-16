@@ -5,7 +5,7 @@
     <PresentationContentSelector v-if="contentShow" />
     <PresentationLocationSelector v-if="locationShow" />
     <PresentationEffectSelector v-if="effectShow" />
-    <PresentationSlider v-if="sliderShow" />
+    <!-- <PresentationSlider v-if="sliderShow" /> -->
     <!-- presentation controller componenets -->
     <!-- presentation controller navigator -->
     <div class="prsent-control-navigator">
@@ -27,10 +27,11 @@
               { 'navigator-button-active': locationShow },
               { 'navigator-button-inactive': !locationShow },
               'navigator-button',
+              'navigator-button-mid',
             ]"
             @click="selectLocationMenu"
           >
-            Location
+            Location/Size
           </button>
         </div>
         <div>
@@ -39,12 +40,13 @@
               { 'navigator-button-active': effectShow },
               { 'navigator-button-inactive': !effectShow },
               'navigator-button',
+              'navigator-button-end',
             ]"
             @click="selectEffectMenu"
           >
             Effect
           </button>
-          <button
+          <!-- <button
             :class="[
               { 'navigator-button-active': sliderShow },
               { 'navigator-button-inactive': !sliderShow },
@@ -54,7 +56,7 @@
             @click="selectSliderMenu"
           >
             Slider
-          </button>
+          </button> -->
         </div>
       </div>
       <!-- access alert -->
@@ -71,16 +73,16 @@
 <script>
 import PresentationContentSelector from './PresentationContentSelector.vue';
 import PresentationLocationSelector from './PresentationLocationSelector.vue';
-import PresentationSlider from './PresentationSlider.vue';
 import PresentationEffectSelector from './PresentationEffectSelector.vue';
+// import PresentationSlider from './PresentationSlider.vue';
 
 export default {
   name: 'PresentationController',
   components: {
     PresentationContentSelector,
     PresentationLocationSelector,
-    PresentationSlider,
     PresentationEffectSelector,
+    // PresentationSlider,
   },
   // : props
   props: {},
@@ -90,7 +92,7 @@ export default {
       contentShow: true,
       locationShow: false,
       effectShow: false,
-      sliderShow: false,
+      // sliderShow: false,
       alertShow: false,
       /* 이 외 slide controller의 모든 데이터는 발표와 관련(다른 사람과 동일한 데이터를 유지해야함) 있으므로 state에서 관리  */
     };
@@ -105,7 +107,7 @@ export default {
       this.contentShow = true;
       this.locationShow = false;
       this.effectShow = false;
-      this.sliderShow = false;
+      // this.sliderShow = false;
     },
     selectLocationMenu: function () {
       if (this.$store.state.meetingRoom.imageSrcs === null) {
@@ -114,7 +116,7 @@ export default {
         this.contentShow = false;
         this.locationShow = true;
         this.effectShow = false;
-        this.sliderShow = false;
+        // this.sliderShow = false;
       }
     },
     selectEffectMenu: function () {
@@ -124,7 +126,7 @@ export default {
         this.contentShow = false;
         this.locationShow = false;
         this.effectShow = true;
-        this.sliderShow = false;
+        // this.sliderShow = false;
       }
     },
     selectSliderMenu: function () {
@@ -134,7 +136,7 @@ export default {
         this.contentShow = false;
         this.locationShow = false;
         this.effectShow = false;
-        this.sliderShow = true;
+        // this.sliderShow = true;
       }
     },
     activateAlert: function () {
@@ -184,6 +186,9 @@ export default {
 }
 .navigator-button-start {
   border-radius: 30px 0px 0px 30px;
+}
+.navigator-button-mid {
+  width: 140px;
 }
 .navigator-button-end {
   border-radius: 0px 30px 30px 0px;
