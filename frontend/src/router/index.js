@@ -6,23 +6,18 @@ import store from '@/store';
 Vue.use(VueRouter);
 const router = new VueRouter({
   //8443포트에서 테스트할때는 history 모드 주석처리하세요.
-  //mode: 'history',
+  mode: 'history',
   routes,
 });
 
 router.beforeEach(function (to, from, next) {
   var authRequired = to.matched.some(routeInfo => {
-    // console.log(routeInfo);
     return routeInfo.meta.authRequired;
   });
   if (!authRequired || (authRequired && store.getters['users/getToken'])) {
-    // console.log('authRequired : ' + authRequired);
-    // console.log('isLogin : ' + store.state.users.login.isLogin);
     next();
   } else {
     router.push('/login');
-    // console.log('authRequired : ' + authRequired);
-    // console.log('isLogin : ' + store.state.users.login.isLogin);
   }
 });
 
