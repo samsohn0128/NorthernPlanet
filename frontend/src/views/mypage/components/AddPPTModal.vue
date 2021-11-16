@@ -51,14 +51,14 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="btn bg-gradient-secondary"
+            class="btn btn-outline-dark button-setting"
             data-bs-dismiss="modal"
           >
             Cancel
           </button>
           <button
             type="button"
-            class="btn bg-gradient-danger"
+            class="btn button-setting button-color-setting"
             @click="addPPT()"
             data-bs-dismiss="modal"
           >
@@ -168,5 +168,19 @@ export default {
 .thumbnail-setting {
   max-width: 200px;
   max-height: 150px;
+}
+.button-color-setting {
+  background: #66806a;
+  color: white;
+}
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
+}
+.button-setting {
+  width: 80px;
+  height: 40px;
+  padding: 5px;
+  margin: 0 5px 0 5px;
 }
 </style>

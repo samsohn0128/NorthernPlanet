@@ -13,8 +13,8 @@
               h-100
               z-index-0
               ms-n9
+              intro-cover
             "
-            style="background-image: url(../../assets/img/gradient/Sky.jpg)"
           ></div>
         </div>
         <div class="container">
@@ -41,7 +41,7 @@
                     <div class="text-center">
                       <button
                         type="button"
-                        class="btn btn-lg bg-gradient-dark text-lg w-80"
+                        class="btn btn-lg button-setting text-lg w-80"
                         v-on:click="tryToGoogleLogIn"
                       >
                         <img
@@ -93,6 +93,13 @@ export default {
   z-index: 1;
 }
 .text-gradient.text-focus {
-  background-image: linear-gradient(310deg, #141727, #3f92be);
+  background-image: linear-gradient(310deg, #141727, #5d918a);
+}
+.intro-cover {
+  background: linear-gradient(90deg, #98ddc1, white);
+}
+.button-setting {
+  border: 2px solid #66806a;
+  color: #456357;
 }
 </style>
