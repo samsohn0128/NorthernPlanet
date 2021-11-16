@@ -81,7 +81,7 @@ export default [
     ],
   },
   {
-    path: '/meetingroom',
+    path: '/meetingroom/:roomNumber',
     name: 'MeetingRoom',
     component: MeetingRoom,
     meta: { authRequired: true },
