@@ -114,7 +114,7 @@ export default {
   height: 100px;
 }
 .text-setting {
-  color: #89abc6;
+  color: #456357;
 }
 .ni:hover {
   color: rgb(139, 0, 116);

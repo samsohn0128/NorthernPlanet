@@ -40,7 +40,7 @@ export default {
   text-align: center;
 }
 .card-setting {
-  background: linear-gradient(90deg, #4ba3c7 0%, white 100%);
+  background: linear-gradient(360deg, #98ddc1, #d8da90);
 }
 .card-body {
   display: flex;

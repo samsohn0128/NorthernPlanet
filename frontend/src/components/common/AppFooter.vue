@@ -2,7 +2,7 @@
   <footer class="footer p-0">
     <div class="row align-items-center text-center justify-content-center">
       <div class="col-lg-6">
-        <div class="copyright text-center text-sm text-muted">
+        <div class="copyright text-center text-sm text-muted text-global">
           Copyright 2021. NorthernPlanet in SSAFY 5th. All Rights Reserved.<br />
           Designed by
           <a
@@ -23,3 +23,8 @@ export default {
   name: 'AppFooter',
 };
 </script>
+<style scoped>
+.text-global {
+  color: #505753 !important;
+}
+</style>

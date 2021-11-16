@@ -25,7 +25,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body url-div">
           <input
             id="url-input"
             :value="roomLink"
@@ -37,12 +37,17 @@
             }"
             class="w-80"
           />
-          <button @click="copyUrl" class="btn btn-link ml-auto">Copy</button>
+          <button
+            @click="copyUrl"
+            class="btn button-color-setting button-setting btn-link ml-auto"
+          >
+            Copy
+          </button>
         </div>
         <div class="modal-footer">
           <button
             type="button"
-            class="btn btn-link ml-auto"
+            class="btn ml-auto btn-outline-dark button-setting"
             data-bs-dismiss="modal"
           >
             Close
@@ -72,3 +77,26 @@ export default {
   },
 };
 </script>
+<style scoped>
+.button-color-setting {
+  background: #66806a;
+  color: white;
+}
+.button-outline-setting {
+  border: 1.5px solid #66806a;
+  color: #456357;
+}
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
+}
+.button-setting {
+  width: 70px;
+  height: 40px;
+  padding: 5px;
+  margin: 0 10px 0 10px;
+}
+.url-div {
+  margin: 5px 0 5px 15px;
+}
+</style>

@@ -8,7 +8,6 @@
         background-wrap
         card-new-parrent
       "
-      style="background-image: url('../../assets/img/gradient/_new.png')"
     >
       <router-link to="/dashboard/create" class="text-white">
         <div
