@@ -20,11 +20,12 @@
         </div>
         <div id="script-show" class="upside-ppt-inside script-setting">
           <div class="move-sequence" @click="setIdxminus()">&lt;</div>
-          <div
-            v-if="slideList[idx].script == null || slideList[idx].script == ''"
-            class="script-inside"
-          >
-            대본을<br />설정해주세요.
+          <div v-if="idx == 1">
+            <Viewer
+              id="changeinitialValue"
+              :initialValue="slideList[idx].script"
+              class="script-inside"
+            />
           </div>
           <div v-else class="script-inside">
             <!-- {{ slideList[idx].script }} -->
@@ -100,28 +101,38 @@
             poster="@/assets/img/logos/focus_camera3.jpg"
           ></video>
         </div>
+
         <div id="ppt-image-setting">
-          <img
+          <!-- <img
             v-if="idx == 0"
             src="@/assets/presentationTemplates/first-slide.png"
             id="img-setting"
             alt="prev-image"
-            class="size-4"
+            class="size-2"
           />
           <img
             v-else-if="idx == slideList.length - 1"
             src="@/assets/presentationTemplates/last-slide.png"
             id="img-setting"
             alt="next-image"
-            class="size-4"
-          />
-          <img
+            class="size-2"
+          /> -->
+          <transition name="fade" mode="out-in" v-if="idx !== null">
+            <img
+              :src="imageSrcs"
+              :key="imageSrcs"
+              alt="presentation image"
+              :class="[sizePreset, transitionPreset]"
+              id="img-setting"
+            />
+          </transition>
+          <!-- <img
             v-else
             :src="slideList[idx].slideFile"
             id="img-setting"
             alt="current-slide"
             class="size-4"
-          />
+          /> -->
         </div>
       </div>
 
@@ -157,6 +168,8 @@
         @selectedSize="setSize"
         @selectIdxplus="setIdxplus"
         @selectIdxminus="setIdxminus"
+        @selectedShow="showScript"
+        @selectedEffect="setEffect"
       />
     </transition>
   </div>
@@ -210,12 +223,28 @@ export default {
       isVideoOn: false,
 
       content: null,
+      effects: {
+        default: 0,
+        fadein: 1,
+        fadedown: 2,
+        fadeleft: 3,
+        faderight: 4,
+        fadeup: 5,
+        backdown: 6,
+        backup: 7,
+        flipx: 8,
+        flipy: 9,
+        rotatein: 10,
+      },
     };
   },
   // : watch
   watch: {},
   // : computed
   computed: {
+    imageSrcs() {
+      return this.slideList[this.idx].slideFile;
+    },
     participants() {
       return this.$store.state.meetingRoom.participants;
     },
@@ -230,28 +259,17 @@ export default {
     roomId() {
       return this.$route.params.room_id;
     },
+
+    transitionPreset() {
+      return 'transition-' + this.slideList[this.idx].effect;
+    },
+    sizePreset() {
+      return 'size-' + this.size;
+    },
   },
   // : lifecycle hook
   created() {
     this.getPresentationData();
-    console.log(this.$route.params);
-
-    // WebRTC 관련
-    // try {
-    //   //websocket init
-    //   const url = 'wss://' + location.host + '/groupcall';
-    //   console.log(url);
-    //   this.$store.dispatch('meetingRoom/wsInit', url);
-
-    //   //roomId로 roomInfo 받아와서 data setting 하기
-    //   this.roomInfo = await getRoom(this.roomId);
-    //   this.roomName = this.roomInfo.data.name;
-    //   this.manager =
-    //     this.roomInfo.data.managerName + '-' + this.roomInfo.data.managerId;
-    //   this.roomDescription = this.roomInfo.data.description;
-    // } catch (error) {
-    //   console.log(error);
-    // }
   },
   mounted() {
     document.addEventListener('keydown', e => {
@@ -259,13 +277,11 @@ export default {
       switch (e.key) {
         case 'ArrowLeft':
           if (this.idx > 1) {
-            this.idx -= 1;
             this.setIdxminus();
           }
           break;
         case 'ArrowRight':
           if (this.idx < this.slideList.length - 2) {
-            this.idx += 1;
             this.setIdxplus();
           }
           break;
@@ -374,6 +390,9 @@ export default {
         if (this.content != null) {
           document.getElementById('changeinitialValue').innerHTML =
             this.content;
+        } else {
+          document.getElementById('changeinitialValue').innerHTML =
+            '대본을<br>설정해주세요';
         }
       }
       // console.log(this.content);
@@ -385,9 +404,17 @@ export default {
         if (this.content != null) {
           document.getElementById('changeinitialValue').innerHTML =
             this.content;
+        } else {
+          document.getElementById('changeinitialValue').innerHTML =
+            '대본을<br>설정해주세요';
         }
       }
       // console.log(this.content);
+    },
+    // effect 미리보기
+    setEffect(idx) {
+      this.slideList[this.idx].effect = idx;
+      this.transitionPreset();
     },
     // 시작
     startButton() {
@@ -461,15 +488,6 @@ export default {
         document.getElementById('script-button-text').innerText = '대본 숨기기';
       }
     },
-
-    // WebRTC 관련
-    // micOnOff: function () {
-    //   if (this.isMicOn) {
-    //     this.isMicOn = false;
-    //   } else {
-    //     this.isMicOn = true;
-    //   }
-    // },
     videoOnOff: function () {
       if (this.isVideoOn) {
         this.isVideoOn = false;
@@ -479,30 +497,6 @@ export default {
         this.playVideoFromCamera();
       }
     },
-    // sendMsgToKurento() {
-    //   if (!this.userName) {
-    //     this.$toastError('이름을 입력해주세요!');
-    //     return;
-    //   }
-    //   const myNameId = this.userName + '-' + this.userId;
-    //   const roomNameId = this.roomName + '-' + this.roomId;
-    //   const message = {
-    //     id: 'joinRoom',
-    //     name: myNameId,
-    //     room: roomNameId,
-    //   };
-    //   const meetingInfo = {
-    //     myName: myNameId,
-    //     roomName: roomNameId,
-    //     manager: this.manager,
-    //     startWithMic: this.isMicOn,
-    //     startWithVideo: this.isVideoOn,
-    //   };
-    //   console.log('message: ', message);
-    //   console.log('meetingInfo: ', meetingInfo);
-    //   this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
-    //   this.$store.dispatch('meetingRoom/sendMessage', message);
-    // },
     playVideoFromCamera: async function () {
       try {
         const constraints = { video: true, audio: false };
@@ -690,24 +684,24 @@ dbecec
   align-items: center;
 }
 .size-0 {
-  max-width: 12vw;
-  max-height: 10vh;
+  margin: 2%;
+  height: 30%;
 }
 .size-1 {
-  max-width: 24vw;
-  max-height: 20vh;
+  margin: 2%;
+  height: 40%;
 }
 .size-2 {
-  max-width: 36vw;
-  max-height: 30vh;
+  margin: 2%;
+  height: 50%;
 }
 .size-3 {
-  max-width: 48vw;
-  max-height: 40vh;
+  margin: 2%;
+  height: 60%;
 }
 .size-4 {
-  max-width: 60vw;
-  max-height: 50vh;
+  margin: 2%;
+  height: 100%;
 }
 .img-setting {
   max-width: 60vw;
@@ -783,5 +777,40 @@ dbecec
 /* 스크롤바 뒷 배경 설정*/
 ::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0.33);
+}
+
+/* animation */
+.transition-0 {
+  animation: default 0.7s;
+}
+.transition-1 {
+  animation: fadeIn 0.7s;
+}
+.transition-2 {
+  animation: fadeInDown 0.7s;
+}
+.transition-3 {
+  animation: fadeInLeft 0.7s;
+}
+.transition-4 {
+  animation: fadeInRight 0.7s;
+}
+.transition-5 {
+  animation: fadeInUp 0.7s;
+}
+.transition-6 {
+  animation: backInDown 0.7s;
+}
+.transition-7 {
+  animation: backInUp 0.7s;
+}
+.transition-8 {
+  animation: flipInX 0.7s;
+}
+.transition-9 {
+  animation: flipInY 0.7s;
+}
+.transition-10 {
+  animation: rotateIn 0.7s;
 }
 </style>
