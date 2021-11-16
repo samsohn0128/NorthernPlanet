@@ -186,7 +186,7 @@ public class PresentationController {
   @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> createPptPdf(@ModelAttribute PptPdf2PngReq pptPdf2PngReq,
       HttpServletResponse response) {
-    log.info("[createPpt - controller]");
+    log.info("[createPpt - controller] test : UTF-8");
     response.setCharacterEncoding("UTF-8");
     String originalFilename = pptPdf2PngReq.getPptPdf().getOriginalFilename();
     String extensionName = originalFilename.substring(originalFilename.lastIndexOf('.'));
