@@ -14,7 +14,7 @@
               py-7
             "
           >
-            <h3 class="text-center">My Profile</h3>
+            <h3 class="text-center text-global">My Profile</h3>
             <div class="card-body">
               <div class="row">
                 <div class="col-md-12 pt-5">
@@ -150,5 +150,8 @@ export default {
 .button-danger-setting {
   background: #ba635f;
   color: white;
+}
+.text-global {
+  color: #505753;
 }
 </style>

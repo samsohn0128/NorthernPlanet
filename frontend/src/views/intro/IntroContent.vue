@@ -52,7 +52,7 @@
             <div class="buttons text-center">
               <router-link
                 to="/dashboard"
-                class="btn btn-outline-dark mt-4 w-20 text-lg"
+                class="btn button-setting mt-4 w-20 text-lg"
               >
                 Start
               </router-link>
@@ -84,8 +84,8 @@ export default {
 .intro-cover {
   background: linear-gradient(90deg, #98ddc1, white);
 }
-/* .button-setting {
-  background: #d8da90;
-  color: white;
-} */
+.button-setting {
+  border: 2px solid #66806a;
+  color: #456357;
+}
 </style>
