@@ -33,6 +33,7 @@ export default {
     /* imageUrls: null, */
     imageSrcs: null,
     scriptList: null,
+    effectList: null,
     selectedContentId: null,
     transition: null,
     // 초기 카메라, 마이크 세팅
@@ -131,6 +132,9 @@ export default {
     },
     SET_SCRIPTS(state, scriptList) {
       state.scriptList = scriptList;
+    },
+    SET_EFFECTS(state, effectList) {
+      state.effectList = effectList;
     },
     SET_ONGOING_PRESENTATION(state, { message, imageSrcs }) {
       state.imageSrcs = imageSrcs;
@@ -291,7 +295,13 @@ export default {
       context.dispatch('changePresenter', message);
       context.dispatch('setOngoingPresentation', message);
       // console.log('onExistingParticipants end')
-      router.push({ name: 'MeetingRoom' });
+      console.log('MeetingRoom', context.state.roomNumber);
+      router.push({
+        name: 'MeetingRoom',
+        params: {
+          roomNumber: context.state.roomNumber,
+        },
+      });
     },
     // 다른 참가자 participant 비디오 받기
     receiveVideo(context, sender) {
@@ -384,14 +394,17 @@ export default {
       }).then(res => {
         const imageSrcs = [];
         const scriptList = [];
+        const effectList = [];
         console.log('slidelist: ', res.data.slideList);
         res.data.slideList.forEach(data => {
           let imageSrc = 'data:image/jpeg;base64,' + data.slideFile;
           imageSrcs.push(imageSrc);
           scriptList.push(data.script);
+          effectList.push(data.effect);
         });
         context.commit('SET_IMAGE_SRCS', imageSrcs);
         context.commit('SET_SCRIPTS', scriptList);
+        context.commit('SET_EFFECTS', effectList);
       });
       context.commit('CHANGE_CONTENT', message);
     },
