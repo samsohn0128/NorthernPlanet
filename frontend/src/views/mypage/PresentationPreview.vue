@@ -478,7 +478,8 @@ export default {
   height: 100vh;
   width: 100vw;
   padding: 20px 20px;
-  background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
+  /* //background: linear-gradient(90deg, #2c3153 0%, #15182a 100%); */
+  background: #66806a;
 }
 /* RGB
 93 244 237 #5df4ec
