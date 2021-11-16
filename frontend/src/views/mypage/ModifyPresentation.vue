@@ -4,7 +4,7 @@
     <div class="nav-setting">
       <div class="nav-detail-left-setting">
         <button
-          class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
+          class="button-setting btn btn-sm btn-round mb-0 me-1"
           @click="goBackPresentation()"
         >
           Back to the list
@@ -15,19 +15,19 @@
       </div>
       <div class="nav-detail-right-setting">
         <button
-          class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
+          class="button-setting btn btn-sm btn-round mb-0 me-1"
           @click="showAllPPT()"
         >
           Preview
         </button>
         <button
-          class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
+          class="button-setting btn btn-sm btn-round mb-0 me-1"
           @click="animationTabToggle('hi')"
         >
           Select Animation
         </button>
         <button
-          class="btn btn-sm bg-gradient-dark btn-round mb-0 me-1"
+          class="button-setting btn btn-sm btn-round mb-0 me-1"
           @click="savePPT()"
         >
           Save all
@@ -94,10 +94,9 @@
             >
               <button
                 class="
+                  button-setting
                   PPTbox-select-detail
-                  btn btn-sm
-                  bg-gradient-dark
-                  btn-round
+                  btn btn-sm btn-round
                   mb-0
                   me-1
                 "
@@ -405,7 +404,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background: rgb(222, 221, 226);
+  background: #f9fbe7;
   padding: 5px 0px;
 }
 .nav-detail-left-setting {
@@ -425,6 +424,7 @@ export default {
   text-align: center;
   width: 20vw;
   font-weight: bold;
+  color: black;
 }
 .nav-detail-right-setting {
   display: flex;
@@ -433,6 +433,10 @@ export default {
   align-items: center;
   text-align: center;
   width: 30vw;
+}
+.button-setting {
+  background: #4ba3c7;
+  color: white;
 }
 .effect-container {
   position: relative;

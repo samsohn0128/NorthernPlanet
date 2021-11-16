@@ -131,7 +131,7 @@ export default {
   width: 30%;
   height: 10%;
   /* height: 40px; */
-  background-color: purple;
+  background: #4ba3c7;
   /* border-radius: 50%; */
   color: white;
   margin-right: 35px;

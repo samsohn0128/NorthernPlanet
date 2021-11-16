@@ -51,28 +51,32 @@ export default [
   {
     path: '/dashboard',
     component: RoomPage,
-    meta: { authRequired: true },
     children: [
       {
         path: '',
         name: 'RoomDashboard',
         component: RoomDashboard,
+        meta: { authRequired: true },
       },
       {
         path: '/dashboard/create',
         component: RoomCreate,
+        meta: { authRequired: true },
       },
       {
         path: '/dashboard/info',
         component: RoomInfo,
+        meta: { authRequired: true },
       },
       {
         path: '/dashboard/tutorial',
         component: RoomTutorial,
+        meta: { authRequired: true },
       },
       {
         path: '/dashboard/:room_id',
         component: RoomReady,
+        meta: { authRequired: false },
       },
     ],
   },

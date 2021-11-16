@@ -5,14 +5,14 @@
       <div class="upside-ppt">
         <div class="upside-ppt-inside">
           <button
-            class="btn btn-sm bg-gradient-dark btn-round mb-1 me-1"
+            class="button-setting btn btn-sm btn-round mb-1 me-1"
             @click="goBack()"
           >
             뒤로가기
           </button>
           <button
             id="script-button-text"
-            class="btn btn-sm bg-gradient-dark btn-round mb-1 me-1"
+            class="button-setting btn btn-sm btn-round mb-1 me-1"
             @click="showScript()"
           >
             대본 숨기기
@@ -37,10 +37,7 @@
         </div>
         <div class="upside-ppt-inside set-timer-location">
           <div class="time-space">
-            <span id="showMin">00</span>
-            :
-            <span id="showSec">00</span>
-            .
+            <span id="showMin">00</span>: <span id="showSec">00</span>.
             <span id="showMilisec">00</span>
           </div>
           <div class="time-button-space">
@@ -80,7 +77,7 @@
             type="button"
             class="btn btn-setting"
             :class="{
-              'bg-gradient-dark': isVideoOn,
+              'button-setting': isVideoOn,
               'bg-gradient-secondary': !isVideoOn,
             }"
             @click="videoOnOff"
@@ -97,6 +94,7 @@
           <!-- local video element -->
           <video
             width="100%"
+            height="750vh"
             :id="'local-video' + roomId"
             autoplay="true"
             poster="@/assets/img/logos/focus_camera3.jpg"
@@ -542,7 +540,7 @@ export default {
 #ppt-image-setting {
   margin-top: 57px;
   width: 70vw;
-  height: 81vh;
+  height: 60vh;
   display: flex;
   align-items: center;
   position: absolute;
@@ -551,7 +549,7 @@ export default {
   height: 100vh;
   width: 100vw;
   padding: 20px 20px;
-  background: rgb(176, 167, 211);
+  background: #eeffff;
 }
 /* RGB
 93 244 237 #5df4ec
@@ -594,6 +592,10 @@ dbecec
   align-items: center;
   width: 50vw;
 }
+.button-setting {
+  background: #4ba3c7;
+  color: white;
+}
 .set-timer-location {
   display: flex;
   flex-direction: column;
@@ -602,7 +604,7 @@ dbecec
 .time-space {
   width: 12vw;
   text-align: center;
-  background: rgb(222, 221, 226);
+  background: #e8f5e9;
   color: black;
   font-size: 18px;
   padding: 5px;
@@ -611,7 +613,7 @@ dbecec
 .time-button-space {
   width: 12vw;
   text-align: center;
-  background: rgb(222, 221, 226);
+  background: #e8f5e9;
   color: black;
   font-size: 18px;
   padding: 5px;
@@ -621,11 +623,15 @@ dbecec
   background: #4aae71;
   border-color: #4aae71;
   width: 65px;
+  border-radius: 20px;
+  box-shadow: 0.5px 0.5px 1px;
 }
 .settingReset {
   background: #fbad10;
   border-color: #fbad10;
   width: 65px;
+  border-radius: 20px;
+  box-shadow: 0.5px 0.5px 1px;
 }
 .main-body-div {
   position: relative;
@@ -648,7 +654,7 @@ dbecec
   width: 40vw;
   height: 120px;
   overflow: auto;
-  background: rgb(222, 221, 226);
+  background: #e8f5e9;
   border-radius: 10px;
   padding: 5px;
   font: 16x bold;
