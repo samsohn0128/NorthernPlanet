@@ -60,7 +60,8 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '21.0'
 
     //poi (ppt to png)
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+//    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
 
     //pdfbox (pdf to png)
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
