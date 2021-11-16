@@ -12,18 +12,12 @@ const router = new VueRouter({
 
 router.beforeEach(function (to, from, next) {
   var authRequired = to.matched.some(routeInfo => {
-    // console.log(routeInfo);
     return routeInfo.meta.authRequired;
   });
   if (!authRequired || (authRequired && store.getters['users/getToken'])) {
-    // console.log('authRequired : ' + authRequired);
-    // console.log('isLogin : ' + store.state.users.login.isLogin);
     next();
   } else {
-    // this.$toastInfo('로그인이 필요합니다');
     router.push('/login');
-    // console.log('authRequired : ' + authRequired);
-    // console.log('isLogin : ' + store.state.users.login.isLogin);
   }
 });
 

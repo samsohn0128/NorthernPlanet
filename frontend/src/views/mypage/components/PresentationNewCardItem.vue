@@ -2,7 +2,7 @@
   <div class="card card-presentation move-on-hover">
     <div
       class="
-        card-body
+        card-setting card-body
         p-0
         mx-3
         mt-3
@@ -38,6 +38,9 @@ export default {
 }
 .new-presentation {
   text-align: center;
+}
+.card-setting {
+  background: linear-gradient(90deg, #4ba3c7 0%, white 100%);
 }
 .card-body {
   display: flex;

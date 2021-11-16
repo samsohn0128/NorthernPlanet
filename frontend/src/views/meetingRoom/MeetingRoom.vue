@@ -34,6 +34,23 @@
       <!-- left side bar control buttons -->
       <!-- Room Title -->
       <h1 class="room-title">{{ roomTitle }}</h1>
+      <div class="upside-ppt-inside set-timer-location">
+        <div class="time-space">
+          <span id="showMin">00</span>
+          :
+          <span id="showSec">00</span>
+          .
+          <span id="showMilisec">00</span>
+        </div>
+        <div class="time-button-space">
+          <button id="startButton" class="settingStart" @click="startButton">
+            start
+          </button>
+          <button id="resetButton" class="settingReset" @click="resetButton">
+            reset
+          </button>
+        </div>
+      </div>
       <!-- Main Video -->
       <MainVideoUnit
         class="main-video-unit"
@@ -121,6 +138,63 @@ export default {
     },
     toggleRightSide: function () {
       this.rightSideShow = !this.rightSideShow;
+    },
+    // 시작
+    startButton() {
+      // 시작 버튼을 누를 때
+      if (this.timerStart == false) {
+        this.timerStart = true;
+        document.getElementById('startButton').innerText = 'pause';
+        document.getElementById('startButton').style.background = '#ef6262';
+        document.getElementById('startButton').style.borderColor = '#ef6262';
+        // 0.001초마다 시간 갱신
+        this.timerWork = setInterval(() => {
+          let nowTime = new Date(Date.now() - this.stTime);
+
+          this.min = this.addZero(nowTime.getMinutes());
+          this.sec = this.addZero(nowTime.getSeconds());
+          this.milisec = this.addZero(
+            Math.floor(nowTime.getMilliseconds() / 10),
+          );
+
+          document.getElementById('showMin').innerText = this.min;
+          document.getElementById('showSec').innerText = this.sec;
+          document.getElementById('showMilisec').innerText = this.milisec;
+        }, 1);
+      } else {
+        // 일시정지 버튼을 누를 때
+        this.endTime = Date.now();
+        this.timerStart = false;
+        document.getElementById('startButton').innerText = 'start';
+        document.getElementById('startButton').style.background = '#4aae71';
+        document.getElementById('startButton').style.borderColor = '#4aae71';
+        clearInterval(this.timerWork);
+      }
+      // 시간 체크
+      if (!this.stTime) {
+        this.stTime = Date.now();
+      } else {
+        this.stTime += Date.now() - this.endTime;
+      }
+    },
+    // 리셋하기, 종료 버튼
+    resetButton() {
+      this.stTime = 0;
+      this.min = 0;
+      this.sec = 0;
+      this.milisec = 0;
+      this.endTime = Date.now();
+      this.timerStart = false;
+      document.getElementById('startButton').innerText = 'start';
+      clearInterval(this.timerWork);
+      this.timerWork = null;
+      document.getElementById('showMin').innerText = '00';
+      document.getElementById('showSec').innerText = '00';
+      document.getElementById('showMilisec').innerText = '00';
+    },
+    // 계산
+    addZero(num) {
+      return num < 10 ? '0' + num : '' + num;
     },
   },
 };
@@ -210,5 +284,24 @@ export default {
 }
 ::-webkit-scrollbar {
   display: none;
+}
+
+.upside-ppt-inside {
+  width: 20vw;
+  height: 15vh;
+}
+.set-timer-location {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.time-space {
+  width: 12vw;
+  text-align: center;
+  background: rgb(222, 221, 226);
+  color: black;
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 10px 10px 0px 0px;
 }
 </style>

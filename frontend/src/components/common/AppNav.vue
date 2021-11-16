@@ -1,22 +1,36 @@
 <template>
   <!-- Navbar Dark -->
   <nav class="nav col-12 navbar navbar-expand-lg z-index-3 py-0">
-    <div class="navbar-texts mx-0">
-      <div class="col-lg-1 col-2 left-nav">
+    <div class="navbar-texts mx-0 row">
+      <div class="col-md-1 left-nav">
         <router-link to="/dashboard">
           <h5 class="profile-setting">NorthernPlanet</h5>
         </router-link>
       </div>
-      <div class="col-md-6 col-lg-9 col-6"></div>
-      <div class="col-md-2 col-lg-1 col-2 right-nav">
-        <router-link to="/mypage">
-          <h5 class="profile-setting">My Page</h5></router-link
-        >
-      </div>
-      <div class="col-md-2 col-lg-1 col-2 right-nav">
-        <router-link to="/" @click.native="userLogout()"
-          ><h5 class="profile-setting">Logout</h5></router-link
-        >
+      <div class="col-md-10"></div>
+      <div class="col-md-1 right-nav">
+        <div class="row dropdown">
+          <div
+            class="col"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img :src="userImage" alt class="image-user rounded-circle" />
+          </div>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li v-if="user.image">
+              <a class="dropdown-item" href="/mypage">My Page</a>
+            </li>
+            <li v-if="user.image">
+              <a class="dropdown-item" href="/" @click="userLogout()">Logout</a>
+            </li>
+            <li v-if="!user.image">
+              <a class="dropdown-item" href="/login">Login</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>
@@ -24,9 +38,19 @@
 </template>
 
 <script>
+import store from '@/store';
 export default {
   name: 'AppNav',
-  computed: {},
+  computed: {
+    user() {
+      return store.getters['users/getUser'];
+    },
+    userImage() {
+      return this.user.image
+        ? this.user.image
+        : require('@/assets/img/logos/focus_logo.png');
+    },
+  },
 
   methods: {
     userLogout() {
@@ -68,5 +92,9 @@ export default {
 .profile-setting {
   color: white;
   margin: 0px;
+}
+.image-user {
+  width: 30%;
+  border: 1.5px solid white;
 }
 </style>

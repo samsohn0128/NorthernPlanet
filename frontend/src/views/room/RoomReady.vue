@@ -98,6 +98,7 @@
 </template>
 <script>
 import { getRoom } from '@/api/rooms.js';
+import store from '@/store';
 export default {
   name: 'RoomReady',
   components: {},
@@ -111,7 +112,9 @@ export default {
       roomInfo: null,
       roomName: null,
       manager: null,
-      userName: null,
+      userName: store.state.users.user.name
+        ? store.state.users.user.name
+        : null,
       userId: Math.random(),
       roomDescription: null,
       isMicOn: false,
@@ -155,6 +158,9 @@ export default {
     sendMsgToKurento() {
       if (!this.userName) {
         this.$toastError('이름을 입력해주세요!');
+        return;
+      } else if (!this.$nameValidate(this.userName)) {
+        this.$toastError('특수문자 - 는 사용할 수 없습니다.');
         return;
       }
       const myNameId = this.userName + '-' + this.userId;
