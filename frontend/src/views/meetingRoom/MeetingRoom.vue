@@ -35,23 +35,7 @@
       <!-- Room Title -->
       <h1 class="room-title">{{ roomTitle }}</h1>
       <div class="upside-ppt">
-        <!-- <div id="script-show" class="upside-ppt-inside script-setting">
-          <div class="move-sequence" @click="setIdxminus()">&lt;</div>
-          <div
-            v-if="slideList[idx].script == null || slideList[idx].script == ''"
-            class="script-inside"
-          >
-            대본을<br />설정해주세요.
-          </div>
-          <div v-else class="script-inside">
-            <Viewer
-              id="changeinitialValue"
-              :initialValue="slideList[idx].script"
-            />
-          </div>
-          <div class="move-sequence" @click="setIdxplus()">&gt;</div>
-        </div> -->
-        <div class="upside-ppt-inside set-timer-location">
+        <div class="set-timer-location">
           <div class="time-space">
             <span id="showMin">00</span>
             :
@@ -111,7 +95,6 @@ import VideoUnitGroup from './components/VideoUnitGroup.vue';
 import MainVideoUnit from './components/MainVideoUnit.vue';
 import MeetingController from './components/MeetingController.vue';
 import MeetingSideBar from './components/MeetingSideBar.vue';
-import { getPresentationDetail } from '@/api/presentation.js';
 // import { Viewer } from '@toast-ui/vue-editor';
 
 import _ from 'lodash';
@@ -134,15 +117,9 @@ export default {
       rightSideShow: true,
       presentationId: this.$route.params.presentationId,
       userId: this.$route.params.userId,
-      slideList: [
-        {
-          effect: null,
-          script: null,
-          sequence: null,
-          slideFile: null,
-          slideId: null,
-        },
-      ],
+
+      idx: 0,
+      content: null,
     };
   },
   // : watch
@@ -168,16 +145,14 @@ export default {
       console.log(e);
       switch (e.key) {
         case 'ArrowLeft':
-          if (this.idx > 1) {
-            this.idx -= 1;
-            this.setIdxminus();
-          }
+          // if (this.idx > 1) {
+          //   // this.setIdxminus();
+          // }
           break;
         case 'ArrowRight':
-          if (this.idx < this.slideList.length - 2) {
-            this.idx += 1;
-            this.setIdxplus();
-          }
+          // if (this.idx < this.slideList.length - 2) {
+          //   // this.setIdxplus();
+          // }
           break;
         case 'a':
         case 'A':
@@ -213,9 +188,11 @@ export default {
           break;
       }
     });
+    this.idx = 1;
   },
   created() {
     // this.getPresentationData();
+    console.log('presentation리스트 확인', this.$store.state.meetingRoom);
   },
   // : methods
   methods: {
@@ -225,42 +202,12 @@ export default {
     toggleRightSide: function () {
       this.rightSideShow = !this.rightSideShow;
     },
-    async getPresentationData() {
-      let response = await getPresentationDetail(
-        this.userId,
-        this.presentationId,
-      );
-      // ByteArray를 img로 변경
-      let imgByteArray = await response.data.slideList;
-      imgByteArray.forEach(element => {
-        element.slideFile = 'data:image/png;base64,' + element.slideFile;
-      });
-      // slideList 대입
-      this.slideList = await response.data.slideList;
-      this.slideList.unshift({
-        effect: null,
-        script: null,
-        sequence: -1,
-        slideFile: '@/assets/presentationTemplates/first-slide.png',
-        slideId: -1,
-      });
-      this.slideList.push({
-        effect: null,
-        script: null,
-        sequence: -1,
-        slideFile: '@/assets/presentationTemplates/last-slide.png',
-        slideId: -2,
-      });
-      console.log('시작 slideList: ', this.slideList);
-      this.idx = 1;
-      this.content = this.slideList[1].script;
-    },
     // Size 세팅
     setSize(selectedSize) {
       this.size = selectedSize;
       document
         .getElementById('img-setting')
-        .setAttribute('class', 'size-' + selectedSize);
+        .setAttribute('class', 'presentation-' + selectedSize);
     },
     // 위치 세팅
     setLocation(selectedLocation) {
@@ -268,29 +215,6 @@ export default {
       document
         .getElementById('ppt-image-setting')
         .setAttribute('class', 'img-' + selectedLocation);
-    },
-    // PPT 인덱스번호 세팅
-    setIdxplus() {
-      if (this.idx < this.slideList.length - 2) {
-        this.idx += 1;
-        this.content = this.slideList[this.idx].script;
-        if (this.content != null) {
-          document.getElementById('changeinitialValue').innerHTML =
-            this.content;
-        }
-      }
-      // console.log(this.content);
-    },
-    setIdxminus() {
-      if (this.idx > 1) {
-        this.idx -= 1;
-        this.content = this.slideList[this.idx].script;
-        if (this.content != null) {
-          document.getElementById('changeinitialValue').innerHTML =
-            this.content;
-        }
-      }
-      // console.log(this.content);
     },
     // 시작
     startButton() {
@@ -348,17 +272,6 @@ export default {
     // 계산
     addZero(num) {
       return num < 10 ? '0' + num : '' + num;
-    },
-    showScript() {
-      let scriptshow = document.getElementById('script-show');
-
-      if (scriptshow.style.display != 'none') {
-        scriptshow.style.display = 'none';
-        document.getElementById('script-button-text').innerText = '대본 보이기';
-      } else {
-        scriptshow.style.display = 'flex';
-        document.getElementById('script-button-text').innerText = '대본 숨기기';
-      }
     },
   },
 };
@@ -453,19 +366,8 @@ export default {
 .upside-ppt {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   height: 11vh;
-}
-.upside-ppt-inside {
-  width: 20vw;
-  height: 15vh;
-}
-.script-setting {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 50vw;
 }
 .button-setting {
   background: #4ba3c7;
@@ -508,26 +410,54 @@ export default {
   border-radius: 20px;
   box-shadow: 0.5px 0.5px 1px;
 }
-.script-inside {
+.img-top {
   display: flex;
   justify-content: center;
-  width: 40vw;
-  height: 120px;
-  overflow: auto;
-  background: #e8f5e9;
-  border-radius: 10px;
-  padding: 5px;
-  font: 16x bold;
-  color: black;
+  align-items: flex-start !important;
 }
-.move-sequence {
-  width: 32px;
-  height: 32px;
-  justify-content: center;
-  text-align: center;
-  background: rgb(222, 221, 226);
-  color: black;
-  font-size: 20px;
-  cursor: pointer;
+/* .img-left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+} */
+.img-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.presentation-0 {
+  position: absolute;
+  margin: 2%;
+  height: 30%;
+  z-index: 1;
+}
+.presentation-1 {
+  position: absolute;
+  margin: 2%;
+  height: 40%;
+  z-index: 1;
+}
+.presentation-2 {
+  position: absolute;
+  margin: 2%;
+  height: 50%;
+  z-index: 1;
+}
+.presentation-3 {
+  position: absolute;
+  margin: 2%;
+  height: 60%;
+  z-index: 1;
+}
+.presentation-4 {
+  position: absolute;
+  margin: 2%;
+  height: 100%;
+  z-index: 1;
+}
+.img-setting {
+  max-width: 60vw;
+  max-height: 50vh;
+  margin: 5px;
 }
 </style>
