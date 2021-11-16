@@ -166,7 +166,7 @@
 import MeetingSideBar from './preview/MeetingSideBar.vue';
 import { getPresentationDetail } from '@/api/presentation.js';
 // import { getRoom } from '@/api/rooms.js';
-import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+// import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/vue-editor';
 
 export default {

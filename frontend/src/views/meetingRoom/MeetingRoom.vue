@@ -34,23 +34,42 @@
       <!-- left side bar control buttons -->
       <!-- Room Title -->
       <h1 class="room-title">{{ roomTitle }}</h1>
-      <div class="upside-ppt-inside set-timer-location">
-        <div class="time-space">
-          <span id="showMin">00</span>
-          :
-          <span id="showSec">00</span>
-          .
-          <span id="showMilisec">00</span>
-        </div>
-        <div class="time-button-space">
-          <button id="startButton" class="settingStart" @click="startButton">
-            start
-          </button>
-          <button id="resetButton" class="settingReset" @click="resetButton">
-            reset
-          </button>
+      <div class="upside-ppt">
+        <!-- <div id="script-show" class="upside-ppt-inside script-setting">
+          <div class="move-sequence" @click="setIdxminus()">&lt;</div>
+          <div
+            v-if="slideList[idx].script == null || slideList[idx].script == ''"
+            class="script-inside"
+          >
+            대본을<br />설정해주세요.
+          </div>
+          <div v-else class="script-inside">
+            <Viewer
+              id="changeinitialValue"
+              :initialValue="slideList[idx].script"
+            />
+          </div>
+          <div class="move-sequence" @click="setIdxplus()">&gt;</div>
+        </div> -->
+        <div class="upside-ppt-inside set-timer-location">
+          <div class="time-space">
+            <span id="showMin">00</span>
+            :
+            <span id="showSec">00</span>
+            .
+            <span id="showMilisec">00</span>
+          </div>
+          <div class="time-button-space">
+            <button id="startButton" class="settingStart" @click="startButton">
+              start
+            </button>
+            <button id="resetButton" class="settingReset" @click="resetButton">
+              reset
+            </button>
+          </div>
         </div>
       </div>
+
       <!-- Main Video -->
       <MainVideoUnit
         class="main-video-unit"
@@ -92,6 +111,8 @@ import VideoUnitGroup from './components/VideoUnitGroup.vue';
 import MainVideoUnit from './components/MainVideoUnit.vue';
 import MeetingController from './components/MeetingController.vue';
 import MeetingSideBar from './components/MeetingSideBar.vue';
+import { getPresentationDetail } from '@/api/presentation.js';
+// import { Viewer } from '@toast-ui/vue-editor';
 
 import _ from 'lodash';
 
@@ -102,6 +123,7 @@ export default {
     MainVideoUnit,
     MeetingController,
     MeetingSideBar,
+    // Viewer,
   },
   // : props
   props: {},
@@ -110,6 +132,17 @@ export default {
     return {
       leftSideShow: true,
       rightSideShow: true,
+      presentationId: this.$route.params.presentationId,
+      userId: this.$route.params.userId,
+      slideList: [
+        {
+          effect: null,
+          script: null,
+          sequence: null,
+          slideFile: null,
+          slideId: null,
+        },
+      ],
     };
   },
   // : watch
@@ -130,7 +163,60 @@ export default {
     },
   },
   // : lifecycle hook
-  mounted() {},
+  mounted() {
+    document.addEventListener('keydown', e => {
+      console.log(e);
+      switch (e.key) {
+        case 'ArrowLeft':
+          if (this.idx > 1) {
+            this.idx -= 1;
+            this.setIdxminus();
+          }
+          break;
+        case 'ArrowRight':
+          if (this.idx < this.slideList.length - 2) {
+            this.idx += 1;
+            this.setIdxplus();
+          }
+          break;
+        case 'a':
+        case 'A':
+          this.setLocation('left');
+          break;
+        case 'd':
+        case 'D':
+          this.setLocation('right');
+          break;
+        case 'w':
+        case 'W':
+          this.setLocation('top');
+          break;
+        case '0':
+          this.selectedSize = 0;
+          this.setSize(this.selectedSize);
+          break;
+        case '1':
+          this.selectedSize = 1;
+          this.setSize(this.selectedSize);
+          break;
+        case '2':
+          this.selectedSize = 2;
+          this.setSize(this.selectedSize);
+          break;
+        case '3':
+          this.selectedSize = 3;
+          this.setSize(this.selectedSize);
+          break;
+        case '4':
+          this.selectedSize = 4;
+          this.setSize(this.selectedSize);
+          break;
+      }
+    });
+  },
+  created() {
+    // this.getPresentationData();
+  },
   // : methods
   methods: {
     toggleLeftSide: function () {
@@ -138,6 +224,73 @@ export default {
     },
     toggleRightSide: function () {
       this.rightSideShow = !this.rightSideShow;
+    },
+    async getPresentationData() {
+      let response = await getPresentationDetail(
+        this.userId,
+        this.presentationId,
+      );
+      // ByteArray를 img로 변경
+      let imgByteArray = await response.data.slideList;
+      imgByteArray.forEach(element => {
+        element.slideFile = 'data:image/png;base64,' + element.slideFile;
+      });
+      // slideList 대입
+      this.slideList = await response.data.slideList;
+      this.slideList.unshift({
+        effect: null,
+        script: null,
+        sequence: -1,
+        slideFile: '@/assets/presentationTemplates/first-slide.png',
+        slideId: -1,
+      });
+      this.slideList.push({
+        effect: null,
+        script: null,
+        sequence: -1,
+        slideFile: '@/assets/presentationTemplates/last-slide.png',
+        slideId: -2,
+      });
+      console.log('시작 slideList: ', this.slideList);
+      this.idx = 1;
+      this.content = this.slideList[1].script;
+    },
+    // Size 세팅
+    setSize(selectedSize) {
+      this.size = selectedSize;
+      document
+        .getElementById('img-setting')
+        .setAttribute('class', 'size-' + selectedSize);
+    },
+    // 위치 세팅
+    setLocation(selectedLocation) {
+      this.selectedLocation = selectedLocation;
+      document
+        .getElementById('ppt-image-setting')
+        .setAttribute('class', 'img-' + selectedLocation);
+    },
+    // PPT 인덱스번호 세팅
+    setIdxplus() {
+      if (this.idx < this.slideList.length - 2) {
+        this.idx += 1;
+        this.content = this.slideList[this.idx].script;
+        if (this.content != null) {
+          document.getElementById('changeinitialValue').innerHTML =
+            this.content;
+        }
+      }
+      // console.log(this.content);
+    },
+    setIdxminus() {
+      if (this.idx > 1) {
+        this.idx -= 1;
+        this.content = this.slideList[this.idx].script;
+        if (this.content != null) {
+          document.getElementById('changeinitialValue').innerHTML =
+            this.content;
+        }
+      }
+      // console.log(this.content);
     },
     // 시작
     startButton() {
@@ -195,6 +348,17 @@ export default {
     // 계산
     addZero(num) {
       return num < 10 ? '0' + num : '' + num;
+    },
+    showScript() {
+      let scriptshow = document.getElementById('script-show');
+
+      if (scriptshow.style.display != 'none') {
+        scriptshow.style.display = 'none';
+        document.getElementById('script-button-text').innerText = '대본 보이기';
+      } else {
+        scriptshow.style.display = 'flex';
+        document.getElementById('script-button-text').innerText = '대본 숨기기';
+      }
     },
   },
 };
@@ -286,9 +450,26 @@ export default {
   display: none;
 }
 
+.upside-ppt {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 11vh;
+}
 .upside-ppt-inside {
   width: 20vw;
   height: 15vh;
+}
+.script-setting {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 50vw;
+}
+.button-setting {
+  background: #4ba3c7;
+  color: white;
 }
 .set-timer-location {
   display: flex;
@@ -298,10 +479,55 @@ export default {
 .time-space {
   width: 12vw;
   text-align: center;
-  background: rgb(222, 221, 226);
+  background: #e8f5e9;
   color: black;
   font-size: 18px;
   padding: 5px;
   border-radius: 10px 10px 0px 0px;
+}
+.time-button-space {
+  width: 12vw;
+  text-align: center;
+  background: #e8f5e9;
+  color: black;
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 0px 0px 10px 10px;
+}
+.settingStart {
+  background: #4aae71;
+  border-color: #4aae71;
+  width: 65px;
+  border-radius: 20px;
+  box-shadow: 0.5px 0.5px 1px;
+}
+.settingReset {
+  background: #fbad10;
+  border-color: #fbad10;
+  width: 65px;
+  border-radius: 20px;
+  box-shadow: 0.5px 0.5px 1px;
+}
+.script-inside {
+  display: flex;
+  justify-content: center;
+  width: 40vw;
+  height: 120px;
+  overflow: auto;
+  background: #e8f5e9;
+  border-radius: 10px;
+  padding: 5px;
+  font: 16x bold;
+  color: black;
+}
+.move-sequence {
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  text-align: center;
+  background: rgb(222, 221, 226);
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
 }
 </style>
