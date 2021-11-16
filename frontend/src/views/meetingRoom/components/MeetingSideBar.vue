@@ -143,7 +143,7 @@ export default {
       this.alertShow = false;
     },
     handAct: function () {
-      this.handactive = true;
+      this.handactive = !this.handactive;
     },
   },
 };
