@@ -56,23 +56,7 @@
           <!-- WebRTC 관련 -->
           <!-- local video element -->
           <i class="bi bi-mic-fill"></i>
-          <!-- <button
-            type="button"
-            class="btn"
-            :class="{
-              'bg-gradient-dark': isMicOn,
-              'bg-gradient-secondary': !isMicOn,
-            }"
-            @click="micOnOff"
-          >
-            <span
-              class="fas"
-              :class="{
-                'fa-microphone': isMicOn,
-                'fa-microphone-slash': !isMicOn,
-              }"
-            ></span>
-          </button> -->
+
           <button
             type="button"
             class="btn btn-setting"
@@ -93,8 +77,7 @@
 
           <!-- local video element -->
           <video
-            width="100%"
-            height="750vh"
+            width="65%"
             :id="'local-video' + roomId"
             autoplay="true"
             poster="@/assets/img/logos/focus_camera3.jpg"
@@ -235,23 +218,6 @@ export default {
   created() {
     this.getPresentationData();
     console.log(this.$route.params);
-
-    // WebRTC 관련
-    // try {
-    //   //websocket init
-    //   const url = 'wss://' + location.host + '/groupcall';
-    //   console.log(url);
-    //   this.$store.dispatch('meetingRoom/wsInit', url);
-
-    //   //roomId로 roomInfo 받아와서 data setting 하기
-    //   this.roomInfo = await getRoom(this.roomId);
-    //   this.roomName = this.roomInfo.data.name;
-    //   this.manager =
-    //     this.roomInfo.data.managerName + '-' + this.roomInfo.data.managerId;
-    //   this.roomDescription = this.roomInfo.data.description;
-    // } catch (error) {
-    //   console.log(error);
-    // }
   },
   mounted() {
     document.addEventListener('keydown', e => {
@@ -462,14 +428,6 @@ export default {
       }
     },
 
-    // WebRTC 관련
-    // micOnOff: function () {
-    //   if (this.isMicOn) {
-    //     this.isMicOn = false;
-    //   } else {
-    //     this.isMicOn = true;
-    //   }
-    // },
     videoOnOff: function () {
       if (this.isVideoOn) {
         this.isVideoOn = false;
@@ -479,30 +437,7 @@ export default {
         this.playVideoFromCamera();
       }
     },
-    // sendMsgToKurento() {
-    //   if (!this.userName) {
-    //     this.$toastError('이름을 입력해주세요!');
-    //     return;
-    //   }
-    //   const myNameId = this.userName + '-' + this.userId;
-    //   const roomNameId = this.roomName + '-' + this.roomId;
-    //   const message = {
-    //     id: 'joinRoom',
-    //     name: myNameId,
-    //     room: roomNameId,
-    //   };
-    //   const meetingInfo = {
-    //     myName: myNameId,
-    //     roomName: roomNameId,
-    //     manager: this.manager,
-    //     startWithMic: this.isMicOn,
-    //     startWithVideo: this.isVideoOn,
-    //   };
-    //   console.log('message: ', message);
-    //   console.log('meetingInfo: ', meetingInfo);
-    //   this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
-    //   this.$store.dispatch('meetingRoom/sendMessage', message);
-    // },
+
     playVideoFromCamera: async function () {
       try {
         const constraints = { video: true, audio: false };
