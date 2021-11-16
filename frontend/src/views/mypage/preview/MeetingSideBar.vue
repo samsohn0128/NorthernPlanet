@@ -14,8 +14,8 @@
       </button>
       <button
         :class="[
-          { 'button-setting': !GestureShow },
-          { 'navigator-button-inactive': GestureShow },
+          { 'button-setting': ScriptShow },
+          { 'navigator-button-inactive': !ScriptShow },
           'navigator-script-button',
         ]"
         @click="selectScriptMenu"
@@ -25,7 +25,7 @@
       <button class="navigator-question-button">?</button>
     </div>
     <!-- prev, next image -->
-    <div v-if="!GestureShow" class="text-center">
+    <div class="text-center">
       <div class="small-img-container">
         <span>
           <img
@@ -61,6 +61,7 @@
         <!-- Location -->
         <div>
           <button
+            class="border-setting"
             @keyup.up="selectTop"
             @keyup.right="selectRight"
             @keyup.left="selectLeft"
@@ -185,6 +186,7 @@ export default {
   data() {
     return {
       GestureShow: true,
+      ScriptShow: true,
       LocationSizeShow: true,
       selectedSize: null,
       selectedLocation: null,
@@ -220,10 +222,21 @@ export default {
   // : methods
   methods: {
     selectGestureMenu: function () {
-      this.GestureShow = true;
+      if (this.GestureShow == true) {
+        this.GestureShow = false;
+        // 제스처 끌 때 코드
+      } else {
+        this.GestureShow = true;
+        // 제스처 킬 때 코드
+      }
     },
     selectScriptMenu: function () {
-      this.GestureShow = false;
+      if (this.ScriptShow == false) {
+        this.ScriptShow = true;
+      } else {
+        this.ScriptShow = false;
+      }
+      this.emitScriptShow();
     },
     selectLocationSizeMenu() {
       this.LocationSizeShow = true;
@@ -254,6 +267,9 @@ export default {
       setTimeout(function () {
         el.classList.remove(effect);
       }, 1000);
+      // effect 저장
+
+      this.emitEffect(idx);
     },
     prevImage() {
       if (this.sidebaridx > 1) {
@@ -278,6 +294,12 @@ export default {
     },
     emitImageplus() {
       this.$emit('selectIdxplus');
+    },
+    emitScriptShow() {
+      this.$emit('selectedShow');
+    },
+    emitEffect(effect) {
+      this.$emit('selectedEffect', effect);
     },
   },
 };
@@ -316,9 +338,9 @@ export default {
   font-weight: bold;
   background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
 }
-.navigator-button-active {
+/* .navigator-button-active {
   background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
-}
+} */
 .navigator-button-inactive {
   background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
 }
@@ -352,6 +374,9 @@ export default {
   max-height: 100px;
   padding: 5px;
   cursor: pointer;
+}
+.border-setting {
+  border: 0px;
 }
 .text-center {
   text-align: center;
