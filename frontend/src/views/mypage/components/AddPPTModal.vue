@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="modal-title" id="ModalAdd">발표자료 추가하기</h6>
+          <h6 class="modal-title" id="ModalAdd">Add new presentation</h6>
           <button
             type="button"
             class="btn-close"
@@ -21,12 +21,16 @@
           </button>
         </div>
         <div>
-          <label class="input-file-button" for="input-picture"
-            >사진 추가하기</label
-          >
-          <label class="input-file-button" for="input-file"
-            >파일 추가하기</label
-          >
+          <div class="row">
+            <label class="input-file-button col" for="input-picture"
+              >Image<img src="https://img.icons8.com/ios/50/000000/image.png" />
+            </label>
+
+            <label class="input-file-button col" for="input-file"
+              >PPT or PDF<img
+                src="https://img.icons8.com/ios/50/000000/file.png"
+            /></label>
+          </div>
           <div id="showFileName"></div>
           <input
             type="file"
@@ -153,8 +157,8 @@ export default {
 .input-file-button {
   display: flex;
   justify-content: center;
-  width: 30%;
-  height: 10%;
+  width: 50%;
+  height: 30%;
   /* height: 40px; */
   background: #4ba3c7;
   /* border-radius: 50%; */
