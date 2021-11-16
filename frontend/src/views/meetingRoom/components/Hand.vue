@@ -1,4 +1,3 @@
-/
 <template>
   <div></div>
 </template>
@@ -14,7 +13,11 @@ let model, webcam, ctx, labelContainer, maxPredictions;
 export default {
   name: 'handcolntroler',
   props: {},
-  data() {},
+  data() {
+    return {
+      predictFlag: true,
+    };
+  },
   mounted() {
     this.init();
   },
@@ -41,7 +44,8 @@ export default {
 
     async loop(timestamp) {
       webcam.update(); // update the webcam frame
-      await this.predict();
+      if (this.predictFlag) await this.predict();
+      else setTimeout(() => (this.predictFlag = true), 3000);
 
       // window.requestAnimationFrame(_.throttle(this.loop), 6000);
       window.requestAnimationFrame(this.loop);
@@ -50,16 +54,17 @@ export default {
     async predict() {
       // Prediction #1: run input through posenet
       // estimatePose can take in an image, video or canvas html element
-      console.log('qwwert');
+      console.log('ready to predict');
       const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
       // Prediction 2: run input through teachable machine classification model
       const prediction = await model.predict(posenetOutput);
 
       if (prediction[1].probability.toFixed(2) > 0.99) {
-        console.log('second');
-        setTimeout(store.dispatch('meetingRoom/goNext'), 1000);
+        console.log('nextPage');
+        this.predictFlag = false;
+        console.log('predictFlag = false');
+        //setTimeout(store.dispatch('meetingRoom/goNext'), 1000);
         //_.throttle(store.dispatch('meetingRoom/goNext'), 1000);
-        console.log('ggggggg');
 
         // const classPrediction =
         //     prediction[i].className + ": " + prediction[i].probability.toFixed(2);
