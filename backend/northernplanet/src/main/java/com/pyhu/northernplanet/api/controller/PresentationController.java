@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -168,7 +168,7 @@ public class PresentationController {
   @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Integer> addSlide(@ModelAttribute SlidePatchReq slidePatchReq) {
     log.info("[addSlide - controller] presentationId: {}, slideFileName: {}",
-            slidePatchReq.getPresentationId(), slidePatchReq.getSlideFile().getOriginalFilename());
+        slidePatchReq.getPresentationId(), slidePatchReq.getSlideFile().getOriginalFilename());
     try {
       presentationService.addSlide(slidePatchReq);
     } catch (Exception e) {
@@ -184,8 +184,10 @@ public class PresentationController {
       @ApiResponse(code = 401, message = "인증 실패"),
       @ApiResponse(code = 500, message = "서버 오류")})
   @PreAuthorize("hasRole('USER')")
-  public ResponseEntity<Integer> createPptPdf(@ModelAttribute PptPdf2PngReq pptPdf2PngReq) {
+  public ResponseEntity<Integer> createPptPdf(@ModelAttribute PptPdf2PngReq pptPdf2PngReq,
+      HttpServletResponse response) {
     log.info("[createPpt - controller]");
+    response.setCharacterEncoding("UTF-8");
     String originalFilename = pptPdf2PngReq.getPptPdf().getOriginalFilename();
     String extensionName = originalFilename.substring(originalFilename.lastIndexOf('.'));
     try {
