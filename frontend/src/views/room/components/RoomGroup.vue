@@ -7,7 +7,7 @@
           <!--props값에 따라 title 출력 [Now, Future, History]-->
           <div class="row" style="width: 200px">
             <div class="col-11">
-              <h3 class="mb-1 ps-3">
+              <h3 class="mb-1 ps-3 text-global">
                 {{ title }}
               </h3>
             </div>
@@ -18,12 +18,12 @@
             >
               <h2>
                 <i
-                  class="fas fa-chevron-down move-on-hover ps-3"
+                  class="fas fa-chevron-down move-on-hover ps-3 text-global"
                   v-show="isToggle"
                   @click="showToggle"
                 ></i
                 ><i
-                  class="fas fa-chevron-up move-on-hover ps-3"
+                  class="fas fa-chevron-up move-on-hover ps-3 text-global"
                   @click="showToggle"
                   v-show="!isToggle"
                 ></i>
@@ -42,17 +42,19 @@
               :key="idx"
               v-show="idx <= showIdx"
             />
-            <h4 class="ps-4" v-if="lengthRooms === 0">No Rooms in here.</h4>
+            <h4 class="ps-4 text-global" v-if="lengthRooms === 0">
+              No Rooms in here.
+            </h4>
           </div>
           <!-- more-->
           <div
-            class="card-last move-on-hover text-center"
+            class="card-last move-on-hover text-center text-global"
             v-show="lengthRooms > 0 && isToggle"
             @click.stop="moreCard"
           >
             <a href="#"
-              ><h2><i class="fas fa-plus"></i></h2>
-              <h4>more</h4>
+              ><h2><i class="fas fa-plus text-global"></i></h2>
+              <h4 class="text-global">more</h4>
             </a>
           </div>
         </div>
@@ -139,4 +141,7 @@ export default {
 </script>
 <style scoped>
 @import './room-style.css';
+.text-global {
+  color: #505753;
+}
 </style>
