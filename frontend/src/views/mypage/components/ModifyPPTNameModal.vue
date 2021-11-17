@@ -65,6 +65,22 @@ import store from '@/store';
 
 export default {
   name: 'ModifyPPTNameModal',
+  // : computed
+  computed: {
+    currentPPTTitle() {
+      return this.$store.state.mypage.currentPPTTitle;
+    },
+  },
+  watch: {
+    currentPPTTitle: function () {
+      console.log(
+        'currentPPTTitle',
+        this.presentationName,
+        this.currentPPTTitle,
+      );
+      this.presentationName = this.currentPPTTitle;
+    },
+  },
   data() {
     return {
       presentationId: store.getters['mypage/getCurrentId'],
