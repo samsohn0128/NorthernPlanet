@@ -40,13 +40,17 @@
         <div class="container-fluid">
           <div class="head-animation" v-if="showAnimation == true">
             <div
-              v-for="(effect, idx) in effects"
-              :class="['effect-container']"
-              :key="idx"
-              :id="idx"
-              @click="showExample(effect, idx)"
+              v-for="(effect, name) in effects"
+              :class="[
+                { 'container-border': effect === slideList[idx].effect },
+                'effect-container',
+              ]"
+              :key="effect"
+              :id="effect"
+              @click="selectEffect(effect)"
+              @mouseenter="showExample(effect, name)"
             >
-              <h6>{{ idx }}</h6>
+              <h6>{{ name }}</h6>
             </div>
           </div>
         </div>
@@ -68,13 +72,16 @@
                     class="ni ni-fat-remove"
                     @click="deleteTheSlide(slide.slideId)"
                   ></i>
-                  <i class="ni ni-spaceship"></i>
+                  <i
+                    v-if="slide.effect != null && slide.effect != 0"
+                    class="ni ni-spaceship"
+                  ></i>
                 </div>
                 <div class="PPTbox">
                   <div style="width: 100%; height: 150px">
                     <img
                       :src="slide.slideFile"
-                      style="max-width: 20vw; max-height: 12vh"
+                      style="max-width: 100%; max-height: 150px"
                       alt="thumbnail"
                     />
                   </div>
@@ -249,14 +256,14 @@ export default {
       this.$router.push({ name: 'Presentation' });
     },
     // Effect의 예시를 보여준다.
-    showExample(idx, effect) {
-      console.log(effect);
+    showExample(effect, name) {
+      console.log(effect, name);
       const el = document.getElementById(effect);
-      el.classList.add(effect);
+      console.log(el);
+      el.classList.add(name);
       setTimeout(function () {
-        el.classList.remove(effect);
+        el.classList.remove(name);
       }, 1000);
-      this.selectEffect(idx);
     },
     // 고른 Effect의 설정을 저장한다.
     selectEffect(effect) {
@@ -510,6 +517,9 @@ export default {
   display: flex;
   flex-direction: row;
   overflow: auto;
+}
+.container-border {
+  border: 0.4rem solid;
 }
 .body-ppt {
   display: flex;

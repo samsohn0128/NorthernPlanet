@@ -34,23 +34,26 @@
       <!-- left side bar control buttons -->
       <!-- Room Title -->
       <h1 class="room-title">{{ roomTitle }}</h1>
-      <div class="upside-ppt-inside set-timer-location">
-        <div class="time-space">
-          <span id="showMin">00</span>
-          :
-          <span id="showSec">00</span>
-          .
-          <span id="showMilisec">00</span>
-        </div>
-        <div class="time-button-space">
-          <button id="startButton" class="settingStart" @click="startButton">
-            start
-          </button>
-          <button id="resetButton" class="settingReset" @click="resetButton">
-            reset
-          </button>
+      <div class="upside-ppt">
+        <div class="set-timer-location">
+          <div class="time-space">
+            <span id="showMin">00</span>
+            :
+            <span id="showSec">00</span>
+            .
+            <span id="showMilisec">00</span>
+          </div>
+          <div class="time-button-space">
+            <button id="startButton" class="settingStart" @click="startButton">
+              start
+            </button>
+            <button id="resetButton" class="settingReset" @click="resetButton">
+              reset
+            </button>
+          </div>
         </div>
       </div>
+
       <!-- Main Video -->
       <MainVideoUnit
         class="main-video-unit"
@@ -92,6 +95,7 @@ import VideoUnitGroup from './components/VideoUnitGroup.vue';
 import MainVideoUnit from './components/MainVideoUnit.vue';
 import MeetingController from './components/MeetingController.vue';
 import MeetingSideBar from './components/MeetingSideBar.vue';
+// import { Viewer } from '@toast-ui/vue-editor';
 
 import _ from 'lodash';
 
@@ -102,6 +106,7 @@ export default {
     MainVideoUnit,
     MeetingController,
     MeetingSideBar,
+    // Viewer,
   },
   // : props
   props: {},
@@ -110,6 +115,11 @@ export default {
     return {
       leftSideShow: true,
       rightSideShow: true,
+      presentationId: this.$route.params.presentationId,
+      userId: this.$route.params.userId,
+
+      idx: 0,
+      content: null,
     };
   },
   // : watch
@@ -130,7 +140,50 @@ export default {
     },
   },
   // : lifecycle hook
-  mounted() {},
+  mounted() {
+    document.addEventListener('keydown', e => {
+      switch (e.key) {
+        case 'ArrowLeft':
+          this.$store.dispatch('meetingRoom/minusIdx');
+          break;
+        case 'ArrowRight':
+          this.$store.dispatch('meetingRoom/plusIdx');
+          break;
+        case 'a':
+        case 'A':
+          this.$store.dispatch('meetingRoom/leftLocation');
+          break;
+        case 'd':
+        case 'D':
+          this.$store.dispatch('meetingRoom/rightLocation');
+          break;
+        case 'w':
+        case 'W':
+          this.$store.dispatch('meetingRoom/topLocation');
+          break;
+        case '0':
+          this.$store.dispatch('meetingRoom/size0Size');
+          break;
+        case '1':
+          this.$store.dispatch('meetingRoom/size1Size');
+          break;
+        case '2':
+          this.$store.dispatch('meetingRoom/size2Size');
+          break;
+        case '3':
+          this.$store.dispatch('meetingRoom/size3Size');
+          break;
+        case '4':
+          this.$store.dispatch('meetingRoom/size4Size');
+          break;
+      }
+    });
+    this.idx = 1;
+  },
+  created() {
+    // this.getPresentationData();
+    console.log('presentation리스트 확인', this.$store.state.meetingRoom);
+  },
   // : methods
   methods: {
     toggleLeftSide: function () {
@@ -286,9 +339,15 @@ export default {
   display: none;
 }
 
-.upside-ppt-inside {
-  width: 20vw;
-  height: 15vh;
+.upside-ppt {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  height: 11vh;
+}
+.button-setting {
+  background: #4ba3c7;
+  color: white;
 }
 .set-timer-location {
   display: flex;
@@ -298,10 +357,83 @@ export default {
 .time-space {
   width: 12vw;
   text-align: center;
-  background: rgb(222, 221, 226);
+  background: #e8f5e9;
   color: black;
   font-size: 18px;
   padding: 5px;
   border-radius: 10px 10px 0px 0px;
+}
+.time-button-space {
+  width: 12vw;
+  text-align: center;
+  background: #e8f5e9;
+  color: black;
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 0px 0px 10px 10px;
+}
+.settingStart {
+  background: #4aae71;
+  border-color: #4aae71;
+  width: 65px;
+  border-radius: 20px;
+  box-shadow: 0.5px 0.5px 1px;
+}
+.settingReset {
+  background: #fbad10;
+  border-color: #fbad10;
+  width: 65px;
+  border-radius: 20px;
+  box-shadow: 0.5px 0.5px 1px;
+}
+.img-top {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start !important;
+}
+/* .img-left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+} */
+.img-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.presentation-0 {
+  position: absolute;
+  margin: 2%;
+  height: 30%;
+  z-index: 1;
+}
+.presentation-1 {
+  position: absolute;
+  margin: 2%;
+  height: 40%;
+  z-index: 1;
+}
+.presentation-2 {
+  position: absolute;
+  margin: 2%;
+  height: 50%;
+  z-index: 1;
+}
+.presentation-3 {
+  position: absolute;
+  margin: 2%;
+  height: 60%;
+  z-index: 1;
+}
+.presentation-4 {
+  position: absolute;
+  margin: 2%;
+  height: 100%;
+  z-index: 1;
+}
+.img-setting {
+  max-width: 60vw;
+  max-height: 50vh;
+  margin: 5px;
 }
 </style>

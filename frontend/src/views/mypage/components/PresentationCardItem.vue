@@ -36,6 +36,7 @@
             id="dropdownMenuButton"
             data-bs-toggle="dropdown"
             aria-expanded="false"
+            @click="setName(presentationInfo.presentationName)"
           >
             <i class="ni ni-bold-down z-index: 5"></i>
           </div>
@@ -91,6 +92,10 @@ export default {
         'mypage/setCurrentPresenatationInfo',
         presentationInfo,
       );
+    },
+    setName(title) {
+      console.log('setName', title);
+      this.$store.dispatch('mypage/setCurrentPresentationTitle', title);
     },
   },
 };

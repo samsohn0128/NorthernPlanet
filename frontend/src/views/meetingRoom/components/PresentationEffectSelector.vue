@@ -1,14 +1,14 @@
 <template>
   <div class="d-flex flex-column justify-content-center align-items-center">
     <div
-      v-for="effect in effects"
+      v-for="(effect, idx) in effects"
       :class="[
         { 'container-border': currentEffect === effect },
         'effect-container',
       ]"
       :key="effect"
       :id="effect"
-      @click="selectEffect(effect)"
+      @click="selectEffect(effect, idx)"
       @mouseenter="showExample(effect)"
     >
       <h4>{{ effect }}</h4>
@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       effects: [
+        'default',
         'fadein',
         'fadedown',
         'fadeleft',
@@ -60,11 +61,15 @@ export default {
   mounted() {},
   // : methods
   methods: {
-    selectEffect(effect) {
+    selectEffect(effect, idx) {
       const message = {
         ...this.messageData,
         transition: effect,
       };
+      // 현재 선택한 Effect 임시저장
+      this.$store.state.meetingRoom.effectList[
+        this.$store.state.meetingRoom.currentPage
+      ] = idx;
       this.$store.dispatch('meetingRoom/sendMessage', message);
     },
     showExample(effect) {
@@ -94,6 +99,9 @@ export default {
 }
 .container-border {
   border: 0.4rem solid;
+}
+.default {
+  animation: default 0.7s;
 }
 .fadein {
   animation: fadeIn 0.7s;

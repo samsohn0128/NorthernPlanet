@@ -28,11 +28,12 @@
         </div> -->
         <!-- <div id="script-show" class="upside-ppt-inside script-setting">
           <div class="move-sequence" @click="setIdxminus()">&lt;</div>
-          <div
-            v-if="slideList[idx].script == null || slideList[idx].script == ''"
-            class="script-inside"
-          >
-            대본을<br />설정해주세요.
+          <div v-if="idx == 1">
+            <Viewer
+              id="changeinitialValue"
+              :initialValue="slideList[idx].script"
+              class="script-inside"
+            />
           </div>
           <div v-else class="script-inside">
             <Viewer
@@ -94,35 +95,25 @@
 
           <!-- local video element -->
           <video
+            class="main-video-unit video-insert-setting"
             height="100%"
             :id="'local-video'"
             autoplay="true"
-            class="main-video-unit"
+            poster="@/assets/img/logos/focus_camera4.jpg"
           ></video>
         </div>
-        <div id="ppt-image-setting">
-          <img
-            v-if="idx == 0"
-            src="@/assets/presentationTemplates/first-slide.png"
-            id="img-setting"
-            alt="prev-image"
-            class="size-4"
-          />
-          <img
-            v-else-if="idx == slideList.length - 1"
-            src="@/assets/presentationTemplates/last-slide.png"
-            id="img-setting"
-            alt="next-image"
-            class="size-4"
-          />
-          <img
-            v-else
-            :src="slideList[idx].slideFile"
-            id="img-setting"
-            alt="current-slide"
-            class="size-4"
-          />
-        </div>
+
+        <!-- <div id="ppt-image-setting">
+          <transition name="fade" mode="out-in" v-if="idx !== null">
+            <img
+              :src="imageSrcs"
+              :key="imageSrcs"
+              alt="presentation image"
+              :class="[sizePreset, transitionPreset]"
+              id="img-setting"
+            />
+          </transition>
+        </div> -->
       </div>
       <div class="bottom-content">
         <div class="d-flex controller" @keyup.right="progressNext">
@@ -163,6 +154,8 @@
         @selectedSize="setSize"
         @selectIdxplus="setIdxplus"
         @selectIdxminus="setIdxminus"
+        @selectedShow="showScript"
+        @selectedEffect="setEffect"
       />
     </transition>
   </div>
@@ -204,7 +197,7 @@ export default {
       timerStart: false, // 타이머가 돌아가고 있는지 확인
       min: '00', // 분 표시하기
       sec: '00', // 초 표시하기
-      milisec: '00', // ms 표시하기
+      // milisec: '00', // ms 표시하기
 
       userName: null,
 
@@ -212,12 +205,28 @@ export default {
       isVideoOn: true,
 
       content: null,
+      effects: {
+        default: 0,
+        fadein: 1,
+        fadedown: 2,
+        fadeleft: 3,
+        faderight: 4,
+        fadeup: 5,
+        backdown: 6,
+        backup: 7,
+        flipx: 8,
+        flipy: 9,
+        rotatein: 10,
+      },
     };
   },
   // : watch
   watch: {},
   // : computed
   computed: {
+    imageSrcs() {
+      return this.slideList[this.idx].slideFile;
+    },
     participants() {
       return this.$store.state.meetingRoom.participants;
     },
@@ -227,12 +236,19 @@ export default {
       );
       return this.participants[mainParticipantName];
     },
+
+    // Local Video 관련
+    transitionPreset() {
+      return 'transition-' + this.slideList[this.idx].effect;
+    },
+    sizePreset() {
+      return 'size-' + this.size;
+    },
   },
   // : lifecycle hook
   created() {
     this.getPresentationData();
     this.playVideoFromCamera();
-    console.log(this.$route.params);
   },
   mounted() {
     document.addEventListener('keydown', e => {
@@ -240,13 +256,11 @@ export default {
       switch (e.key) {
         case 'ArrowLeft':
           if (this.idx > 1) {
-            this.idx -= 1;
             this.setIdxminus();
           }
           break;
         case 'ArrowRight':
           if (this.idx < this.slideList.length - 2) {
-            this.idx += 1;
             this.setIdxplus();
           }
           break;
@@ -342,6 +356,9 @@ export default {
         if (this.content != null) {
           document.getElementById('changeinitialValue').innerHTML =
             this.content;
+        } else {
+          document.getElementById('changeinitialValue').innerHTML =
+            '대본을<br>설정해주세요';
         }
       }
       // console.log(this.content);
@@ -353,9 +370,17 @@ export default {
         if (this.content != null) {
           document.getElementById('changeinitialValue').innerHTML =
             this.content;
+        } else {
+          document.getElementById('changeinitialValue').innerHTML =
+            '대본을<br>설정해주세요';
         }
       }
       // console.log(this.content);
+    },
+    // effect 미리보기
+    setEffect(idx) {
+      this.slideList[this.idx].effect = idx;
+      this.transitionPreset();
     },
     // 시작
     startButton() {
@@ -369,13 +394,13 @@ export default {
 
           this.min = this.addZero(nowTime.getMinutes());
           this.sec = this.addZero(nowTime.getSeconds());
-          this.milisec = this.addZero(
-            Math.floor(nowTime.getMilliseconds() / 10),
-          );
+          // this.milisec = this.addZero(
+          //   Math.floor(nowTime.getMilliseconds() / 10),
+          // );
 
           document.getElementById('showMin').innerText = this.min;
           document.getElementById('showSec').innerText = this.sec;
-          document.getElementById('showMilisec').innerText = this.milisec;
+          // document.getElementById('showMilisec').innerText = this.milisec;
         }, 1);
       } else {
         // 일시정지 버튼을 누를 때
@@ -396,14 +421,14 @@ export default {
       this.stTime = 0;
       this.min = 0;
       this.sec = 0;
-      this.milisec = 0;
+      // this.milisec = 0;
       this.endTime = Date.now();
       this.timerStart = false;
       clearInterval(this.timerWork);
       this.timerWork = null;
       document.getElementById('showMin').innerText = '00';
       document.getElementById('showSec').innerText = '00';
-      document.getElementById('showMilisec').innerText = '00';
+      // document.getElementById('showMilisec').innerText = '00';
     },
     // 계산
     addZero(num) {
@@ -424,17 +449,15 @@ export default {
         document.getElementById('script-button-text').innerText = '대본 숨기기';
       }
     },
-
-    videoOnOff: function () {
-      if (this.isVideoOn) {
-        this.isVideoOn = false;
-        this.stopVideoFromCamera();
-      } else {
-        this.isVideoOn = true;
-        this.playVideoFromCamera();
-      }
-    },
-
+    // videoOnOff: function () {
+    //   if (this.isVideoOn) {
+    //     this.isVideoOn = false;
+    //     this.stopVideoFromCamera();
+    //   } else {
+    //     this.isVideoOn = true;
+    //     this.playVideoFromCamera();
+    //   }
+    // },
     playVideoFromCamera: async function () {
       try {
         const constraints = { video: true, audio: false };
@@ -467,8 +490,9 @@ export default {
 <style scoped>
 #ppt-image-setting {
   margin-top: 57px;
-
-  width: 70vw;
+  max-width: 100%;
+  z-index: 1;
+  width: 70%;
   height: 60vh;
   display: flex;
   align-items: center;
@@ -625,7 +649,18 @@ dbecec
   border-radius: 20px;
   box-shadow: 0.5px 0.5px 1px;
 }
-
+.main-body-div {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.webrtc-body-div {
+  position: absolute;
+  width: 70vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .btn-setting {
   width: 20%;
 }
@@ -671,29 +706,32 @@ dbecec
   align-items: center;
 }
 .size-0 {
-  max-width: 12vw;
-  max-height: 10vh;
+  margin: 2%;
+  height: 30%;
 }
 .size-1 {
-  max-width: 24vw;
-  max-height: 20vh;
+  margin: 2%;
+  height: 40%;
 }
 .size-2 {
-  max-width: 36vw;
-  max-height: 30vh;
+  margin: 2%;
+  height: 50%;
 }
 .size-3 {
-  max-width: 48vw;
-  max-height: 40vh;
+  margin: 2%;
+  height: 60%;
 }
 .size-4 {
-  max-width: 60vw;
-  max-height: 50vh;
+  margin: 2%;
+  height: 100%;
 }
 .img-setting {
-  max-width: 60vw;
-  max-height: 50vh;
+  max-width: 100%;
+  max-height: 100%;
   margin: 5px;
+}
+.video-insert-setting {
+  transform: scaleX(-1);
 }
 .right-side-bar {
   width: 400px;
@@ -764,5 +802,40 @@ dbecec
 /* 스크롤바 뒷 배경 설정*/
 ::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0.33);
+}
+
+/* animation */
+.transition-0 {
+  animation: default 0.7s;
+}
+.transition-1 {
+  animation: fadeIn 0.7s;
+}
+.transition-2 {
+  animation: fadeInDown 0.7s;
+}
+.transition-3 {
+  animation: fadeInLeft 0.7s;
+}
+.transition-4 {
+  animation: fadeInRight 0.7s;
+}
+.transition-5 {
+  animation: fadeInUp 0.7s;
+}
+.transition-6 {
+  animation: backInDown 0.7s;
+}
+.transition-7 {
+  animation: backInUp 0.7s;
+}
+.transition-8 {
+  animation: flipInX 0.7s;
+}
+.transition-9 {
+  animation: flipInY 0.7s;
+}
+.transition-10 {
+  animation: rotateIn 0.7s;
 }
 </style>
