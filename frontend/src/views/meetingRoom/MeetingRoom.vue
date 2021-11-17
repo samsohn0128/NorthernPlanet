@@ -54,27 +54,24 @@
         </div>
       </div> -->
 
-      <div class="upside-ppt-inside set-timer-location">
+      <!-- <div class="upside-ppt-inside set-timer-location">
         <div class="time-space">
           <span id="showMin">00</span> : <span id="showSec">00</span>
           <span class="time-button-space">
-            <!-- 시작 -->
             <i
               class="ni ni-button-play time-button"
               @click="startButton"
               v-if="!timerStart"
             ></i>
-            <!-- 일시정지 -->
             <i
               class="ni ni-button-pause time-button"
               @click="startButton"
               v-if="timerStart"
             ></i>
-            <!-- 초기화 -->
             <i class="ni ni-button-power time-button" @click="resetButton"></i>
           </span>
         </div>
-      </div>
+      </div> -->
 
       <!-- Main Video -->
       <MainVideoUnit
@@ -215,62 +212,62 @@ export default {
       this.rightSideShow = !this.rightSideShow;
     },
     // 시작
-    startButton() {
-      // 시작 버튼을 누를 때
-      if (this.timerStart == false) {
-        this.timerStart = true;
-        document.getElementById('startButton').innerText = 'pause';
-        document.getElementById('startButton').style.background = '#ef6262';
-        document.getElementById('startButton').style.borderColor = '#ef6262';
-        // 0.001초마다 시간 갱신
-        this.timerWork = setInterval(() => {
-          let nowTime = new Date(Date.now() - this.stTime);
+    // startButton() {
+    //   // 시작 버튼을 누를 때
+    //   if (this.timerStart == false) {
+    //     this.timerStart = true;
+    //     document.getElementById('startButton').innerText = 'pause';
+    //     document.getElementById('startButton').style.background = '#ef6262';
+    //     document.getElementById('startButton').style.borderColor = '#ef6262';
+    //     // 0.001초마다 시간 갱신
+    //     this.timerWork = setInterval(() => {
+    //       let nowTime = new Date(Date.now() - this.stTime);
 
-          this.min = this.addZero(nowTime.getMinutes());
-          this.sec = this.addZero(nowTime.getSeconds());
-          this.milisec = this.addZero(
-            Math.floor(nowTime.getMilliseconds() / 10),
-          );
+    //       this.min = this.addZero(nowTime.getMinutes());
+    //       this.sec = this.addZero(nowTime.getSeconds());
+    //       this.milisec = this.addZero(
+    //         Math.floor(nowTime.getMilliseconds() / 10),
+    //       );
 
-          document.getElementById('showMin').innerText = this.min;
-          document.getElementById('showSec').innerText = this.sec;
-          document.getElementById('showMilisec').innerText = this.milisec;
-        }, 1);
-      } else {
-        // 일시정지 버튼을 누를 때
-        this.endTime = Date.now();
-        this.timerStart = false;
-        document.getElementById('startButton').innerText = 'start';
-        document.getElementById('startButton').style.background = '#4aae71';
-        document.getElementById('startButton').style.borderColor = '#4aae71';
-        clearInterval(this.timerWork);
-      }
-      // 시간 체크
-      if (!this.stTime) {
-        this.stTime = Date.now();
-      } else {
-        this.stTime += Date.now() - this.endTime;
-      }
-    },
-    // 리셋하기, 종료 버튼
-    resetButton() {
-      this.stTime = 0;
-      this.min = 0;
-      this.sec = 0;
-      this.milisec = 0;
-      this.endTime = Date.now();
-      this.timerStart = false;
-      document.getElementById('startButton').innerText = 'start';
-      clearInterval(this.timerWork);
-      this.timerWork = null;
-      document.getElementById('showMin').innerText = '00';
-      document.getElementById('showSec').innerText = '00';
-      document.getElementById('showMilisec').innerText = '00';
-    },
-    // 계산
-    addZero(num) {
-      return num < 10 ? '0' + num : '' + num;
-    },
+    //       document.getElementById('showMin').innerText = this.min;
+    //       document.getElementById('showSec').innerText = this.sec;
+    //       // document.getElementById('showMilisec').innerText = this.milisec;
+    //     }, 1);
+    //   } else {
+    //     // 일시정지 버튼을 누를 때
+    //     this.endTime = Date.now();
+    //     this.timerStart = false;
+    //     document.getElementById('startButton').innerText = 'start';
+    //     document.getElementById('startButton').style.background = '#4aae71';
+    //     document.getElementById('startButton').style.borderColor = '#4aae71';
+    //     clearInterval(this.timerWork);
+    //   }
+    //   // 시간 체크
+    //   if (!this.stTime) {
+    //     this.stTime = Date.now();
+    //   } else {
+    //     this.stTime += Date.now() - this.endTime;
+    //   }
+    // },
+    // // 리셋하기, 종료 버튼
+    // resetButton() {
+    //   this.stTime = 0;
+    //   this.min = 0;
+    //   this.sec = 0;
+    //   this.milisec = 0;
+    //   this.endTime = Date.now();
+    //   this.timerStart = false;
+    //   document.getElementById('startButton').innerText = 'start';
+    //   clearInterval(this.timerWork);
+    //   this.timerWork = null;
+    //   document.getElementById('showMin').innerText = '00';
+    //   document.getElementById('showSec').innerText = '00';
+    //   // document.getElementById('showMilisec').innerText = '00';
+    // },
+    // // 계산
+    // addZero(num) {
+    //   return num < 10 ? '0' + num : '' + num;
+    // },
   },
 };
 </script>
@@ -386,7 +383,7 @@ export default {
   border-radius: 10px 10px 0px 0px;
 } */
 /* 스톱워치 */
-.set-timer-location {
+/* .set-timer-location {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -395,7 +392,6 @@ export default {
   width: 8vw;
   height: 2.3vw;
   text-align: center;
-  /* background: #505753; */
   background: #505753;
   color: white;
   font-size: 15px;
@@ -414,8 +410,8 @@ export default {
 }
 .time-button {
   margin: 2px;
-}
-.settingStart {
+} */
+/* .settingStart {
   background: #4aae71;
   border-color: #4aae71;
   width: 65px;
@@ -428,12 +424,12 @@ export default {
   width: 65px;
   border-radius: 20px;
   box-shadow: 0.5px 0.5px 1px;
-}
-.img-top {
+} */
+/* .img-top {
   display: flex;
   justify-content: center;
   align-items: flex-start !important;
-}
+} */
 /* .img-left {
   display: flex;
   justify-content: flex-start;
