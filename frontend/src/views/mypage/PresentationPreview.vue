@@ -102,7 +102,7 @@
           ></video>
         </div>
 
-        <!-- <div id="ppt-image-setting">
+        <div id="ppt-image-setting">
           <transition name="fade" mode="out-in" v-if="idx !== null">
             <img
               :src="imageSrcs"
@@ -112,7 +112,10 @@
               id="img-setting"
             />
           </transition>
-        </div> -->
+        </div>
+        <div class="script" v-if="currentPage !== null">
+          <div v-html="script"></div>
+        </div>
       </div>
       <div class="bottom-content">
         <div class="d-flex controller" @keyup.right="progressNext">
@@ -228,6 +231,9 @@ export default {
   computed: {
     imageSrcs() {
       return this.slideList[this.idx].slideFile;
+    },
+    script() {
+      return this.slideList[this.idx].script;
     },
     participants() {
       return this.$store.state.meetingRoom.participants;
@@ -445,15 +451,14 @@ export default {
       this.$router.go(-1);
     },
     showScript() {
-      let scriptshow = document.getElementById('script-show');
-
-      if (scriptshow.style.display != 'none') {
-        scriptshow.style.display = 'none';
-        document.getElementById('script-button-text').innerText = '대본 보이기';
-      } else {
-        scriptshow.style.display = 'flex';
-        document.getElementById('script-button-text').innerText = '대본 숨기기';
-      }
+      // let scriptshow = document.getElementById('script-show');
+      // if (scriptshow.style.display != 'none') {
+      //   scriptshow.style.display = 'none';
+      //   document.getElementById('script-button-text').innerText = '대본 보이기';
+      // } else {
+      //   scriptshow.style.display = 'flex';
+      //   document.getElementById('script-button-text').innerText = '대본 숨기기';
+      // }
     },
     // videoOnOff: function () {
     //   if (this.isVideoOn) {
@@ -801,6 +806,28 @@ dbecec
 .button-danger-setting {
   background: #ba635f;
   color: white;
+}
+
+/* script */
+.script {
+  position: absolute;
+
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  width: 65%;
+  height: 10%;
+  transition: 0.3s ease;
+  color: white;
+  font-size: 1.5rem;
+  line-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  overflow: auto;
+  border-radius: 10px;
 }
 
 /* scroll bar*/
