@@ -16,6 +16,7 @@
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
+            @click="cancelPPT()"
           >
             <span aria-hidden="true">×</span>
           </button>
@@ -72,6 +73,7 @@
             type="button"
             class="btn btn-outline-dark button-setting"
             data-bs-dismiss="modal"
+            @click="cancelPPT()"
           >
             Cancel
           </button>
@@ -102,6 +104,7 @@ export default {
       userId: store.getters['users/getUserId'],
     };
   },
+
   // 모달창을 만들어서 발표 자료 이름을 먼저 입력받은 상태.
   methods: {
     async addPPT() {
@@ -143,11 +146,14 @@ export default {
         this.$toastError('프레젠테이션 추가에 실패했습니다.');
       }
     },
+    cancelPPT() {
+      document.getElementById('showFileName').innerHTML = '';
+      this.$router.go();
+    },
     selectFile(e) {
       const file = e.target.files[0];
       // document.getElementsByClassName('image')[0].src =
       //   URL.createObjectURL(file);
-      this.imageChanged = true;
       this.imgUrl.first = URL.createObjectURL(file);
       let imgFile = document.getElementById('input-picture').files;
       if (imgFile.length == 0) {
@@ -157,6 +163,8 @@ export default {
       for (let i = 0; i < imgFile.length; i++) {
         fileList += imgFile[i].name + '<br>';
       }
+      console.log('imagefile: ', imgFile);
+      console.log('filelist: ', fileList);
       let target2 = document.getElementById('showFileName');
       target2.innerHTML = fileList;
     },
