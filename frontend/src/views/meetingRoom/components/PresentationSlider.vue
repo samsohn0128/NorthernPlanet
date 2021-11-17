@@ -1,42 +1,37 @@
 <template>
   <div>
-    <!-- prev -->
-    {{ this.$store.state.meetingRoom.now }}
-    {{ this.$store.state.meetingRoom.prev }}
-    {{ this.$store.state.meetingRoom.next }}
-
-    <PresentationSlideItem
-      v-if="prev >= 0"
-      :slideUrl="slideUrls[this.$store.state.meetingRoom.prev]"
-    />
-    <img
-      v-else
-      src="@/assets/presentationTemplates/first-slide.png"
-      alt=""
-      class="template-insert"
-    />
-    <!-- now -->
-    <div style="position: relative">
+    <div class="small-img-container">
+      <!-- prev -->
       <PresentationSlideItem
-        :slideUrl="slideUrls[this.$store.state.meetingRoom.now]"
+        v-if="prev >= 0"
+        :slideUrl="slideUrls[prev]"
+        :Next="false"
+        @selectPrev="progressPrev"
+        @selectNext="progressNext"
       />
-      <div class="overlay">
-        <span>Now</span>
-      </div>
+      <img
+        v-else
+        src="@/assets/presentationTemplates/first-slide.png"
+        alt=""
+        class="small-img-setting"
+      />
+      <!-- next -->
+      <PresentationSlideItem
+        v-if="next < slideUrls.length"
+        :slideUrl="slideUrls[next]"
+        :Next="true"
+        @selectPrev="progressPrev"
+        @selectNext="progressNext"
+      />
+      <img
+        v-else
+        src="@/assets/presentationTemplates/last-slide.png"
+        alt=""
+        class="small-img-setting"
+      />
     </div>
-    <!-- next -->
-    <PresentationSlideItem
-      v-if="next < slideUrls.length"
-      :slideUrl="slideUrls[this.$store.state.meetingRoom.next]"
-    />
-    <img
-      v-else
-      src="@/assets/presentationTemplates/last-slide.png"
-      alt=""
-      class="template-insert"
-    />
     <!-- slider: 슬라이드 넘기기 ui -->
-    <div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-center align-items-center mb-5">
       <button class="slider-prev-button" @click="progressPrev">prev</button>
       <button @keyup.right="progressNext" @keyup.left="progressPrev">
         <div class="slider-progress-indicator">
@@ -91,6 +86,12 @@ export default {
     currentPage() {
       return this.$store.state.meetingRoom.currentPage;
     },
+    PagePlus() {
+      return this.$store.state.meetingRoom.plus;
+    },
+    PageMinus() {
+      return this.$store.state.meetingRoom.minus;
+    },
   },
   // : watch
   watch: {
@@ -111,6 +112,12 @@ export default {
         };
         this.$store.dispatch('meetingRoom/sendMessage', message);
       }
+    },
+    PagePlus: function () {
+      this.progressNext();
+    },
+    PageMinus: function () {
+      this.progressPrev();
     },
   },
   // : lifecycle hook
@@ -239,5 +246,21 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+.small-img-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 350px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.small-img-setting {
+  max-width: 190px;
+  max-height: 100px;
+  padding: 5px;
+  cursor: pointer;
 }
 </style>

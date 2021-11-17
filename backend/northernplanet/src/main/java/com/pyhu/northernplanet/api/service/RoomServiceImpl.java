@@ -138,6 +138,14 @@ public class RoomServiceImpl implements RoomService {
     return roomPutRes;
   }
 
+  @Override
+  public void leaveRoom(Long roomId) {
+    Room room=getRoom(roomId);
+    if(room!=null){
+      roomRepository.leaveRoom(roomId, LocalDateTime.now());
+    }
+  }
+
   private void saveParticipants(List<ParticipantDto> person, Room room) {
     Participant participant;
     Code code;

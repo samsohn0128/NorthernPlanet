@@ -3,14 +3,13 @@
     :class="[locationPreset, 'main-video-container']"
     id="main-video-container"
   >
-    {{ this.$store.state.meetingRoom.now }}
-    {{ this.$store.state.meetingRoom.next }}
-    <transition :name="transitionPreset" v-if="currentPage !== null">
+    <!-- <transition :name="transitionPreset" v-if="currentPage !== null"> -->
+    <transition name="fade" mode="out-in" v-if="currentPage !== null">
       <img
         :src="imageSrcs[currentPage]"
         :key="imageSrcs[currentPage]"
         alt="presentation image"
-        :class="[sizePreset, 'img-fluid']"
+        :class="[sizePreset, transitionPreset, 'img-fluid']"
         id="presentation-image"
       />
     </transition>
@@ -52,6 +51,9 @@ export default {
     scriptList: function () {
       return this.$store.state.meetingRoom.scriptList;
     },
+    effectList: function () {
+      return this.$store.state.meetingRoom.effectList;
+    },
     currentPage: function () {
       return this.$store.state.meetingRoom.currentPage;
     },
@@ -69,7 +71,7 @@ export default {
       return 'presentation-' + this.$store.state.meetingRoom.size;
     },
     transitionPreset() {
-      return 'transition-' + this.$store.state.meetingRoom.transition;
+      return 'transition-' + this.effectList[this.currentPage];
     },
     /* presetCss() {
       return (
@@ -80,6 +82,14 @@ export default {
       );
     }, */
   },
+  // Effect 실시간 반영을 위한 시도.. 실패..
+  // watch: {
+  //   '$store.state.meetingRoom.effectList'(dd, old) {
+  //     console.log(dd, old);
+  //     console.log('watch effectList');
+  //     this.transitionPreset();
+  //   },
+  // },
   mounted() {
     this.mainVideo.classList.add('video-insert');
     document.getElementById('main-video-container').appendChild(this.mainVideo);
@@ -130,7 +140,7 @@ export default {
   left: 50%;
   transform: translate(-50%);
   background: rgba(0, 0, 0, 0.7);
-  width: 50%;
+  width: 80%;
   height: 10%;
   transition: 0.3s ease;
   color: white;
@@ -140,6 +150,25 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 5;
+  overflow: auto;
+}
+/* scroll bar*/
+/* 스크롤바 설정*/
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* 스크롤바 막대 설정*/
+::-webkit-scrollbar-thumb {
+  height: 5px;
+  background-color: #303f9f;
+  /* 스크롤바 둥글게 설정    */
+  border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.33);
 }
 /* location presets */
 .presentation-right {
@@ -293,6 +322,43 @@ export default {
   border-radius: 25px;
 } */
 /* transitions */
+.transition-0 {
+  animation: default 0.7s;
+}
+.transition-1 {
+  animation: fadeIn 0.7s;
+}
+.transition-2 {
+  animation: fadeInDown 0.7s;
+}
+.transition-3 {
+  animation: fadeInLeft 0.7s;
+}
+.transition-4 {
+  animation: fadeInRight 0.7s;
+}
+.transition-5 {
+  animation: fadeInUp 0.7s;
+}
+.transition-6 {
+  animation: backInDown 0.7s;
+}
+.transition-7 {
+  animation: backInUp 0.7s;
+}
+.transition-8 {
+  animation: flipInX 0.7s;
+}
+.transition-9 {
+  animation: flipInY 0.7s;
+}
+.transition-10 {
+  animation: rotateIn 0.7s;
+}
+
+.transition-default-enter-active {
+  animation: default 0.7s;
+}
 .transition-fadein-enter-active {
   animation: fadeIn 0.7s;
 }

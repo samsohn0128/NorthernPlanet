@@ -56,4 +56,10 @@ public interface RoomService {
    * @return {방 아이디, 이름, 설명, 시작시간, 종료시간, 활동상태, 참가자, 매니저 정보}
    */
   RoomPutRes updateRoom(RoomPutReq roomInfo);
+
+  /**
+   * 방 나가기
+   * @param roomId
+   * */
+  void leaveRoom(Long roomId);
 }

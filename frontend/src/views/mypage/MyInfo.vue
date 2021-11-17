@@ -3,6 +3,7 @@
     <section>
       <div class="container py-4 mb-3">
         <div class="row">
+          <div class="col col-lg-2"></div>
           <div
             id="make-margin"
             class="
@@ -67,6 +68,7 @@
               </div>
             </div>
           </div>
+          <div class="col col-lg-4"></div>
         </div>
       </div>
     </section>

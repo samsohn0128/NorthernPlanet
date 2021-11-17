@@ -2,13 +2,18 @@
   <!-- Navbar Dark -->
   <nav class="nav col-12 navbar navbar-expand-lg z-index-3 py-0">
     <div class="navbar-texts mx-0 row">
-      <div class="col-md-1 left-nav">
+      <div class="col col-md-1 left-nav">
         <router-link to="/dashboard">
-          <h5 class="profile-setting">NorthernPlanet</h5>
+          <!-- <h5 class="profile-setting">NorthernPlanet</h5> -->
+          <img
+            src="@/assets/img/logos/northernplanet_logo.png"
+            alt=""
+            class="profile-setting"
+          />
         </router-link>
       </div>
-      <div class="col-md-10"></div>
-      <div class="col-md-1 right-nav">
+      <div class="col col-md-10"></div>
+      <div class="col-md-1 right-nav profile-image">
         <div class="row dropdown">
           <div
             class="col"
@@ -68,6 +73,7 @@ export default {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
+  align-items: center;
   width: 100%;
   height: 45px;
   background: linear-gradient(90deg, #6d9e8a, #6d9e8a);
@@ -86,11 +92,16 @@ export default {
   align-items: center;
 }
 .profile-setting {
-  color: white;
-  margin: 0px;
+  /* color: white;
+  margin: 0px; */
+  width: 160px;
+  /* display: inline-block; */
 }
 .image-user {
   width: 30%;
   border: 1.5px solid white;
+}
+.profile-image {
+  align-items: center;
 }
 </style>

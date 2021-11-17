@@ -33,6 +33,7 @@ export default {
     /* imageUrls: null, */
     imageSrcs: null,
     scriptList: null,
+    effectList: null,
     selectedContentId: null,
     transition: null,
     // 초기 카메라, 마이크 세팅
@@ -42,6 +43,20 @@ export default {
     now: null,
     next: null,
     imgLength: null,
+    // 단축키 설정을 위한 변수
+    // idx
+    plus: 0,
+    minus: 0,
+    // size
+    size0: 0,
+    size1: 0,
+    size2: 0,
+    size3: 0,
+    size4: 0,
+    // location
+    left: 0,
+    top: 0,
+    right: 0,
   }),
   // mutations
   mutations: {
@@ -136,6 +151,9 @@ export default {
     SET_SCRIPTS(state, scriptList) {
       state.scriptList = scriptList;
     },
+    SET_EFFECTS(state, effectList) {
+      state.effectList = effectList;
+    },
     SET_ONGOING_PRESENTATION(state, { message, imageSrcs }) {
       state.imageSrcs = imageSrcs;
       state.currentPage = message.currentPage;
@@ -176,6 +194,76 @@ export default {
       console.log(imglength);
       state.imgLength = imglength;
       console.log(state.imgLength);
+    },
+    PLUS_IDX(state) {
+      if (state.plus == 1) {
+        state.plus = 0;
+      } else {
+        state.plus = 1;
+      }
+    },
+    MINUS_IDX(state) {
+      if (state.minus == 1) {
+        state.minus = 0;
+      } else {
+        state.minus = 1;
+      }
+    },
+    SIZE0_SIZE(state) {
+      if (state.size0 == 1) {
+        state.size0 = 0;
+      } else {
+        state.size0 = 1;
+      }
+    },
+    SIZE1_SIZE(state) {
+      if (state.size1 == 1) {
+        state.size1 = 0;
+      } else {
+        state.size1 = 1;
+      }
+    },
+    SIZE2_SIZE(state) {
+      if (state.size2 == 1) {
+        state.size2 = 0;
+      } else {
+        state.size2 = 1;
+      }
+    },
+    SIZE3_SIZE(state) {
+      if (state.size3 == 1) {
+        state.size3 = 0;
+      } else {
+        state.size3 = 1;
+      }
+    },
+    SIZE4_SIZE(state) {
+      if (state.size4 == 1) {
+        state.size4 = 0;
+      } else {
+        state.size4 = 1;
+      }
+    },
+    LEFT_LOCATION(state) {
+      if (state.left == 1) {
+        state.left = 0;
+      } else {
+        state.left = 1;
+      }
+    },
+    TOP_LOCATION(state) {
+      if (state.top == 1) {
+        state.top = 0;
+      } else {
+        state.top = 1;
+      }
+    },
+    RIGHT_LOCATION(state) {
+      if (state.right == 1) {
+        state.right = 0;
+      } else {
+        state.right = 1;
+      }
     },
   },
   // actions
@@ -312,7 +400,13 @@ export default {
       context.dispatch('changePresenter', message);
       context.dispatch('setOngoingPresentation', message);
       // console.log('onExistingParticipants end')
-      router.push({ name: 'MeetingRoom' });
+      // console.log('MeetingRoom', context.state.roomNumber);
+      router.push({
+        name: 'MeetingRoom',
+        params: {
+          roomNumber: context.state.roomNumber,
+        },
+      });
     },
     // 다른 참가자 participant 비디오 받기
     receiveVideo(context, sender) {
@@ -354,7 +448,7 @@ export default {
     leaveRoom(context) {
       window.location.reload(); // 새로고침
       router.push({ path: '/dashboard' });
-      console.log(context.state.roomNumber);
+      // console.log(context.state.roomNumber);
       if (context.state.myName === context.state.manager) {
         const roomData = {
           room_id: context.state.roomNumber,
@@ -405,26 +499,29 @@ export default {
       }).then(res => {
         const imageSrcs = [];
         const scriptList = [];
-        console.log('slidelist: ', res.data.slideList);
+        const effectList = [];
         res.data.slideList.forEach(data => {
           let imageSrc = 'data:image/jpeg;base64,' + data.slideFile;
           imageSrcs.push(imageSrc);
           scriptList.push(data.script);
+          effectList.push(data.effect);
         });
         context.commit('SET_IMAGE_SRCS', imageSrcs);
         context.commit('SET_SCRIPTS', scriptList);
         console.log(res.data.slideList.length);
+        //SET_LENGTH 지우거나 쓰시는분?
         context.commit('SET_LENGTH', res.data.slideList.length);
+        context.commit('SET_EFFECTS', effectList);
       });
       context.commit('CHANGE_CONTENT', message);
     },
     // ContentSelector에서 컨텐츠 선택 시 action
     /* setImageUrls(context, imageUrls) {
-      context.commit('SET_IMAGE_URLS', imageUrls);
-    }, */
+        context.commit('SET_IMAGE_URLS', imageUrls);
+      }, */
     /* setSelectedContentId(context, id) {
-      context.commit('SET_SELECTED_CONTENT_ID', id);
-    }, */
+        context.commit('SET_SELECTED_CONTENT_ID', id);
+      }, */
     setOngoingPresentation(context, message) {
       if (message.presentationUserId !== null) {
         axios({
@@ -456,6 +553,40 @@ export default {
       if (context.state.now < context.state.imgLength - 1) {
         context.commit('GO_NEXT');
       }
+    },
+    // 단축키 설정
+    // idx
+    plusIdx(context) {
+      context.commit('PLUS_IDX');
+    },
+    minusIdx(context) {
+      context.commit('MINUS_IDX');
+    },
+    // size
+    size0Size(context) {
+      context.commit('SIZE0_SIZE');
+    },
+    size1Size(context) {
+      context.commit('SIZE1_SIZE');
+    },
+    size2Size(context) {
+      context.commit('SIZE2_SIZE');
+    },
+    size3Size(context) {
+      context.commit('SIZE3_SIZE');
+    },
+    size4Size(context) {
+      context.commit('SIZE4_SIZE');
+    },
+    // location
+    leftLocation(context) {
+      context.commit('LEFT_LOCATION');
+    },
+    topLocation(context) {
+      context.commit('TOP_LOCATION');
+    },
+    rightLocation(context) {
+      context.commit('RIGHT_LOCATION');
     },
   },
   getters: {

@@ -1,74 +1,77 @@
 <template>
   <div class="d-flex flex-column justify-content-center align-items-center">
-    <!-- location -->
-    <button
-      @keyup.up="selectTop"
-      @keyup.right="selectRight"
-      @keyup.left="selectLeft"
-      @keyup.49="selectSize(0)"
-      @keyup.50="selectSize(1)"
-      @keyup.51="selectSize(2)"
-      @keyup.52="selectSize(3)"
-      @keyup.53="selectSize(4)"
-    >
-      <h2 class="text-center">location</h2>
-    </button>
-    <div class="template-container">
-      <img
-        src="@/assets/presentationTemplates/presentation-right.jpg"
-        alt=""
-        :class="[
-          { 'insert-border': presentationLocation === 'right' },
-          'template-insert',
-          'img-fluid',
-        ]"
-      />
-      <div @click="selectRight" class="overlay">
-        <span v-if="presentationLocation === 'right'">selected</span>
-        <span v-else>Presentation On Right</span>
+    <div class="button-setting">
+      <!-- location -->
+      <button
+        class="border-setting"
+        @keyup.up="selectTop"
+        @keyup.right="selectRight"
+        @keyup.left="selectLeft"
+        @keyup.49="selectSize(0)"
+        @keyup.50="selectSize(1)"
+        @keyup.51="selectSize(2)"
+        @keyup.52="selectSize(3)"
+        @keyup.53="selectSize(4)"
+      >
+        <h2 class="text-center">location</h2>
+      </button>
+      <div class="template-container">
+        <img
+          src="@/assets/presentationTemplates/presentation-right.jpg"
+          alt=""
+          :class="[
+            { 'insert-border': presentationLocation === 'right' },
+            'template-insert',
+            'img-fluid',
+          ]"
+        />
+        <div @click="selectRight" class="overlay">
+          <span v-if="presentationLocation === 'right'">selected</span>
+          <span v-else>Presentation On Right</span>
+        </div>
       </div>
-    </div>
-    <div class="template-container">
-      <img
-        src="@/assets/presentationTemplates/presentation-left.jpg"
-        alt=""
-        :class="[
-          { 'insert-border': presentationLocation === 'left' },
-          'template-insert',
-          'img-fluid',
-        ]"
-      />
-      <div @click="selectLeft" class="overlay">
-        <span v-if="presentationLocation === 'left'">selected</span>
-        <span v-else>Presentation On Left</span>
+      <div class="template-container">
+        <img
+          src="@/assets/presentationTemplates/presentation-left.jpg"
+          alt=""
+          :class="[
+            { 'insert-border': presentationLocation === 'left' },
+            'template-insert',
+            'img-fluid',
+          ]"
+        />
+        <div @click="selectLeft" class="overlay">
+          <span v-if="presentationLocation === 'left'">selected</span>
+          <span v-else>Presentation On Left</span>
+        </div>
       </div>
-    </div>
-    <div class="template-container">
-      <img
-        src="@/assets/presentationTemplates/presentation-top.jpg"
-        alt=""
-        :class="[
-          { 'insert-border': presentationLocation === 'top' },
-          'template-insert',
-          'img-fluid',
-        ]"
-      />
-      <div @click="selectTop" class="overlay">
-        <span v-if="presentationLocation === 'top'">selected</span>
-        <span v-else>Presentation On Top</span>
+      <div class="template-container">
+        <img
+          src="@/assets/presentationTemplates/presentation-top.jpg"
+          alt=""
+          :class="[
+            { 'insert-border': presentationLocation === 'top' },
+            'template-insert',
+            'img-fluid',
+          ]"
+        />
+        <div @click="selectTop" class="overlay">
+          <span v-if="presentationLocation === 'top'">selected</span>
+          <span v-else>Presentation On Top</span>
+        </div>
       </div>
-    </div>
-    <!-- size -->
-    <div class="size-controller">
-      <h2 class="text-center">size</h2>
-      <input
-        type="range"
-        class="range-select"
-        min="0"
-        max="4"
-        step="1"
-        v-model="selectedSize"
-      />
+      <!-- size -->
+      <div class="size-controller">
+        <h2 class="text-center">size</h2>
+        <input
+          type="range"
+          class="range-select"
+          min="0"
+          max="4"
+          step="1"
+          v-model="selectedSize"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -90,6 +93,12 @@ export default {
   },
   // : computed
   computed: {
+    slideUrls() {
+      return this.$store.state.meetingRoom.imageSrcs;
+    },
+    transition() {
+      return this.$store.state.meetingRoom.transition;
+    },
     currentPage() {
       return this.$store.state.meetingRoom.currentPage;
     },
@@ -102,9 +111,51 @@ export default {
     presentationTransition() {
       return this.$store.state.meetingRoom.transition;
     },
+    LocationLeft() {
+      return this.$store.state.meetingRoom.left;
+    },
+    LocationTop() {
+      return this.$store.state.meetingRoom.top;
+    },
+    LocationRight() {
+      return this.$store.state.meetingRoom.right;
+    },
+    size0() {
+      return this.$store.state.meetingRoom.size0;
+    },
+    size1() {
+      return this.$store.state.meetingRoom.size1;
+    },
+    size2() {
+      return this.$store.state.meetingRoom.size2;
+    },
+    size3() {
+      return this.$store.state.meetingRoom.size3;
+    },
+    size4() {
+      return this.$store.state.meetingRoom.size4;
+    },
   },
   // : watch
   watch: {
+    now: function () {
+      // 발표자의 현재 이미지 url state에 저장: 이미지 변경 시 -> actions / mutation으로 분리해야함
+      this.$store.state.meetingRoom.currentPage = this.now;
+      // 현재 본인이 발표자라면 웹소켓 메시지 보내기
+      if (
+        this.$store.state.meetingRoom.presenter ===
+        this.$store.state.meetingRoom.myName
+      ) {
+        var message = {
+          id: 'changePresentation',
+          currentPage: this.now,
+          location: this.presentationLocation,
+          size: this.presentationSize,
+          transition: this.transition,
+        };
+        this.$store.dispatch('meetingRoom/sendMessage', message);
+      }
+    },
     selectedSize: function () {
       const message = {
         id: 'changePresentation',
@@ -114,6 +165,30 @@ export default {
         transition: this.presentationTransition,
       };
       this.$store.dispatch('meetingRoom/sendMessage', message);
+    },
+    LocationLeft: function () {
+      this.selectLeft();
+    },
+    LocationTop: function () {
+      this.selectTop();
+    },
+    LocationRight: function () {
+      this.selectRight();
+    },
+    size0: function () {
+      this.selectSize(0);
+    },
+    size1: function () {
+      this.selectSize(1);
+    },
+    size2: function () {
+      this.selectSize(2);
+    },
+    size3: function () {
+      this.selectSize(3);
+    },
+    size4: function () {
+      this.selectSize(4);
     },
   },
   // : lifecycle hook
@@ -166,6 +241,14 @@ export default {
 </script>
 
 <style scoped>
+.button-setting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.border-setting {
+  border: 0px;
+}
 .template-container {
   position: relative;
   width: 240px;
