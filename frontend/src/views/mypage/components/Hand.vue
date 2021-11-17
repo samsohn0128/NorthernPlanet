@@ -97,96 +97,39 @@ export default {
       // Prediction 2: run input through teachable machine classification model
       const prediction = await model.predict(posenetOutput);
       if (prediction[0].probability.toFixed(2) > 0.99 && this.handactive2) {
-        console.log('prediction[0]00000000000000000000');
       } else if (
         prediction[1].probability.toFixed(2) > 0.99 &&
         this.handactive2
       ) {
-        console.log('prediction[1]111111111111111111111111');
         this.predictFlag = false;
-        if (
-          this.$store.state.meetingRoom.now <
-          this.$store.state.meetingRoom.imgLength - 1
-        ) {
-          store.dispatch('meetingRoom/goNext');
-        }
+        this.$emit('next');
       } else if (
         prediction[2].probability.toFixed(2) > 0.99 &&
         this.handactive2
       ) {
-        console.log('prediction[2]222222222222222222222222');
         this.predictFlag = false;
-        if (this.$store.state.meetingRoom.size < 4) {
-          this.$store.state.meetingRoom.size++;
-          const message = {
-            id: 'changePresentation',
-            currentPage: this.$store.state.meetingRoom.currentPage,
-            location: this.$store.state.meetingRoom.location,
-            size: this.$store.state.meetingRoom.size,
-            transition: this.$store.state.meetingRoom.transition,
-          };
-          this.$store.dispatch('meetingRoom/sendMessage', message);
-        }
+        this.$emit('sizeUp');
       } else if (
         prediction[3].probability.toFixed(2) > 0.99 &&
         this.handactive2
       ) {
-        console.log('prediction[3]33333333333333333333333');
         this.predictFlag = false;
-        if (this.$store.state.meetingRoom.size > 0) {
-          this.$store.state.meetingRoom.size--;
-          const message = {
-            id: 'changePresentation',
-            currentPage: this.$store.state.meetingRoom.currentPage,
-            location: this.$store.state.meetingRoom.location,
-            size: this.$store.state.meetingRoom.size,
-            transition: this.$store.state.meetingRoom.transition,
-          };
-          this.$store.dispatch('meetingRoom/sendMessage', message);
-        }
+        this.$emit('sizeDown');
       } else if (prediction[4].probability.toFixed(2) > 0.99) {
-        console.log('prediction[4]4444444444444444444444444');
         this.predictFlag = false;
         this.handactive2 = !this.handactive2;
-        // this.$store.state.meetingRoom.location = 'left';
-        // const message = {
-        //   id: 'changePresentation',
-        //   currentPage: this.$store.state.meetingRoom.currentPage,
-        //   location: this.$store.state.meetingRoom.location,
-        //   size: this.$store.state.meetingRoom.size,
-        //   transition: this.$store.state.meetingRoom.transition,
-        // };
-        // this.$store.dispatch('meetingRoom/sendMessage', message);
       } else if (
         prediction[5].probability.toFixed(2) > 0.99 &&
         this.handactive2
       ) {
-        console.log('prediction[5]55555555555555555555555555');
         this.predictFlag = false;
-        this.$store.state.meetingRoom.location = 'right';
-        const message = {
-          id: 'changePresentation',
-          currentPage: this.$store.state.meetingRoom.currentPage,
-          location: this.$store.state.meetingRoom.location,
-          size: this.$store.state.meetingRoom.size,
-          transition: this.$store.state.meetingRoom.transition,
-        };
-        this.$store.dispatch('meetingRoom/sendMessage', message);
+        this.$emit('locationRight');
       } else if (
         prediction[6].probability.toFixed(2) > 0.99 &&
         this.handactive2
       ) {
-        console.log('prediction[6]666666666666666666666666');
         this.predictFlag = false;
-        this.$store.state.meetingRoom.location = 'top';
-        const message = {
-          id: 'changePresentation',
-          currentPage: this.$store.state.meetingRoom.currentPage,
-          location: this.$store.state.meetingRoom.location,
-          size: this.$store.state.meetingRoom.size,
-          transition: this.$store.state.meetingRoom.transition,
-        };
-        this.$store.dispatch('meetingRoom/sendMessage', message);
+        this.$emit('locationTop');
       }
     },
   },

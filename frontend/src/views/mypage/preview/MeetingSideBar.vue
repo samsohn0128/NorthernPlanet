@@ -176,7 +176,16 @@
         </button>
       </div>
     </div>
-    <Hand class="hand" v-model="handactive" @isLoading="changeGestureLoading" />
+    <Hand
+      class="hand"
+      v-model="handactive"
+      @isLoading="changeGestureLoading"
+      @next="nextImage"
+      @locationTop="selectTop"
+      @locationRight="selectRight"
+      @sizeUp="sizeUp"
+      @sizeDown="sizeDown"
+    />
   </div>
 </template>
 
@@ -203,8 +212,8 @@ export default {
       ScriptShow: false,
 
       LocationSizeShow: true,
-      selectedSize: null,
-      selectedLocation: null,
+      selectedSize: 3,
+      selectedLocation: 'right',
       effects: {
         default: 0,
         fadein: 1,
@@ -233,12 +242,11 @@ export default {
     },
   },
   // : lifecycle hook
-  mounted() {},
+  mounted() {
+    this.emitLocation();
+  },
   // : methods
   methods: {
-    selectGestureMenu: function () {
-      this.GestureShow = !this.GestureShow;
-    },
     selectScriptMenu: function () {
       this.ScriptShow = !this.ScriptShow;
       this.emitScriptShow();
@@ -264,6 +272,12 @@ export default {
     selectTop: function () {
       this.selectedLocation = 'top';
       this.emitLocation();
+    },
+    sizeUp: function () {
+      if (this.selectedSize < 4) this.selectedSize++;
+    },
+    sizeDown: function () {
+      if (this.selectedSize > 0) this.selectedSize--;
     },
     // Effect의 예시를 보여준다.
     showExample(idx, effect) {
