@@ -46,19 +46,31 @@
                 </div>
               </label>
             </div>
+            <div
+              class="modal-body-file-list row"
+              id="showFileName"
+              v-if="this.imgFile"
+            >
+              <div class="col">{{ this.imgFile[0].name }}</div>
+              <div class="col" v-if="this.imgFile.length > 1">
+                + {{ this.imgFile.length - 1 }}
+              </div>
+            </div>
           </div>
-          <div id="showFileName"></div>
+
           <input
             type="file"
             multiple="multiple"
             id="input-picture"
             style="display: none"
-            @change="selectFile"
+            accept=".jpg, .png, .jpeg"
+            @change="selectImage"
           />
           <input
             type="file"
             id="input-file"
             style="display: none"
+            accept=".gif, .pdf, .pptx"
             @change="selectFile"
           />
           <!-- <img
@@ -102,6 +114,7 @@ export default {
       dialogVisible: { first: false },
       imgUrl: { first: '' },
       userId: store.getters['users/getUserId'],
+      imgFile: null,
     };
   },
 
@@ -147,26 +160,15 @@ export default {
       }
     },
     cancelPPT() {
-      document.getElementById('showFileName').innerHTML = '';
       this.$router.go();
     },
-    selectFile(e) {
-      const file = e.target.files[0];
-      // document.getElementsByClassName('image')[0].src =
-      //   URL.createObjectURL(file);
-      this.imgUrl.first = URL.createObjectURL(file);
-      let imgFile = document.getElementById('input-picture').files;
-      if (imgFile.length == 0) {
-        imgFile = document.getElementById('input-file').files;
-      }
-      let fileList = '';
-      for (let i = 0; i < imgFile.length; i++) {
-        fileList += imgFile[i].name + '<br>';
-      }
-      console.log('imagefile: ', imgFile);
-      console.log('filelist: ', fileList);
-      let target2 = document.getElementById('showFileName');
-      target2.innerHTML = fileList;
+    selectFile() {
+      this.imgFile = null;
+      this.imgFile = document.getElementById('input-file').files;
+    },
+    selectImage() {
+      this.imgFile = null;
+      this.imgFile = document.getElementById('input-picture').files;
     },
     change() {
       // this.dialog = false;
@@ -178,29 +180,29 @@ export default {
 
 <style scoped>
 .modal-body {
-  display: flex;
-  align-items: center;
   width: 100%;
   height: 100%;
 }
 .modal-body-content {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
 }
 .modal-body-content-item {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  margin-left: 14px;
+}
+.modal-body-file-list {
+  margin-left: 17px;
 }
 .input-file-button-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 .input-file-button {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   text-align: center;
   width: 100%;
@@ -215,7 +217,7 @@ export default {
   font-size: 15px;
   font-weight: bold;
   text-align: center;
-  border-radius: 0.25rem;
+  border-radius: 10px;
 }
 .thumbnail-setting {
   max-width: 200px;
