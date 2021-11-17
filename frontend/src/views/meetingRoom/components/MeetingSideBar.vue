@@ -178,13 +178,8 @@ export default {
       this.gestureLoading = isLoading;
     },
     selectScriptMenu: function () {
-      if (this.ScriptShow == false) {
-        this.ScriptShow = true;
-      } else {
-        this.ScriptShow = false;
-      }
-      // 대본을 키고 끄는 코드
-      // this.emitScriptShow();
+      this.ScriptShow = !this.ScriptShow;
+      this.$store.dispatch('meetingRoom/showScript');
     },
   },
 };

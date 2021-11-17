@@ -100,20 +100,19 @@
             autoplay="true"
             poster="@/assets/img/logos/focus_camera4.jpg"
           ></video>
+          <div id="ppt-image-setting">
+            <transition name="fade" mode="out-in" v-if="idx !== null">
+              <img
+                :src="imageSrcs"
+                :key="imageSrcs"
+                alt="presentation image"
+                :class="[sizePreset, transitionPreset, 'img-fluid']"
+                id="img-setting"
+              />
+            </transition>
+          </div>
         </div>
-
-        <div id="ppt-image-setting">
-          <transition name="fade" mode="out-in" v-if="idx !== null">
-            <img
-              :src="imageSrcs"
-              :key="imageSrcs"
-              alt="presentation image"
-              :class="[sizePreset, transitionPreset]"
-              id="img-setting"
-            />
-          </transition>
-        </div>
-        <div class="script" v-if="currentPage !== null">
+        <div class="script" v-if="showScriptnow">
           <div v-html="script"></div>
         </div>
       </div>
@@ -209,7 +208,7 @@ export default {
       isMicOn: false,
       isVideoOn: true,
 
-      content: null,
+      // content: null,
       effects: {
         default: 0,
         fadein: 1,
@@ -223,6 +222,7 @@ export default {
         flipy: 9,
         rotatein: 10,
       },
+      showScriptnow: true,
     };
   },
   // : watch
@@ -343,7 +343,7 @@ export default {
       });
       console.log('시작 slideList: ', this.slideList);
       this.idx = 1;
-      this.content = this.slideList[1].script;
+      // this.content = this.slideList[1].script;
     },
     // Size 세팅
     setSize(selectedSize) {
@@ -363,30 +363,12 @@ export default {
     setIdxplus() {
       if (this.idx < this.slideList.length - 2) {
         this.idx += 1;
-        // this.content = this.slideList[this.idx].script;
-        // if (this.content != null) {
-        //   document.getElementById('changeinitialValue').innerHTML =
-        //     this.content;
-        // } else {
-        //   document.getElementById('changeinitialValue').innerHTML =
-        //     '대본을<br>설정해주세요';
-        // }
       }
-      // console.log(this.content);
     },
     setIdxminus() {
       if (this.idx > 1) {
         this.idx -= 1;
-        // this.content = this.slideList[this.idx].script;
-        // if (this.content != null) {
-        //   document.getElementById('changeinitialValue').innerHTML =
-        //     this.content;
-        // } else {
-        //   document.getElementById('changeinitialValue').innerHTML =
-        //     '대본을<br>설정해주세요';
-        // }
       }
-      // console.log(this.content);
     },
     // effect 미리보기
     setEffect(idx) {
@@ -451,14 +433,8 @@ export default {
       this.$router.go(-1);
     },
     showScript() {
-      // let scriptshow = document.getElementById('script-show');
-      // if (scriptshow.style.display != 'none') {
-      //   scriptshow.style.display = 'none';
-      //   document.getElementById('script-button-text').innerText = '대본 보이기';
-      // } else {
-      //   scriptshow.style.display = 'flex';
-      //   document.getElementById('script-button-text').innerText = '대본 숨기기';
-      // }
+      this.showScriptnow = !this.showScriptnow;
+      console.log('inside showScript', this.showScriptnow);
     },
     // videoOnOff: function () {
     //   if (this.isVideoOn) {
@@ -503,8 +479,8 @@ export default {
   margin-top: 57px;
   max-width: 100%;
   z-index: 1;
-  width: 70%;
-  height: 60vh;
+  width: 100%;
+  height: 60%;
   display: flex;
   align-items: center;
   position: absolute;
@@ -571,7 +547,9 @@ dbecec
   width: 71%;
   margin-bottom: 10px;
 }
-
+.img-fluid {
+  max-width: 100%;
+}
 .bottom-content {
   display: flex;
   flex-direction: row;

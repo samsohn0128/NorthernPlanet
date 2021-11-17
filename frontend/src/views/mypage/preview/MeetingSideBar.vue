@@ -411,7 +411,7 @@ export default {
   height: 180px;
 }
 .insert-border {
-  border: 0.4rem solid;
+  border: 0.4rem solid #495c4d;
 }
 .template-container:hover .overlay {
   opacity: 1;
