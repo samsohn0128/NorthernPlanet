@@ -34,7 +34,7 @@
       <!-- left side bar control buttons -->
       <!-- Room Title -->
       <h1 class="room-title">{{ roomTitle }}</h1>
-      <div class="upside-ppt">
+      <!-- <div class="upside-ppt">
         <div class="set-timer-location">
           <div class="time-space">
             <span id="showMin">00</span>
@@ -52,8 +52,8 @@
             </button>
           </div>
         </div>
-      </div>
-      -->
+      </div> -->
+
       <div class="upside-ppt-inside set-timer-location">
         <div class="time-space">
           <span id="showMin">00</span> : <span id="showSec">00</span>
@@ -395,6 +395,7 @@ export default {
   width: 8vw;
   height: 2.3vw;
   text-align: center;
+  /* background: #505753; */
   background: #505753;
   color: white;
   font-size: 15px;
@@ -413,15 +414,6 @@ export default {
 }
 .time-button {
   margin: 2px;
-}
-.time-button-space {
-  width: 12vw;
-  text-align: center;
-  background: #e8f5e9;
-  color: black;
-  font-size: 18px;
-  padding: 5px;
-  border-radius: 0px 0px 10px 10px;
 }
 .settingStart {
   background: #4aae71;

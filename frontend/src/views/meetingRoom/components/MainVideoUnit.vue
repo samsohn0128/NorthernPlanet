@@ -152,6 +152,24 @@ export default {
   z-index: 5;
   overflow: auto;
 }
+/* scroll bar*/
+/* 스크롤바 설정*/
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* 스크롤바 막대 설정*/
+::-webkit-scrollbar-thumb {
+  height: 5px;
+  background-color: #303f9f;
+  /* 스크롤바 둥글게 설정    */
+  border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.33);
+}
 /* location presets */
 .presentation-right {
   justify-content: flex-end;
