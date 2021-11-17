@@ -104,5 +104,6 @@ export default {
 .profile-image {
   display: flex;
   align-items: center;
+  height: 40px;
 }
 </style>
