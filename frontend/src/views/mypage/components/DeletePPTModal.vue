@@ -10,7 +10,9 @@
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="modal-title" id="ModalWithdraw">발표자료 삭제하기</h6>
+          <h6 class="modal-title" id="ModalWithdraw">
+            Your attention is required
+          </h6>
           <button
             type="button"
             class="btn-close"
@@ -23,22 +25,22 @@
         <div class="modal-body">
           <div class="py-3 text-center">
             <i class="ni ni-bell-55 ni-3x"></i>
-            <h4 class="text-gradient text-danger mt-4">
-              정말 발표자료를 삭제하시겠습니까?
+            <h4 class="delete-title mt-4">
+              Are you sure delete your presentation?
             </h4>
           </div>
         </div>
         <div class="modal-footer">
           <button
             type="button"
-            class="btn bg-gradient-secondary"
+            class="btn btn-outline-dark"
             data-bs-dismiss="modal"
           >
             Cancel
           </button>
           <button
             type="button"
-            class="btn bg-gradient-danger"
+            class="btn button-danger-setting"
             @click="deletePPT()"
             data-bs-dismiss="modal"
           >
@@ -88,4 +90,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
+}
+.delete-title {
+  color: #ba635f;
+}
+</style>

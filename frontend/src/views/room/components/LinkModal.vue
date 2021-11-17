@@ -25,7 +25,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body url-div">
+        <div class="modal-body url-div input-group">
           <input
             id="url-input"
             :value="roomLink"
@@ -35,7 +35,7 @@
               minWidth: '20px',
               comfortZone: 0,
             }"
-            class="w-80"
+            class="form-control w-80"
           />
           <button
             @click="copyUrl"
@@ -97,6 +97,6 @@ export default {
   margin: 0 10px 0 10px;
 }
 .url-div {
-  margin: 5px 0 5px 15px;
+  margin: 5px 5px 15px;
 }
 </style>

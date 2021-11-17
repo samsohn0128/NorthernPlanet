@@ -50,8 +50,8 @@
                 type="button"
                 class="btn"
                 :class="{
-                  'bg-gradient-dark': isMicOn,
-                  'bg-gradient-secondary': !isMicOn,
+                  'button-color-setting': isMicOn,
+                  'btn-outline-dark': !isMicOn,
                 }"
                 @click="micOnOff"
               >
@@ -67,8 +67,8 @@
                 type="button"
                 class="btn"
                 :class="{
-                  'bg-gradient-dark': isVideoOn,
-                  'bg-gradient-secondary': !isVideoOn,
+                  'button-color-setting': isVideoOn,
+                  'btn-outline-dark': !isVideoOn,
                 }"
                 @click="videoOnOff"
               >
@@ -82,7 +82,7 @@
               </button>
               <button
                 type="button"
-                class="btn bg-gradient-primary"
+                class="btn button-create-setting"
                 style="float: right"
                 @click="sendMsgToKurento"
               >
@@ -215,3 +215,16 @@ export default {
   },
 };
 </script>
+<style scoped>
+.btn {
+  margin: 4px;
+}
+.button-create-setting {
+  background: linear-gradient(90deg, #77dfde, #dbd64a);
+  color: white;
+}
+.button-color-setting {
+  background: #66806a;
+  color: white;
+}
+</style>
