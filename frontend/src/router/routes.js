@@ -20,8 +20,6 @@ import PresentationPreview from '@/views/mypage/PresentationPreview.vue';
 import ModifyPresentation from '@/views/mypage/ModifyPresentation.vue';
 import PageNotFound from '@/components/common/PageNotFound.vue';
 
-import Script from '@/views/Script.vue';
-
 export default [
   {
     path: '/',
@@ -114,11 +112,6 @@ export default [
     path: '/mypage/presentationpreview/:userId/:presentationId',
     name: 'PresentationPreview',
     component: PresentationPreview,
-    meta: { authRequired: true },
-  },
-  {
-    path: '/script',
-    component: Script,
     meta: { authRequired: true },
   },
   {

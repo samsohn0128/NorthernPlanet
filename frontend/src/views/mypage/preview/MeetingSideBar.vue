@@ -77,6 +77,7 @@
           ></div>
         </div> -->
         <div>
+          <h3 style="margin: 0px">Location</h3>
           <div class="template-container">
             <div @click="selectRight" class="overlay">
               <img

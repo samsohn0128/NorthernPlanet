@@ -115,7 +115,9 @@ export default {
       userName: store.state.users.user.name
         ? store.state.users.user.name
         : null,
-      userId: Math.random(),
+      userId: store.state.users.user.userId
+        ? store.state.users.user.userId
+        : Math.random(),
       roomDescription: null,
       isMicOn: false,
       isVideoOn: false,

@@ -33,15 +33,14 @@
               <div class="row">
                 <div class="col-md-12 pt-3">
                   <label><h6 class="name-margin-setting">Name</h6></label>
-                  <div class="input-group row">
-                    <div class="col-9">
-                      <input
-                        type="name"
-                        class="form-control"
-                        v-model="userName"
-                      />
-                    </div>
-                    <div class="col-3">
+                  <div class="input-group">
+                    <input
+                      type="name"
+                      class="form-control"
+                      v-model="userName"
+                      readonly
+                    />
+                    <!-- <div class="col-3">
                       <button
                         type="button"
                         class="btn button-setting"
@@ -49,7 +48,7 @@
                       >
                         Modify
                       </button>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
