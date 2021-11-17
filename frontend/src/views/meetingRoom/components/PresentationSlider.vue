@@ -1,31 +1,37 @@
 <template>
   <div>
-    <!-- prev -->
-    <PresentationSlideItem v-if="prev >= 0" :slideUrl="slideUrls[prev]" />
-    <img
-      v-else
-      src="@/assets/presentationTemplates/first-slide.png"
-      alt=""
-      class="template-insert"
-    />
-    <!-- now -->
-    <div style="position: relative">
-      <PresentationSlideItem :slideUrl="slideUrls[now]" />
-      <div class="overlay"><span>Now</span></div>
+    <div class="small-img-container">
+      <!-- prev -->
+      <PresentationSlideItem
+        v-if="prev >= 0"
+        :slideUrl="slideUrls[prev]"
+        :Next="false"
+        @selectPrev="progressPrev"
+        @selectNext="progressNext"
+      />
+      <img
+        v-else
+        src="@/assets/presentationTemplates/first-slide.png"
+        alt=""
+        class="small-img-setting"
+      />
+      <!-- next -->
+      <PresentationSlideItem
+        v-if="next < slideUrls.length"
+        :slideUrl="slideUrls[next]"
+        :Next="true"
+        @selectPrev="progressPrev"
+        @selectNext="progressNext"
+      />
+      <img
+        v-else
+        src="@/assets/presentationTemplates/last-slide.png"
+        alt=""
+        class="small-img-setting"
+      />
     </div>
-    <!-- next -->
-    <PresentationSlideItem
-      v-if="next < slideUrls.length"
-      :slideUrl="slideUrls[next]"
-    />
-    <img
-      v-else
-      src="@/assets/presentationTemplates/last-slide.png"
-      alt=""
-      class="template-insert"
-    />
     <!-- slider: 슬라이드 넘기기 ui -->
-    <div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-center align-items-center mb-5">
       <button class="slider-prev-button" @click="progressPrev">prev</button>
       <button @keyup.right="progressNext" @keyup.left="progressPrev">
         <div class="slider-progress-indicator">
@@ -220,5 +226,21 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+.small-img-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 350px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.small-img-setting {
+  max-width: 190px;
+  max-height: 100px;
+  padding: 5px;
+  cursor: pointer;
 }
 </style>
