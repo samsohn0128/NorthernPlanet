@@ -84,7 +84,7 @@ export default {
       return this.$store.state.meetingRoom.transition;
     },
     currentPage() {
-      return this.$store.state.meetingRoom.currentPage;
+      return this.$store.state.meetingRoom.now;
     },
     PagePlus() {
       return this.$store.state.meetingRoom.plus;
@@ -95,38 +95,25 @@ export default {
   },
   // : watch
   watch: {
-    now: function () {
-      // 발표자의 현재 이미지 url state에 저장: 이미지 변경 시 -> actions / mutation으로 분리해야함
-      this.$store.state.meetingRoom.currentPage = this.now;
-      // 현재 본인이 발표자라면 웹소켓 메시지 보내기
-      if (
-        this.$store.state.meetingRoom.presenter ===
-        this.$store.state.meetingRoom.myName
-      ) {
-        var message = {
-          id: 'changePresentation',
-          currentPage: this.now,
-          location: this.presentationLocation,
-          size: this.presentationSize,
-          transition: this.transition,
-        };
-        this.$store.dispatch('meetingRoom/sendMessage', message);
-      }
-    },
     PagePlus: function () {
       this.progressNext();
     },
     PageMinus: function () {
       this.progressPrev();
     },
+    currentPage: function () {
+      this.now = this.currentPage;
+      this.prev = this.currentPage - 1;
+      this.next = this.currentPage + 1;
+    },
+  },
+  created() {
+    this.now = this.$store.state.meetingRoom.now;
+    this.prev = this.now - 1;
+    this.next = this.now + 1;
   },
   // : lifecycle hook
-  mounted() {
-    this.$store.state.meetingRoom.prev = this.currentPage - 1;
-    this.$store.state.meetingRoom.now = this.currentPage;
-    this.$store.state.meetingRoom.next = this.currentPage + 1;
-    console.log(this.$store.state.meetingRoom.now);
-  },
+  mounted() {},
   // : methods
   methods: {
     progressPrev: function () {

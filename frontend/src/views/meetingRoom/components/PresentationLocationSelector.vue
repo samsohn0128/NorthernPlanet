@@ -286,6 +286,7 @@ export default {
 }
 .size-controller {
   margin-top: 0px;
+  margin-bottom: 60px;
 }
 .range-select {
   -webkit-appearance: none;

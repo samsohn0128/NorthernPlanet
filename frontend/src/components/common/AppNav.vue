@@ -102,6 +102,8 @@ export default {
   border: 1.5px solid white;
 }
 .profile-image {
+  display: flex;
   align-items: center;
+  height: 40px;
 }
 </style>
