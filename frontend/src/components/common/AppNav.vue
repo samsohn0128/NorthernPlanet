@@ -13,7 +13,7 @@
         </router-link>
       </div>
       <div class="col col-md-10"></div>
-      <div class="col-md-1 right-nav profile-image">
+      <div class="col-md-1 right-nav profile-image mt-4">
         <div class="row dropdown">
           <div
             class="col"
