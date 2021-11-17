@@ -25,18 +25,10 @@ export default {
       isLoading: false,
     };
   },
-  mounted() {
-    // this.init();
-    console.log('value: ' + this.value + ' - mounted');
-    console.log('handactive: ' + this.handactive + ' - mounted');
-  },
   watch: {
     value: function () {
       this.handactive = this.value;
       this.handactive2 = this.value;
-      console.log('value: ' + this.value);
-      console.log('handactive: ' + this.handactive);
-      console.log('handactive2: ' + this.handactive2);
       if (this.handactive) {
         this.isLoading = true;
         this.init().then(() => {
@@ -72,7 +64,6 @@ export default {
       return new Promise(() => {
         setTimeout(() => {
           this.predictFlag = true;
-          console.log('after wait, this.predictFlag: ' + this.predictFlag);
           window.requestAnimationFrame(this.loop);
         }, timeToDelay);
       });
@@ -82,7 +73,6 @@ export default {
       webcam.update(); // update the webcam frame
       if (this.predictFlag) await this.predict();
       else {
-        console.log('before wait, this.predictFlag: ' + this.predictFlag);
         await this.wait(800);
       }
       if (this.handactive) window.requestAnimationFrame(this.loop);
@@ -91,7 +81,6 @@ export default {
     async predict() {
       // Prediction #1: run input through posenet
       // estimatePose can take in an image, video or canvas html element
-      console.log('ready to predict');
 
       const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
       // Prediction 2: run input through teachable machine classification model
