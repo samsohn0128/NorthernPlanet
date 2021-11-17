@@ -57,11 +57,7 @@ export default {
       nowTime: '',
     };
   },
-  computed: {
-    myName() {
-      return this.$store.getters['meetingRoom/getMyName'];
-    },
-  },
+  computed: {},
   methods: {
     addChat: function () {
       if (this.chatInput === '') return;
@@ -77,7 +73,6 @@ export default {
       const message = {
         id: 'addChat',
         time: this.nowTime,
-        name: this.myName,
         chatContent: this.chatInput,
       };
 
