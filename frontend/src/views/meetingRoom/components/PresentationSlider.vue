@@ -86,6 +86,12 @@ export default {
     currentPage() {
       return this.$store.state.meetingRoom.currentPage;
     },
+    PagePlus() {
+      return this.$store.state.meetingRoom.plus;
+    },
+    PageMinus() {
+      return this.$store.state.meetingRoom.minus;
+    },
   },
   // : watch
   watch: {
@@ -106,6 +112,12 @@ export default {
         };
         this.$store.dispatch('meetingRoom/sendMessage', message);
       }
+    },
+    PagePlus: function () {
+      this.progressNext();
+    },
+    PageMinus: function () {
+      this.progressPrev();
     },
   },
   // : lifecycle hook
