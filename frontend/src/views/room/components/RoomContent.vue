@@ -50,6 +50,7 @@
         <label>
           <h6>Participant List</h6>
         </label>
+
         <div class="form-group mb-4" v-if="isManager">
           <div class="row">
             <div class="col-md-10">
