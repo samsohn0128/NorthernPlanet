@@ -282,16 +282,22 @@ export default {
 }
 /* location presets */
 .presentation-right {
-  justify-content: flex-end;
-  align-items: center;
+  /* justify-content: flex-end;
+  align-items: center; */
+  justify-content: center;
+  align-items: end;
 }
 .presentation-left {
-  justify-content: start;
-  align-items: center;
-}
-.presentation-top {
+  /* justify-content: start;
+  align-items: center; */
   justify-content: center;
   align-items: start;
+}
+.presentation-top {
+  /* justify-content: center;
+  align-items: start; */
+  justify-content: start;
+  align-items: center;
 }
 /* size presets */
 .presentation-0 {
