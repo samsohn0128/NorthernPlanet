@@ -476,11 +476,11 @@ export default {
 
 <style scoped>
 #ppt-image-setting {
-  margin-top: 57px;
+  margin-left: 160px;
   max-width: 100%;
   z-index: 1;
-  width: 100%;
-  height: 60%;
+  width: 70%;
+  height: 100%;
   display: flex;
   align-items: center;
   position: absolute;
