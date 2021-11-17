@@ -126,7 +126,10 @@
       </div>
       <div class="bottom-content">
         <div class="d-flex controller" @keyup.right="progressNext">
-          <button class="controller-button mx-3" @click="goBack">
+          <button
+            class="controller-button mx-3 button-color-setting"
+            @click="goBack"
+          >
             <i class="ni ni-fat-remove ni-2x"></i>
           </button>
         </div>
@@ -285,6 +288,9 @@ export default {
       }
     });
   },
+  destroyed() {
+    this.stopVideoFromCamera();
+  },
   // : methods
   methods: {
     toggleRightSide: function () {
@@ -375,7 +381,7 @@ export default {
 
           document.getElementById('showMin').innerText = this.min;
           document.getElementById('showSec').innerText = this.sec;
-          document.getElementById('showMilisec').innerText = this.milisec;
+          // document.getElementById('showMilisec').innerText = this.milisec;
         }, 1);
       } else {
         // 일시정지 버튼을 누를 때
@@ -403,7 +409,7 @@ export default {
       this.timerWork = null;
       document.getElementById('showMin').innerText = '00';
       document.getElementById('showSec').innerText = '00';
-      document.getElementById('showMilisec').innerText = '00';
+      // document.getElementById('showMilisec').innerText = '00';
     },
     // 계산
     addZero(num) {
@@ -411,6 +417,7 @@ export default {
     },
     // 뒤로 가기
     goBack() {
+      this.stopVideoFromCamera();
       this.$router.go(-1);
     },
     showScript() {
@@ -467,7 +474,6 @@ export default {
 <style scoped>
 #ppt-image-setting {
   margin-top: 57px;
-
   width: 70vw;
   height: 60vh;
   display: flex;
@@ -480,7 +486,7 @@ export default {
   padding: 20px 20px;
   /* background: linear-gradient(90deg, #2c3153 0%, #15182a 100%); */
   /* background: #66806a; */
-  background: #2d382f;
+  background: #29332b;
 }
 /* RGB
 93 244 237 #5df4ec
@@ -576,10 +582,6 @@ dbecec
   align-items: center;
   width: 50vw;
 }
-.button-setting {
-  background: #4ba3c7;
-  color: white;
-}
 
 /* 스톱워치 */
 .set-timer-location {
@@ -591,6 +593,7 @@ dbecec
   width: 8vw;
   height: 2.3vw;
   text-align: center;
+  /* background: #505753; */
   background: #505753;
   color: white;
   font-size: 15px;
@@ -700,7 +703,7 @@ dbecec
   top: 0;
   right: 0;
   height: 100vh;
-  background: #e9ecef;
+  background: #f7fbf9;
   position: fixed;
   overflow: auto;
 }
@@ -745,6 +748,22 @@ dbecec
 .button-show-enter-active {
   animation-delay: 0.3s;
   visibility: hidden;
+}
+.button-color-setting {
+  background: #66806a;
+  color: white;
+}
+.button-outline-setting {
+  border: 1.5px solid #66806a;
+  color: #456357;
+}
+.button-create-setting {
+  background: #ffc286;
+  color: white;
+}
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
 }
 
 /* scroll bar*/

@@ -123,10 +123,10 @@
         </div>
         <!-- size -->
         <div>
-          <h2>size</h2>
+          <h2 class="text-global">size</h2>
           <input
             type="range"
-            class="range-select"
+            class="range-select size-class"
             min="0"
             max="4"
             step="1"
@@ -318,16 +318,19 @@ export default {
   border-radius: 30px;
   color: black;
   font-weight: bold;
-  background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
+  background: linear-gradient(90deg, #d1e3da, #aebdb6);
 }
 .navigator-button-active {
   background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
 }
 .navigator-button-inactive {
-  background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
+  /* background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%); */
+  border: 2px solid #66806a;
+  color: #456357;
 }
 .button-setting {
-  background: #4ba3c7;
+  /* background: #4ba3c7; */
+  background: #66806a;
   color: white;
 }
 .access-alert {
@@ -431,6 +434,29 @@ export default {
   align-items: center;
   overflow: auto;
   max-height: 833px;
+}
+.button-color-setting {
+  background: #66806a;
+  color: white;
+}
+.button-outline-setting {
+  border: 1.5px solid #66806a;
+  color: #456357;
+}
+.button-create-setting {
+  background: #ffc286;
+  color: white;
+}
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
+}
+.text-global {
+  color: #505753;
+}
+.size-class {
+  color: #505753;
+  background: #aebdb6;
 }
 
 /* 애니메이션 설정 */

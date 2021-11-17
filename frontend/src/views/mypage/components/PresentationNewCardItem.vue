@@ -11,6 +11,7 @@
         border-radius-lg
         bg-gradient-primary
         z-index-1
+        new-card
       "
     >
       <div class="new-presentation">
@@ -46,5 +47,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.new-card:hover {
+  cursor: pointer;
 }
 </style>
