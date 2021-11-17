@@ -20,16 +20,31 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div>
-          <div class="row">
-            <label class="input-file-button col" for="input-picture"
-              >Image<img src="https://img.icons8.com/ios/50/000000/image.png" />
-            </label>
+        <div class="modal-body">
+          <div class="modal-body-content container py-3">
+            <div class="modal-body-content-item row">
+              <label class="input-file-button col" for="input-picture">
+                <div class="input-file-button-content col">
+                  <img
+                    src="https://img.icons8.com/ios/50/000000/image.png"
+                    class="row"
+                  />
 
-            <label class="input-file-button col" for="input-file"
-              >PPT or PDF<img
-                src="https://img.icons8.com/ios/50/000000/file.png"
-            /></label>
+                  <div class="row">IMAGE</div>
+                </div>
+              </label>
+
+              <label class="input-file-button col" for="input-file">
+                <div class="input-file-button-content col">
+                  <img
+                    src="https://img.icons8.com/ios/50/000000/file.png"
+                    class="row"
+                  />
+
+                  <div class="row">FILE</div>
+                </div>
+              </label>
+            </div>
           </div>
           <div id="showFileName"></div>
           <input
@@ -45,12 +60,12 @@
             style="display: none"
             @change="selectFile"
           />
-          <img
+          <!-- <img
             class="image thumbnail-setting"
             :src="imgUrl.first"
             alt=""
             @click="dialogVisible.first = true"
-          />
+          /> -->
         </div>
         <div class="modal-footer">
           <button
@@ -130,8 +145,8 @@ export default {
     },
     selectFile(e) {
       const file = e.target.files[0];
-      document.getElementsByClassName('image')[0].src =
-        URL.createObjectURL(file);
+      // document.getElementsByClassName('image')[0].src =
+      //   URL.createObjectURL(file);
       this.imageChanged = true;
       this.imgUrl.first = URL.createObjectURL(file);
       let imgFile = document.getElementById('input-picture').files;
@@ -154,20 +169,45 @@ export default {
 </script>
 
 <style scoped>
+.modal-body {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.modal-body-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+.modal-body-content-item {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.input-file-button-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .input-file-button {
   display: flex;
   justify-content: center;
-  width: 50%;
-  height: 30%;
+  text-align: center;
+  width: 100%;
+  height: 100%;
   /* height: 40px; */
-  background: #4ba3c7;
+  background-color: #b4c6a6;
+
   /* border-radius: 50%; */
-  color: white;
+  color: #ffffff;
   margin-right: 35px;
   cursor: pointer;
   font-size: 15px;
   font-weight: bold;
   text-align: center;
+  border-radius: 0.25rem;
 }
 .thumbnail-setting {
   max-width: 200px;
