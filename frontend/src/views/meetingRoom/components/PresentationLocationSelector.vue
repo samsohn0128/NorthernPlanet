@@ -125,6 +125,7 @@ export default {
   // : methods
   methods: {
     selectSize: function (size) {
+      console.log('this.selectedSize: ' + this.selectedSize);
       this.selectedSize = size;
     },
     selectRight: function () {
