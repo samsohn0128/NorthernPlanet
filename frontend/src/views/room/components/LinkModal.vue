@@ -99,4 +99,7 @@ export default {
 .url-div {
   margin: 5px 5px 15px;
 }
+* {
+  color: #505753;
+}
 </style>
