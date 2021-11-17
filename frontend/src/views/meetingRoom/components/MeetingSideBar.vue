@@ -45,7 +45,10 @@
       </button>
       <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner> -->
     </div>
-    <div class="d-flex justify-content-center navigator">
+    <div
+      class="d-flex justify-content-center navigator"
+      v-if="presentationShow"
+    >
       <button
         :class="[
           { 'button-toggle-setting': handactive && !gestureLoading },
@@ -196,13 +199,8 @@ export default {
       this.gestureLoading = isLoading;
     },
     selectScriptMenu: function () {
-      if (this.ScriptShow == false) {
-        this.ScriptShow = true;
-      } else {
-        this.ScriptShow = false;
-      }
-      // 대본을 키고 끄는 코드
-      // this.emitScriptShow();
+      this.ScriptShow = !this.ScriptShow;
+      this.$store.dispatch('meetingRoom/showScript');
     },
   },
 };
