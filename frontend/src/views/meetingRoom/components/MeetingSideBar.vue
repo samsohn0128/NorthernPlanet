@@ -32,18 +32,6 @@
       >
         Chat
       </button>
-      <!-- <button
-        :class="[
-          { 'navigator-button-active': handactive },
-          { 'navigator-button-inactive': !handactive },
-          'navigator-hand-button',
-        ]"
-        @click="handAct"
-        v-show="!gestureLoading"
-      >
-        손짓
-      </button>
-      <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner> -->
     </div>
     <div
       class="d-flex justify-content-center navigator"
@@ -52,8 +40,8 @@
       <button
         :class="[
           { 'button-toggle-setting': handactive && !gestureLoading },
-          { 'navigator-toggle-inactive': gestureLoading },
-          { 'navigator-toggle-inactive': !handactive },
+          { 'navigator-toggle-inactive': !handactive || gestureLoading },
+          { gestureNotWorking: gestureNotWorking },
           'navigator-Gesture-button',
         ]"
         @click="handAct"
@@ -65,11 +53,6 @@
           color="#15182a"
         ></LoadingSpinner>
       </button>
-      <!-- <LoadingSpinner
-        v-show="gestureLoading"
-        class="load-spinner"
-        color="#15182a"
-      ></LoadingSpinner> -->
       <button
         :class="[
           { 'button-toggle-setting': ScriptShow },
@@ -91,7 +74,12 @@
     />
     <Chat v-if="chatShow" :messageList="messageList" class="chat" />
     <!-- <Hand v-if="handactive" class="hand" /> -->
-    <Hand class="hand" v-model="handactive" @isLoading="changeGestureLoading" />
+    <Hand
+      class="hand"
+      v-model="handactive"
+      @isLoading="changeGestureLoading"
+      @gestureNotWorking="setGestureNotWorking"
+    />
 
     <!-- SideBar Items -->
     <!-- access alert -->
@@ -132,6 +120,7 @@ export default {
       handactive: false,
       gestureLoading: false,
       ScriptShow: true,
+      gestureNotWorking: false,
     };
   },
   // : computed
@@ -201,6 +190,9 @@ export default {
     selectScriptMenu: function () {
       this.ScriptShow = !this.ScriptShow;
       this.$store.dispatch('meetingRoom/showScript');
+    },
+    setGestureNotWorking: function () {
+      this.gestureNotWorking = !this.gestureNotWorking;
     },
   },
 };
@@ -326,5 +318,8 @@ export default {
 } */
 .load-spinner {
   z-index: 5;
+}
+.gestureNotWorking {
+  background: #ba635f;
 }
 </style>

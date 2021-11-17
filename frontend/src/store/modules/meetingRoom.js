@@ -552,11 +552,28 @@ export default {
     goPrev(context) {
       if (context.state.now > 0) {
         context.commit('GO_PREV');
+        const message = {
+          id: 'changePresentation',
+          currentPage: context.state.currentPage,
+          location: context.state.location,
+          size: context.state.size,
+          transition: context.state.transition,
+        };
+        context.dispatch('sendMessage', message);
       }
     },
     goNext(context) {
       if (context.state.now < context.state.imgLength - 1) {
         context.commit('GO_NEXT');
+        const message = {
+          id: 'changePresentation',
+          currentPage: context.state.currentPage,
+          location: context.state.location,
+          size: context.state.size,
+          transition: context.state.transition,
+        };
+        console.log('currentPage: ' + message.currentPage + ' - goNext');
+        context.dispatch('sendMessage', message);
       }
     },
     // 단축키 설정

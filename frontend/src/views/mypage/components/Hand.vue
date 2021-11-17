@@ -91,44 +91,19 @@ export default {
         this.handactive2
       ) {
         this.predictFlag = false;
-        if (
-          this.$store.state.meetingRoom.now <
-          this.$store.state.meetingRoom.imgLength - 1
-        ) {
-          store.dispatch('meetingRoom/goNext');
-        }
+        this.$emit('next');
       } else if (
         prediction[2].probability.toFixed(2) > 0.99 &&
         this.handactive2
       ) {
         this.predictFlag = false;
-        if (this.$store.state.meetingRoom.size < 4) {
-          this.$store.state.meetingRoom.size++;
-          const message = {
-            id: 'changePresentation',
-            currentPage: this.$store.state.meetingRoom.currentPage,
-            location: this.$store.state.meetingRoom.location,
-            size: this.$store.state.meetingRoom.size,
-            transition: this.$store.state.meetingRoom.transition,
-          };
-          this.$store.dispatch('meetingRoom/sendMessage', message);
-        }
+        this.$emit('sizeUp');
       } else if (
         prediction[3].probability.toFixed(2) > 0.99 &&
         this.handactive2
       ) {
         this.predictFlag = false;
-        if (this.$store.state.meetingRoom.size > 0) {
-          this.$store.state.meetingRoom.size--;
-          const message = {
-            id: 'changePresentation',
-            currentPage: this.$store.state.meetingRoom.currentPage,
-            location: this.$store.state.meetingRoom.location,
-            size: this.$store.state.meetingRoom.size,
-            transition: this.$store.state.meetingRoom.transition,
-          };
-          this.$store.dispatch('meetingRoom/sendMessage', message);
-        }
+        this.$emit('sizeDown');
       } else if (prediction[4].probability.toFixed(2) > 0.99) {
         this.predictFlag = false;
         this.handactive2 = !this.handactive2;
@@ -138,37 +113,17 @@ export default {
         this.handactive2
       ) {
         this.predictFlag = false;
-        this.$store.state.meetingRoom.location = 'right';
-        const message = {
-          id: 'changePresentation',
-          currentPage: this.$store.state.meetingRoom.currentPage,
-          location: this.$store.state.meetingRoom.location,
-          size: this.$store.state.meetingRoom.size,
-          transition: this.$store.state.meetingRoom.transition,
-        };
-        this.$store.dispatch('meetingRoom/sendMessage', message);
+        this.$emit('locationRight');
       } else if (
         prediction[6].probability.toFixed(2) > 0.99 &&
         this.handactive2
       ) {
         this.predictFlag = false;
-        this.$store.state.meetingRoom.location = 'top';
-        const message = {
-          id: 'changePresentation',
-          currentPage: this.$store.state.meetingRoom.currentPage,
-          location: this.$store.state.meetingRoom.location,
-          size: this.$store.state.meetingRoom.size,
-          transition: this.$store.state.meetingRoom.transition,
-        };
-        this.$store.dispatch('meetingRoom/sendMessage', message);
+        this.$emit('locationTop');
       }
     },
   },
 };
 </script>
 
-<style>
-.gestureNotWorking {
-  background: #ba635f;
-}
-</style>
+<style></style>
