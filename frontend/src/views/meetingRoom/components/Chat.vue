@@ -6,7 +6,11 @@
     />
 
     <div class="container">
-      <div class="row clearfix">
+      <div
+        id="make-chatting-bottom"
+        class="row clearfix"
+        style="overflow: auto; height: 79vh"
+      >
         <div class="col-lg-12">
           <div class="chat">
             <div class="chat-history">
@@ -18,20 +22,18 @@
                 />
               </ul>
             </div>
-            <div class="chat-message clearfix chat-input">
-              <div class="input-group mb-0">
-                <input
-                  type="text"
-                  class="form-control chat-input-div"
-                  placeholder="Enter text here..."
-                  v-model="chatInput"
-                  @keyup.enter="addChat"
-                />
-                <div class="input-group-prepend" @click="addChat">
-                  <span class="input-group-text"
-                    ><i class="fa fa-send"></i
-                  ></span>
-                </div>
+          </div>
+          <div class="chat-message clearfix chat-input">
+            <div class="input-group mb-0">
+              <input
+                type="text"
+                class="form-control chat-input-div"
+                placeholder="Enter text here..."
+                v-model="chatInput"
+                @keyup.enter="addChat"
+              />
+              <div class="input-group-prepend" @click="addChat">
+                <span class="input-group-text"><i class="fa fa-send"></i></span>
               </div>
             </div>
           </div>
@@ -57,7 +59,19 @@ export default {
       nowTime: '',
     };
   },
-  computed: {},
+  watch: {
+    messageList() {
+      let currentChat = document.getElementById('make-chatting-bottom');
+      // console.log('요기', currentChat.scrollTop, currentChat.scrollHeight);
+      currentChat.scrollTop = currentChat.scrollHeight;
+    },
+  },
+  computed: {
+    myName() {
+      return this.$store.getters['meetingRoom/getMyName'];
+    },
+  },
+
   methods: {
     addChat: function () {
       if (this.chatInput === '') return;
@@ -165,10 +179,6 @@ body {
   float: left;
   padding-left: 10px;
 }
-
-/* .chat .chat-history {
-  padding: 5px;
-} */
 
 .chat .chat-history ul {
   padding: 0;
@@ -325,5 +335,24 @@ body {
     height: calc(100vh - 350px);
     overflow-x: auto;
   }
+}
+
+/* scroll bar*/
+/* 스크롤바 설정*/
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* 스크롤바 막대 설정*/
+::-webkit-scrollbar-thumb {
+  height: 5px;
+  background-color: #6d9e8a;
+  /* 스크롤바 둥글게 설정    */
+  border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.33);
 }
 </style>
