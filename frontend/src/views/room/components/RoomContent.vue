@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-7">
-            <label>
+            <label class="text-global">
               <h6>Room Name</h6>
             </label>
             <div class="input-group mb-3">
@@ -359,5 +359,8 @@ export default {
 .button-danger-setting {
   background: #ba635f;
   color: white;
+}
+.text-global {
+  color: #505753;
 }
 </style>
