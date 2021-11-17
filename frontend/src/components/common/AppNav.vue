@@ -98,7 +98,7 @@ export default {
   /* display: inline-block; */
 }
 .image-user {
-  width: 30%;
+  width: 30px;
   border: 1.5px solid white;
 }
 .profile-image {
