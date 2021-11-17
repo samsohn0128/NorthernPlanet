@@ -73,6 +73,7 @@ export default {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
+  align-items: center;
   width: 100%;
   height: 45px;
   background: linear-gradient(90deg, #6d9e8a, #6d9e8a);

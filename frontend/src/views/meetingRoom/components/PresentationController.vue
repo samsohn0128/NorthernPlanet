@@ -71,16 +71,16 @@
 <script>
 import PresentationContentSelector from './PresentationContentSelector.vue';
 import PresentationLocationSelector from './PresentationLocationSelector.vue';
-import PresentationSlider from './PresentationSlider.vue';
 import PresentationEffectSelector from './PresentationEffectSelector.vue';
+import PresentationSlider from './PresentationSlider.vue';
 
 export default {
   name: 'PresentationController',
   components: {
     PresentationContentSelector,
     PresentationLocationSelector,
-    PresentationSlider,
     PresentationEffectSelector,
+    PresentationSlider,
   },
   // : props
   props: {},
@@ -184,6 +184,9 @@ export default {
 }
 .navigator-button-start {
   border-radius: 30px 0px 0px 30px;
+}
+.navigator-button-mid {
+  width: 140px;
 }
 .navigator-button-end {
   border-radius: 0px 30px 30px 0px;

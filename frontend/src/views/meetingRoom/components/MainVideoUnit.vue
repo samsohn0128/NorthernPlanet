@@ -3,12 +3,13 @@
     :class="[locationPreset, 'main-video-container']"
     id="main-video-container"
   >
-    <transition :name="transitionPreset" v-if="currentPage !== null">
+    <!-- <transition :name="transitionPreset" v-if="currentPage !== null"> -->
+    <transition name="fade" mode="out-in" v-if="currentPage !== null">
       <img
         :src="imageSrcs[currentPage]"
         :key="imageSrcs[currentPage]"
         alt="presentation image"
-        :class="[sizePreset, 'img-fluid']"
+        :class="[sizePreset, transitionPreset, 'img-fluid']"
         id="presentation-image"
       />
     </transition>
@@ -50,6 +51,9 @@ export default {
     scriptList: function () {
       return this.$store.state.meetingRoom.scriptList;
     },
+    effectList: function () {
+      return this.$store.state.meetingRoom.effectList;
+    },
     currentPage: function () {
       return this.$store.state.meetingRoom.currentPage;
     },
@@ -67,7 +71,7 @@ export default {
       return 'presentation-' + this.$store.state.meetingRoom.size;
     },
     transitionPreset() {
-      return 'transition-' + this.$store.state.meetingRoom.transition;
+      return 'transition-' + this.effectList[this.currentPage];
     },
     /* presetCss() {
       return (
@@ -78,6 +82,14 @@ export default {
       );
     }, */
   },
+  // Effect 실시간 반영을 위한 시도.. 실패..
+  // watch: {
+  //   '$store.state.meetingRoom.effectList'(dd, old) {
+  //     console.log(dd, old);
+  //     console.log('watch effectList');
+  //     this.transitionPreset();
+  //   },
+  // },
   mounted() {
     this.mainVideo.classList.add('video-insert');
     document.getElementById('main-video-container').appendChild(this.mainVideo);
@@ -291,6 +303,43 @@ export default {
   border-radius: 25px;
 } */
 /* transitions */
+.transition-0 {
+  animation: default 0.7s;
+}
+.transition-1 {
+  animation: fadeIn 0.7s;
+}
+.transition-2 {
+  animation: fadeInDown 0.7s;
+}
+.transition-3 {
+  animation: fadeInLeft 0.7s;
+}
+.transition-4 {
+  animation: fadeInRight 0.7s;
+}
+.transition-5 {
+  animation: fadeInUp 0.7s;
+}
+.transition-6 {
+  animation: backInDown 0.7s;
+}
+.transition-7 {
+  animation: backInUp 0.7s;
+}
+.transition-8 {
+  animation: flipInX 0.7s;
+}
+.transition-9 {
+  animation: flipInY 0.7s;
+}
+.transition-10 {
+  animation: rotateIn 0.7s;
+}
+
+.transition-default-enter-active {
+  animation: default 0.7s;
+}
 .transition-fadein-enter-active {
   animation: fadeIn 0.7s;
 }

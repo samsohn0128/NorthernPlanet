@@ -22,7 +22,7 @@
       >
         Script
       </button>
-      <button class="navigator-question-button">?</button>
+      <!-- <button class="navigator-question-button">?</button> -->
     </div>
     <!-- prev, next image -->
     <div class="text-center">
@@ -59,7 +59,7 @@
       <!-- Location/Size -->
       <div v-if="LocationSizeShow">
         <!-- Location -->
-        <div>
+        <!-- <div>
           <div
             @keyup.up="selectTop"
             @keyup.right="selectRight"
@@ -70,7 +70,7 @@
             @keyup.52="selectSize(3)"
             @keyup.53="selectSize(4)"
           ></div>
-        </div>
+        </div> -->
         <div>
           <div class="template-container">
             <div @click="selectRight" class="overlay">
@@ -227,6 +227,7 @@ export default {
     },
     selectScriptMenu: function () {
       this.ScriptShow = !this.ScriptShow;
+      this.emitScriptShow();
     },
     selectLocationSizeMenu() {
       this.LocationSizeShow = true;
@@ -257,6 +258,9 @@ export default {
       setTimeout(function () {
         el.classList.remove(effect);
       }, 1000);
+      // effect 저장
+
+      this.emitEffect(idx);
     },
     prevImage() {
       if (this.sidebaridx > 1) {
@@ -281,6 +285,12 @@ export default {
     },
     emitImageplus() {
       this.$emit('selectIdxplus');
+    },
+    emitScriptShow() {
+      this.$emit('selectedShow');
+    },
+    emitEffect(effect) {
+      this.$emit('selectedEffect', effect);
     },
   },
 };
@@ -320,9 +330,9 @@ export default {
   font-weight: bold;
   background: linear-gradient(90deg, #d1e3da, #aebdb6);
 }
-.navigator-button-active {
+/* .navigator-button-active {
   background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
-}
+} */
 .navigator-button-inactive {
   /* background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%); */
   border: 2px solid #66806a;
@@ -359,6 +369,9 @@ export default {
   max-height: 100px;
   padding: 5px;
   cursor: pointer;
+}
+.border-setting {
+  border: 0px;
 }
 .text-center {
   text-align: center;
