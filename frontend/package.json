@@ -33,6 +33,7 @@
     "vue-input-autowidth": "^1.0.11",
     "vue-popperjs": "^2.3.0",
     "vue-router": "^3.2.0",
+    "vue-spinner": "^1.0.4",
     "vue-toastification": "^1.7.14",
     "vue-upload-component": "^2.8.20",
     "vue2-datepicker": "^3.9.2",

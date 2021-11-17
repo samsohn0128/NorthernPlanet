@@ -32,18 +32,32 @@
       >
         Chat
       </button>
+      <!-- <button
+        :class="[
+          { 'navigator-button-active': handactive },
+          { 'navigator-button-inactive': !handactive },
+          'navigator-hand-button',
+        ]"
+        @click="handAct"
+        v-show="!gestureLoading"
+      >
+        손짓
+      </button>
+      <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner> -->
     </div>
     <div class="d-flex justify-content-center navigator">
       <button
         :class="[
-          { 'button-setting': GestureShow },
-          { 'navigator-button-inactive': !GestureShow },
+          { 'button-setting': handactive },
+          { 'navigator-button-inactive': !handactive },
           'navigator-Gesture-button',
         ]"
-        @click="selectGestureMenu"
+        @click="handAct"
+        v-show="!gestureLoading"
       >
         Gesture
       </button>
+      <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner>
       <button
         :class="[
           { 'button-setting': ScriptShow },
@@ -64,6 +78,8 @@
       class="presentation-controller"
     />
     <Chat v-if="chatShow" :messageList="messageList" class="chat" />
+    <!-- <Hand v-if="handactive" class="hand" /> -->
+    <Hand class="hand" v-model="handactive" @isLoading="changeGestureLoading" />
 
     <!-- SideBar Items -->
     <!-- access alert -->
@@ -78,11 +94,20 @@
 <script>
 import MeetingParticipants from './MeetingParticipants.vue';
 import PresentationController from './PresentationController.vue';
+import LoadingSpinner from 'vue-spinner/src/PulseLoader.vue';
+
 import Chat from './Chat.vue';
+import Hand from './Hand.vue';
 
 export default {
   name: 'MeetingSideBar',
-  components: { MeetingParticipants, PresentationController, Chat },
+  components: {
+    MeetingParticipants,
+    PresentationController,
+    Chat,
+    Hand,
+    LoadingSpinner,
+  },
   // : props
   props: {},
   // : data
@@ -92,7 +117,8 @@ export default {
       presentationShow: false,
       chatShow: false,
       alertShow: false,
-      GestureShow: true,
+      handactive: false,
+      gestureLoading: false,
       ScriptShow: true,
     };
   },
@@ -154,14 +180,11 @@ export default {
     inactivateAlert: function () {
       this.alertShow = false;
     },
-    selectGestureMenu: function () {
-      if (this.GestureShow == true) {
-        this.GestureShow = false;
-        // 제스처 끌 때 코드
-      } else {
-        this.GestureShow = true;
-        // 제스처 킬 때 코드
-      }
+    handAct: function () {
+      this.handactive = !this.handactive;
+    },
+    changeGestureLoading: function (isLoading) {
+      this.gestureLoading = isLoading;
     },
     selectScriptMenu: function () {
       if (this.ScriptShow == false) {
