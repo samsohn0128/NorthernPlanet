@@ -42,9 +42,7 @@
       v-html="scriptList[currentPage]"
       class="script"
       v-if="currentPage !== null && showScriptnow"
-    >
-      {{ scriptList[currentPage] }}
-    </div>
+    ></div>
     <div class="overlay" style="z-index: 5">
       <span>{{ mainParticipantName }}</span>
     </div>
