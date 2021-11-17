@@ -160,7 +160,7 @@ export default {
 /* 스크롤바 막대 설정*/
 ::-webkit-scrollbar-thumb {
   height: 17%;
-  background-color: #303f9f;
+  background-color: #6d9e8a;
   /* 스크롤바 둥글게 설정    */
   border-radius: 10px;
 }
