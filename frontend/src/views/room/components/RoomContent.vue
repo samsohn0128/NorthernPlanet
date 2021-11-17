@@ -63,7 +63,7 @@
             <div class="col-md-2">
               <button
                 type="button"
-                class="btn bg-gradient-dark"
+                class="btn button-color-setting"
                 @click="addParticipant"
               >
                 Add
@@ -92,7 +92,7 @@
                 <td>
                   <div v-if="index > 0 && isManager">
                     <button
-                      class="btn btn-outline-danger text-danger py-1"
+                      class="btn button-danger-setting py-1"
                       type="button"
                       id="btn-delete"
                       @click="deleteParticipant(participant.email)"
@@ -109,7 +109,7 @@
             <span>
               <button
                 type="button"
-                class="button-setting btn bg-gradient-dark"
+                class="button-setting button-color-setting btn bg-gradient-dark"
                 @click="updateHandler"
               >
                 Update Room
@@ -118,7 +118,7 @@
             <span>
               <button
                 type="button"
-                class="button-setting btn btn-outline-danger text-danger"
+                class="button-setting btn button-danger-setting"
                 data-bs-toggle="modal"
                 data-bs-target="#modal-notification"
               >
@@ -128,11 +128,11 @@
             <span>
               <button
                 type="button"
-                class="button-setting btn bg-gradient-warning"
+                class="button-setting btn button-create-setting"
                 data-bs-toggle="modal"
                 data-bs-target="#modal-link"
               >
-                링크생성
+                make link
               </button>
             </span>
           </div>
@@ -343,5 +343,21 @@ export default {
   height: 40px;
   padding: 5px;
   margin: 5px;
+}
+.button-color-setting {
+  background: #66806a;
+  color: white;
+}
+.button-outline-setting {
+  border: 1.5px solid #66806a;
+  color: #456357;
+}
+.button-create-setting {
+  background: #ffc286;
+  color: white;
+}
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
 }
 </style>

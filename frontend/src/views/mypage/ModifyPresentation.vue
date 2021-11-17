@@ -4,7 +4,7 @@
     <div class="nav-setting">
       <div class="nav-detail-left-setting">
         <button
-          class="button-setting btn btn-sm btn-round mb-0 me-1"
+          class="button-outline-setting btn btn-sm btn-round mb-0 me-1"
           @click="goBackPresentation()"
         >
           Back to the list
@@ -15,13 +15,13 @@
       </div>
       <div class="nav-detail-right-setting">
         <button
-          class="button-setting btn btn-sm btn-round mb-0 me-1"
+          class="button-outline-setting btn btn-sm btn-round mb-0 me-1"
           @click="showAllPPT()"
         >
           Preview
         </button>
         <button
-          class="button-setting btn btn-sm btn-round mb-0 me-1"
+          class="button-outline-setting btn btn-sm btn-round mb-0 me-1"
           @click="animationTabToggle('hi')"
         >
           Select Animation
@@ -101,7 +101,7 @@
             >
               <button
                 class="
-                  button-setting
+                  button-outline-setting
                   PPTbox-select-detail
                   btn btn-sm btn-round
                   mb-0
@@ -411,7 +411,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background: #f9fbe7;
+  background: #d5e8df;
   padding: 5px 0px;
 }
 .nav-detail-left-setting {
@@ -431,7 +431,7 @@ export default {
   text-align: center;
   width: 20vw;
   font-weight: bold;
-  color: black;
+  color: #505753;
 }
 .nav-detail-right-setting {
   display: flex;
@@ -442,8 +442,12 @@ export default {
   width: 30vw;
 }
 .button-setting {
-  background: #4ba3c7;
+  background: #66806a;
   color: white;
+}
+.button-outline-setting {
+  border: 1.5px solid #66806a;
+  color: #456357;
 }
 .effect-container {
   position: relative;

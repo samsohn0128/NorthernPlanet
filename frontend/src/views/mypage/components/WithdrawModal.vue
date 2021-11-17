@@ -28,7 +28,7 @@
         <div class="modal-body">
           <div class="py-3 text-center">
             <i class="ni ni-bell-55 ni-3x"></i>
-            <h4 class="text-gradient text-danger mt-4">
+            <h4 class="button-ou mt-4 text-withdraw">
               Are you sure withdraw our site?
             </h4>
           </div>
@@ -36,14 +36,14 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="btn bg-gradient-secondary"
+            class="btn btn-outline-dark"
             data-bs-dismiss="modal"
           >
             No
           </button>
           <button
             type="button"
-            class="btn bg-gradient-danger"
+            class="btn button-danger-setting"
             @click="withdraw"
             data-bs-dismiss="modal"
           >
@@ -84,3 +84,16 @@ export default {
   },
 };
 </script>
+<style scoped>
+.button-setting {
+  background: #66806a;
+  color: white;
+}
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
+}
+.text-withdraw {
+  color: #ba635f;
+}
+</style>

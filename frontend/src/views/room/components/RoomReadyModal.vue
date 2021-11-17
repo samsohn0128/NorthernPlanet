@@ -44,8 +44,8 @@
             type="button"
             class="btn"
             :class="{
-              'bg-gradient-dark': isMicOn,
-              'bg-gradient-secondary': !isMicOn,
+              'button-color-setting': isMicOn,
+              'btn-outline-dark': !isMicOn,
             }"
             @click="micOnOff"
           >
@@ -61,8 +61,8 @@
             type="button"
             class="btn"
             :class="{
-              'bg-gradient-dark': isVideoOn,
-              'bg-gradient-secondary': !isVideoOn,
+              'button-color-setting': isVideoOn,
+              'btn-outline-dark': !isVideoOn,
             }"
             @click="videoOnOff"
           >
@@ -78,14 +78,14 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="btn bg-gradient-secondary"
+            class="btn btn-outline-dark"
             data-bs-dismiss="modal"
           >
             Close
           </button>
           <button
             type="button"
-            class="btn bg-gradient-primary"
+            class="btn button-create-setting"
             @click="sendMsgToKurento"
             data-bs-dismiss="modal"
           >
@@ -222,5 +222,27 @@ export default {
 <style scoped>
 .btn {
   margin: 4px;
+}
+.button-color-setting {
+  background: #66806a;
+  color: white;
+}
+.button-outline-setting {
+  border: 1.5px solid #66806a;
+  color: #456357;
+}
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
+}
+.button-create-setting {
+  background: linear-gradient(90deg, #77dfde, #dbd64a);
+  color: white;
+}
+.button-setting {
+  width: 70px;
+  height: 40px;
+  padding: 5px;
+  margin: 0 10px 0 10px;
 }
 </style>

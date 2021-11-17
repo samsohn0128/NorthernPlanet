@@ -83,7 +83,7 @@
                   <div class="col-md-2">
                     <button
                       type="button"
-                      class="btn bg-gradient-dark ms-2"
+                      class="btn button-color-setting ms-2"
                       @click="addParticipant"
                     >
                       Add
@@ -129,7 +129,7 @@
                 <div class="col-md-12 text-center">
                   <button
                     type="button"
-                    class="btn bg-gradient-primary w-40"
+                    class="btn button-create-setting w-40"
                     @click="createHandler"
                   >
                     Create Room
@@ -302,3 +302,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.button-color-setting {
+  background: #66806a;
+  color: white;
+}
+.button-create-setting {
+  background: linear-gradient(90deg, #77dfde, #dbd64a);
+  color: white;
+}
+</style>

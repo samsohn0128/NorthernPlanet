@@ -68,11 +68,10 @@ export default {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
+  align-items: center;
   width: 100%;
   height: 45px;
-  background: linear-gradient(90deg, rgb(119, 223, 222), rgb(219, 214, 74));
-  /* #77dfde
-   #dbd64a */
+  background: linear-gradient(90deg, #6d9e8a, #6d9e8a);
 }
 .navbar-texts {
   display: flex;
