@@ -32,7 +32,7 @@
       >
         Chat
       </button>
-      <button
+      <!-- <button
         :class="[
           { 'navigator-button-active': handactive },
           { 'navigator-button-inactive': !handactive },
@@ -43,7 +43,7 @@
       >
         손짓
       </button>
-      <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner>
+      <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner> -->
     </div>
     <div class="d-flex justify-content-center navigator">
       <button
@@ -52,10 +52,12 @@
           { 'navigator-button-inactive': !handactive },
           'navigator-Gesture-button',
         ]"
-        @click="selectGestureMenu"
+        @click="handAct"
+        v-show="!gestureLoading"
       >
         Gesture
       </button>
+      <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner>
       <button
         :class="[
           { 'button-setting': ScriptShow },
