@@ -12,7 +12,7 @@
               flex-column
             "
           >
-            <h3 class="text-center">Room Info</h3>
+            <h3 class="text-center text-global">Room Info</h3>
             <RoomContent></RoomContent>
           </div>
         </div>
