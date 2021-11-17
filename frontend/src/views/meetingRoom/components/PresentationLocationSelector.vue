@@ -2,7 +2,7 @@
   <div class="d-flex flex-column justify-content-center align-items-center">
     <div class="button-setting">
       <!-- location -->
-      <button
+      <div
         class="border-setting"
         @keyup.up="selectTop"
         @keyup.right="selectRight"
@@ -14,7 +14,7 @@
         @keyup.53="selectSize(4)"
       >
         <h2 class="text-center">location</h2>
-      </button>
+      </div>
       <div class="template-container">
         <img
           src="@/assets/presentationTemplates/presentation-right.jpg"
@@ -65,7 +65,7 @@
         <h2 class="text-center">size</h2>
         <input
           type="range"
-          class="range-select"
+          class="range-select size-class"
           min="0"
           max="4"
           step="1"
@@ -263,7 +263,7 @@ export default {
   height: 180px;
 }
 .insert-border {
-  border: 0.4rem solid;
+  border: 0.4rem solid #495c4d;
 }
 .overlay {
   position: absolute;
@@ -317,5 +317,9 @@ export default {
   border-radius: 50%;
   background: #15182a;
   cursor: pointer;
+}
+.size-class {
+  color: #505753;
+  background: #aebdb6;
 }
 </style>

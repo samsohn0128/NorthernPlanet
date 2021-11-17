@@ -12,7 +12,7 @@
       v-if="participants === null || participants.length === 0"
       class="video-container"
     >
-      <img src="@/assets/icons/empty.svg" alt="" class="video-insert" />
+      <img src="@/assets/icons/empty.png" alt="" class="video-insert" />
     </div>
     <!-- 객체 v-for 시 index를 key로 주면 발표자 변경 시 비디오 렌더링 문제 발생, key를 name으로 변경 -->
     <VideoUnit
