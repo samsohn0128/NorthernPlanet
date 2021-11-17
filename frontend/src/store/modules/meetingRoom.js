@@ -617,5 +617,8 @@ export default {
     getNow(state) {
       return state.now;
     },
+    getPresenter(state) {
+      return state.presenter;
+    },
   },
 };

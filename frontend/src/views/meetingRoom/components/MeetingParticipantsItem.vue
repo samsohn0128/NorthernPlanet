@@ -130,8 +130,8 @@ export default {
 }
 .popup-item {
   /* background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%); */
-  border: 1.5px solid #494f4b;
-  color: #3b403d;
+  /* border: 1.5px solid #494f4b; */
+  background: linear-gradient(90deg, #8a968e 0%, #78827b 100%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   width: 250px;
   height: 50px;
@@ -144,6 +144,7 @@ export default {
 .popup-item:hover {
   /* background: linear-gradient(90deg, #2c3153 0%, #15182a 100%); */
   background: linear-gradient(90deg, #494f4b 0%, #3b403d 100%);
+  /* color: white !important; */
 }
 .popup-slide-enter-active {
   animation: fadeIn 0.5s;
