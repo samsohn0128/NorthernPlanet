@@ -34,7 +34,7 @@
       <!-- left side bar control buttons -->
       <!-- Room Title -->
       <h1 class="room-title">{{ roomTitle }}</h1>
-      <div class="upside-ppt-inside set-timer-location">
+      <!-- <div class="upside-ppt-inside set-timer-location">
         <div class="time-space">
           <span id="showMin">00</span>
           :
@@ -49,6 +49,27 @@
           <button id="resetButton" class="settingReset" @click="resetButton">
             reset
           </button>
+        </div>
+      </div> -->
+      <div class="upside-ppt-inside set-timer-location">
+        <div class="time-space">
+          <span id="showMin">00</span> : <span id="showSec">00</span>
+          <span class="time-button-space">
+            <!-- 시작 -->
+            <i
+              class="ni ni-button-play time-button"
+              @click="startButton"
+              v-if="!timerStart"
+            ></i>
+            <!-- 일시정지 -->
+            <i
+              class="ni ni-button-pause time-button"
+              @click="startButton"
+              v-if="timerStart"
+            ></i>
+            <!-- 초기화 -->
+            <i class="ni ni-button-power time-button" @click="resetButton"></i>
+          </span>
         </div>
       </div>
       <!-- Main Video -->
@@ -290,7 +311,7 @@ export default {
   width: 20vw;
   height: 15vh;
 }
-.set-timer-location {
+/* .set-timer-location {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -303,5 +324,34 @@ export default {
   font-size: 18px;
   padding: 5px;
   border-radius: 10px 10px 0px 0px;
+} */
+/* 스톱워치 */
+.set-timer-location {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.time-space {
+  width: 8vw;
+  height: 2.3vw;
+  text-align: center;
+  background: #505753;
+  color: white;
+  font-size: 15px;
+  padding: 5px;
+  border-radius: 10px 10px 10px 10px;
+}
+.time-button-space {
+  width: 8vw;
+  text-align: center;
+  background: #505753;
+  color: white;
+  font-size: 13px;
+  padding: 5px;
+
+  border-radius: 0px 0px 10px 10px;
+}
+.time-button {
+  margin: 2px;
 }
 </style>
