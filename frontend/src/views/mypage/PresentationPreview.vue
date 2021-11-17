@@ -1,9 +1,17 @@
 <template>
   <div class="meetingroom-container">
-    <transition name="left-slide"></transition>
-    <div :class="[{ 'main-right-margin': rightSideShow }, 'main']">
-      <div class="upside-ppt">
-        <div class="upside-ppt-inside">
+    <div
+      :class="[
+        { 'main-right-margin': rightSideShow },
+        'main',
+        'd-flex',
+        'flex-column',
+        'align-items-center',
+        'justify-content-center',
+      ]"
+    >
+      <div class="top-content">
+        <!-- <div class="upside-ppt-inside">
           <button
             class="button-setting btn btn-sm btn-round mb-1 me-1"
             @click="goBack()"
@@ -11,14 +19,14 @@
             뒤로가기
           </button>
           <button
-            id="script-button-text"
+            id="script-button-text
             class="button-setting btn btn-sm btn-round mb-1 me-1"
             @click="showScript()"
           >
             대본 숨기기
           </button>
-        </div>
-        <div id="script-show" class="upside-ppt-inside script-setting">
+        </div> -->
+        <!-- <div id="script-show" class="upside-ppt-inside script-setting">
           <div class="move-sequence" @click="setIdxminus()">&lt;</div>
           <div
             v-if="slideList[idx].script == null || slideList[idx].script == ''"
@@ -27,53 +35,46 @@
             대본을<br />설정해주세요.
           </div>
           <div v-else class="script-inside">
-            <!-- {{ slideList[idx].script }} -->
             <Viewer
               id="changeinitialValue"
               :initialValue="slideList[idx].script"
             />
           </div>
           <div class="move-sequence" @click="setIdxplus()">&gt;</div>
-        </div>
+        </div> -->
+
+        <!-- 타이머 -->
         <div class="upside-ppt-inside set-timer-location">
           <div class="time-space">
-            <span id="showMin">00</span>: <span id="showSec">00</span>.
-            <span id="showMilisec">00</span>
-          </div>
-          <div class="time-button-space">
-            <button id="startButton" class="settingStart" @click="startButton">
-              start
-            </button>
-            <button id="resetButton" class="settingReset" @click="resetButton">
-              reset
-            </button>
+            <span id="showMin">00</span> : <span id="showSec">00</span>
+            <span class="time-button-space">
+              <!-- 시작 -->
+              <i
+                class="ni ni-button-play time-button"
+                @click="startButton"
+                v-if="!timerStart"
+              ></i>
+              <!-- 일시정지 -->
+              <i
+                class="ni ni-button-pause time-button"
+                @click="startButton"
+                v-if="timerStart"
+              ></i>
+              <!-- 초기화 -->
+              <i
+                class="ni ni-button-power time-button"
+                @click="resetButton"
+              ></i>
+            </span>
           </div>
         </div>
       </div>
 
       <div class="main-body-div">
-        <div class="webrtc-body-div">
-          <!-- WebRTC 관련 -->
+        <div class="video-body-div">
           <!-- local video element -->
-          <i class="bi bi-mic-fill"></i>
+
           <!-- <button
-            type="button"
-            class="btn"
-            :class="{
-              'bg-gradient-dark': isMicOn,
-              'bg-gradient-secondary': !isMicOn,
-            }"
-            @click="micOnOff"
-          >
-            <span
-              class="fas"
-              :class="{
-                'fa-microphone': isMicOn,
-                'fa-microphone-slash': !isMicOn,
-              }"
-            ></span>
-          </button> -->
-          <button
             type="button"
             class="btn btn-setting"
             :class="{
@@ -89,15 +90,14 @@
                 'fa-video-slash': !isVideoOn,
               }"
             ></span>
-          </button>
+          </button> -->
 
           <!-- local video element -->
           <video
-            width="100%"
-            height="750vh"
-            :id="'local-video' + roomId"
+            height="100%"
+            :id="'local-video'"
             autoplay="true"
-            poster="@/assets/img/logos/focus_camera3.jpg"
+            class="main-video-unit"
           ></video>
         </div>
         <div id="ppt-image-setting">
@@ -124,9 +124,15 @@
           />
         </div>
       </div>
-
+      <div class="bottom-content">
+        <div class="d-flex controller" @keyup.right="progressNext">
+          <button class="controller-button mx-3" @click="goBack">
+            <i class="ni ni-fat-remove ni-2x"></i>
+          </button>
+        </div>
+      </div>
       <!-- right side bar control buttons -->
-      <transition name="button-show"
+      <!-- <transition name="button-show"
         ><img
           src="@/assets/icons/right.svg"
           alt="right side bar toggle button"
@@ -144,7 +150,7 @@
           class="right-side-toggler"
           v-if="!rightSideShow"
           @click="toggleRightSide"
-      /></transition>
+      /></transition> -->
     </div>
     <!-- right side bar -->
     <transition name="right-slide">
@@ -167,13 +173,13 @@ import MeetingSideBar from './preview/MeetingSideBar.vue';
 import { getPresentationDetail } from '@/api/presentation.js';
 // import { getRoom } from '@/api/rooms.js';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import { Viewer } from '@toast-ui/vue-editor';
+//import { Viewer } from '@toast-ui/vue-editor';
 
 export default {
   name: 'PresentationPreview',
   components: {
     MeetingSideBar,
-    Viewer,
+    // Viewer,
   },
   data() {
     return {
@@ -200,14 +206,10 @@ export default {
       sec: '00', // 초 표시하기
       milisec: '00', // ms 표시하기
 
-      // WebRTC 관련
-      roomInfo: null,
-      roomName: null,
-      manager: null,
       userName: null,
-      roomDescription: null,
+
       isMicOn: false,
-      isVideoOn: false,
+      isVideoOn: true,
 
       content: null,
     };
@@ -225,33 +227,12 @@ export default {
       );
       return this.participants[mainParticipantName];
     },
-
-    // WebRTC 관련
-    roomId() {
-      return this.$route.params.room_id;
-    },
   },
   // : lifecycle hook
   created() {
     this.getPresentationData();
+    this.playVideoFromCamera();
     console.log(this.$route.params);
-
-    // WebRTC 관련
-    // try {
-    //   //websocket init
-    //   const url = 'wss://' + location.host + '/groupcall';
-    //   console.log(url);
-    //   this.$store.dispatch('meetingRoom/wsInit', url);
-
-    //   //roomId로 roomInfo 받아와서 data setting 하기
-    //   this.roomInfo = await getRoom(this.roomId);
-    //   this.roomName = this.roomInfo.data.name;
-    //   this.manager =
-    //     this.roomInfo.data.managerName + '-' + this.roomInfo.data.managerId;
-    //   this.roomDescription = this.roomInfo.data.description;
-    // } catch (error) {
-    //   console.log(error);
-    // }
   },
   mounted() {
     document.addEventListener('keydown', e => {
@@ -337,19 +318,6 @@ export default {
       });
       console.log('시작 slideList: ', this.slideList);
       this.idx = 1;
-      // 정규식 이용하여 <p>, <strong> 등등 제거
-      // for (let i = 0; i < this.slideList.length; i++) {
-      //   if (this.slideList[i].script != null) {
-      //     this.slideList[i].script = this.slideList[i].script.replace(
-      //       /<br\/>/gi,
-      //       '\n',
-      //     );
-      //     this.slideList[i].script = this.slideList[i].script.replace(
-      //       /<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/gi,
-      //       '',
-      //     );
-      //   }
-      // }
       this.content = this.slideList[1].script;
     },
     // Size 세팅
@@ -394,9 +362,7 @@ export default {
       // 시작 버튼을 누를 때
       if (this.timerStart == false) {
         this.timerStart = true;
-        document.getElementById('startButton').innerText = 'pause';
-        document.getElementById('startButton').style.background = '#ef6262';
-        document.getElementById('startButton').style.borderColor = '#ef6262';
+
         // 0.001초마다 시간 갱신
         this.timerWork = setInterval(() => {
           let nowTime = new Date(Date.now() - this.stTime);
@@ -415,9 +381,7 @@ export default {
         // 일시정지 버튼을 누를 때
         this.endTime = Date.now();
         this.timerStart = false;
-        document.getElementById('startButton').innerText = 'start';
-        document.getElementById('startButton').style.background = '#4aae71';
-        document.getElementById('startButton').style.borderColor = '#4aae71';
+
         clearInterval(this.timerWork);
       }
       // 시간 체크
@@ -435,7 +399,6 @@ export default {
       this.milisec = 0;
       this.endTime = Date.now();
       this.timerStart = false;
-      document.getElementById('startButton').innerText = 'start';
       clearInterval(this.timerWork);
       this.timerWork = null;
       document.getElementById('showMin').innerText = '00';
@@ -462,14 +425,6 @@ export default {
       }
     },
 
-    // WebRTC 관련
-    // micOnOff: function () {
-    //   if (this.isMicOn) {
-    //     this.isMicOn = false;
-    //   } else {
-    //     this.isMicOn = true;
-    //   }
-    // },
     videoOnOff: function () {
       if (this.isVideoOn) {
         this.isVideoOn = false;
@@ -479,37 +434,12 @@ export default {
         this.playVideoFromCamera();
       }
     },
-    // sendMsgToKurento() {
-    //   if (!this.userName) {
-    //     this.$toastError('이름을 입력해주세요!');
-    //     return;
-    //   }
-    //   const myNameId = this.userName + '-' + this.userId;
-    //   const roomNameId = this.roomName + '-' + this.roomId;
-    //   const message = {
-    //     id: 'joinRoom',
-    //     name: myNameId,
-    //     room: roomNameId,
-    //   };
-    //   const meetingInfo = {
-    //     myName: myNameId,
-    //     roomName: roomNameId,
-    //     manager: this.manager,
-    //     startWithMic: this.isMicOn,
-    //     startWithVideo: this.isVideoOn,
-    //   };
-    //   console.log('message: ', message);
-    //   console.log('meetingInfo: ', meetingInfo);
-    //   this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
-    //   this.$store.dispatch('meetingRoom/sendMessage', message);
-    // },
+
     playVideoFromCamera: async function () {
       try {
         const constraints = { video: true, audio: false };
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        const videoElement = document.getElementById(
-          'local-video' + this.roomId,
-        );
+        const videoElement = document.getElementById('local-video');
         videoElement.srcObject = stream;
       } catch (error) {
         console.error('Error opening video camera.', error);
@@ -517,9 +447,7 @@ export default {
     },
     stopVideoFromCamera: async function () {
       try {
-        const videoElement = document.getElementById(
-          'local-video' + this.roomId,
-        );
+        const videoElement = document.getElementById('local-video');
         var stream = videoElement.srcObject;
         var tracks = stream.getTracks();
 
@@ -539,6 +467,7 @@ export default {
 <style scoped>
 #ppt-image-setting {
   margin-top: 57px;
+
   width: 70vw;
   height: 60vh;
   display: flex;
@@ -549,7 +478,9 @@ export default {
   height: 100vh;
   width: 100vw;
   padding: 20px 20px;
-  background: #eeffff;
+  /* background: linear-gradient(90deg, #2c3153 0%, #15182a 100%); */
+  /* background: #66806a; */
+  background: #2d382f;
 }
 /* RGB
 93 244 237 #5df4ec
@@ -569,22 +500,75 @@ dbecec
   width: auto;
   height: 100%;
 }
+
+/* 비디오 */
 .main-video-unit {
-  margin-top: 25px;
   position: relative;
   height: 100%;
   width: auto;
-}
-.upside-ppt {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 11vh;
 }
-.upside-ppt-inside {
+.main-body-div {
+  width: 100%;
+  height: 90%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.video-body-div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.top-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 5%;
+  width: 71%;
+  margin-bottom: 10px;
+}
+
+.bottom-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 5%;
+  margin-top: 10px;
+}
+
+.controller-button {
+  background: linear-gradient(90deg, #f10488 0%, #a51bb2 100%);
+  box-shadow: 0px 4px 4px black;
+  border: none;
+  width: auto;
+  height: 40px;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+}
+.controller-button-disabled {
+  background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
+  box-shadow: 0px 4px 4px black;
+  border: none;
+  width: 150px;
+  height: 40px;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+}
+/* .upside-ppt-inside {
   width: 20vw;
   height: 15vh;
-}
+} */
 .script-setting {
   display: flex;
   flex-direction: row;
@@ -596,29 +580,37 @@ dbecec
   background: #4ba3c7;
   color: white;
 }
+
+/* 스톱워치 */
 .set-timer-location {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 .time-space {
-  width: 12vw;
+  width: 8vw;
+  height: 2.3vw;
   text-align: center;
-  background: #e8f5e9;
-  color: black;
-  font-size: 18px;
+  background: #505753;
+  color: white;
+  font-size: 15px;
   padding: 5px;
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 10px 10px 10px 10px;
 }
 .time-button-space {
-  width: 12vw;
+  width: 8vw;
   text-align: center;
-  background: #e8f5e9;
-  color: black;
-  font-size: 18px;
+  background: #505753;
+  color: white;
+  font-size: 13px;
   padding: 5px;
+
   border-radius: 0px 0px 10px 10px;
 }
+.time-button {
+  margin: 2px;
+}
+
 .settingStart {
   background: #4aae71;
   border-color: #4aae71;
@@ -633,18 +625,7 @@ dbecec
   border-radius: 20px;
   box-shadow: 0.5px 0.5px 1px;
 }
-.main-body-div {
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-.webrtc-body-div {
-  position: absolute;
-  width: 70vw;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
+
 .btn-setting {
   width: 20%;
 }

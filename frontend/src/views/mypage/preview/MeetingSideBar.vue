@@ -14,18 +14,18 @@
       </button>
       <button
         :class="[
-          { 'button-setting': !GestureShow },
-          { 'navigator-button-inactive': GestureShow },
+          { 'button-setting': ScriptShow },
+          { 'navigator-button-inactive': !ScriptShow },
           'navigator-script-button',
         ]"
         @click="selectScriptMenu"
       >
-        대본
+        Script
       </button>
       <button class="navigator-question-button">?</button>
     </div>
     <!-- prev, next image -->
-    <div v-if="!GestureShow" class="text-center">
+    <div class="text-center">
       <div class="small-img-container">
         <span>
           <img
@@ -60,7 +60,7 @@
       <div v-if="LocationSizeShow">
         <!-- Location -->
         <div>
-          <button
+          <div
             @keyup.up="selectTop"
             @keyup.right="selectRight"
             @keyup.left="selectLeft"
@@ -69,9 +69,7 @@
             @keyup.51="selectSize(2)"
             @keyup.52="selectSize(3)"
             @keyup.53="selectSize(4)"
-          >
-            <h4>location</h4>
-          </button>
+          ></div>
         </div>
         <div>
           <div class="template-container">
@@ -83,6 +81,7 @@
                   { 'insert-border': selectedLocation === 'right' },
                   'template-insert',
                   'img-fluid',
+                  'img-location',
                 ]"
               />
               <span v-if="selectedLocation === 'right'">selected</span>
@@ -98,6 +97,7 @@
                   { 'insert-border': selectedLocation === 'left' },
                   'template-insert',
                   'img-fluid',
+                  'img-location',
                 ]"
               />
               <span v-if="selectedLocation === 'left'">selected</span>
@@ -113,6 +113,7 @@
                   { 'insert-border': selectedLocation === 'top' },
                   'template-insert',
                   'img-fluid',
+                  'img-location',
                 ]"
               />
               <span v-if="selectedLocation === 'top'">selected</span>
@@ -184,7 +185,9 @@ export default {
   // : data
   data() {
     return {
-      GestureShow: true,
+      GestureShow: false,
+      ScriptShow: false,
+
       LocationSizeShow: true,
       selectedSize: null,
       selectedLocation: null,
@@ -220,10 +223,10 @@ export default {
   // : methods
   methods: {
     selectGestureMenu: function () {
-      this.GestureShow = true;
+      this.GestureShow = !this.GestureShow;
     },
     selectScriptMenu: function () {
-      this.GestureShow = false;
+      this.ScriptShow = !this.ScriptShow;
     },
     selectLocationSizeMenu() {
       this.LocationSizeShow = true;
@@ -290,18 +293,19 @@ export default {
 .navigator-Gesture-button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border: none;
-  width: 150px;
+  margin-right: 5px;
+  width: 140px;
   height: 35px;
-  border-radius: 30px 0px 0px 30px;
+  border-radius: 30px 30px 30px 30px;
   color: white;
   font-weight: bold;
 }
 .navigator-script-button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border: none;
-  width: 150px;
+  width: 140px;
   height: 35px;
-  border-radius: 0px 30px 30px 0px;
+  border-radius: 30px 30px 30px 30px;
   color: white;
   font-weight: bold;
 }
@@ -460,5 +464,7 @@ export default {
 }
 .rotatein {
   animation: rotateIn 0.7s;
+}
+.img-location {
 }
 </style>
