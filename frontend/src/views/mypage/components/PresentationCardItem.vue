@@ -25,7 +25,7 @@
         <div class="row z-index: 5 dropdown">
           <a
             href="javascript:;"
-            class="card-title h5 d-block text-darker col-8"
+            class="card-title h5 d-block text-darker col-8 ni"
             @click="goToModifyPresentation()"
           >
             {{ presentationInfo.presentationName }}
@@ -36,6 +36,7 @@
             id="dropdownMenuButton"
             data-bs-toggle="dropdown"
             aria-expanded="false"
+            @click="setName(presentationInfo.presentationName)"
           >
             <i class="ni ni-bold-down z-index: 5"></i>
           </div>
@@ -92,6 +93,10 @@ export default {
         presentationInfo,
       );
     },
+    setName(title) {
+      console.log('setName', title);
+      this.$store.dispatch('mypage/setCurrentPresentationTitle', title);
+    },
   },
 };
 </script>
@@ -117,6 +122,6 @@ export default {
   color: #456357;
 }
 .ni:hover {
-  color: rgb(139, 0, 116);
+  color: #9fc7a5;
 }
 </style>

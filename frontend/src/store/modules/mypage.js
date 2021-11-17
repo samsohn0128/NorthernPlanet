@@ -24,6 +24,9 @@ export default {
     SET_SEQUENCE_NUM: function (state, sequenceNum) {
       state.sequenceNum = sequenceNum;
     },
+    SET_CURRENT_PRESENTATION_TITLE: function (state, title) {
+      state.currentPPTTitle = title;
+    },
   },
   actions: {
     setCurrentPresenatationInfo: function ({ commit }, data) {
@@ -34,6 +37,9 @@ export default {
     // },
     setSequenceNum({ commit }, sequenceNum) {
       commit('SET_SEQUENCE_NUM', sequenceNum);
+    },
+    setCurrentPresentationTitle({ commit }, title) {
+      commit('SET_CURRENT_PRESENTATION_TITLE', title);
     },
   },
   getters: {

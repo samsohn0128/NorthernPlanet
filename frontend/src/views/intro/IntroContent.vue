@@ -41,13 +41,13 @@
             "
           >
             <h1 class="text-gradient text-focus mb-4 text-center">
-              Focus on your presentation
+              Put your hands up
             </h1>
             <h3 class="text-gradient text-focus mb-4 text-center">
               change the paradigm of video presentation
             </h3>
             <h4 class="text-gradient text-focus lead text-center mb-4">
-              당신의 발표자료를 화상화면과 함께 띄워보세요
+              효과적인 온라인 발표를 경험해보세요
             </h4>
             <div class="buttons text-center">
               <router-link
@@ -79,7 +79,7 @@ export default {
   z-index: 1;
 }
 .text-gradient.text-focus {
-  background-image: linear-gradient(310deg, #141727, #5d918a);
+  background-image: linear-gradient(310deg, #141727, #7e8054);
 }
 .intro-cover {
   background: linear-gradient(90deg, #98ddc1, white);

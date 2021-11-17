@@ -33,6 +33,29 @@
         Chat
       </button>
     </div>
+    <div class="d-flex justify-content-center navigator">
+      <button
+        :class="[
+          { 'button-setting': GestureShow },
+          { 'navigator-button-inactive': !GestureShow },
+          'navigator-Gesture-button',
+        ]"
+        @click="selectGestureMenu"
+      >
+        Gesture
+      </button>
+      <button
+        :class="[
+          { 'button-setting': ScriptShow },
+          { 'navigator-button-inactive': !ScriptShow },
+          'navigator-script-button',
+        ]"
+        @click="selectScriptMenu"
+      >
+        Script
+      </button>
+      <button class="navigator-question-button">?</button>
+    </div>
     <!-- navigator -->
     <!-- SideBar Items -->
     <MeetingParticipants v-if="participantShow" class="meeting-participants" />
@@ -69,6 +92,8 @@ export default {
       presentationShow: false,
       chatShow: false,
       alertShow: false,
+      GestureShow: true,
+      ScriptShow: true,
     };
   },
   // : computed
@@ -129,6 +154,24 @@ export default {
     inactivateAlert: function () {
       this.alertShow = false;
     },
+    selectGestureMenu: function () {
+      if (this.GestureShow == true) {
+        this.GestureShow = false;
+        // 제스처 끌 때 코드
+      } else {
+        this.GestureShow = true;
+        // 제스처 킬 때 코드
+      }
+    },
+    selectScriptMenu: function () {
+      if (this.ScriptShow == false) {
+        this.ScriptShow = true;
+      } else {
+        this.ScriptShow = false;
+      }
+      // 대본을 키고 끄는 코드
+      // this.emitScriptShow();
+    },
   },
 };
 </script>
@@ -163,6 +206,39 @@ export default {
   border-radius: 0px 30px 30px 0px;
   color: white;
   font-weight: bold;
+}
+.navigator-Gesture-button {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: none;
+  width: 150px;
+  height: 35px;
+  border-radius: 30px 0px 0px 30px;
+  color: white;
+  font-weight: bold;
+}
+.navigator-script-button {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: none;
+  width: 150px;
+  height: 35px;
+  border-radius: 0px 30px 30px 0px;
+  color: white;
+  font-weight: bold;
+}
+.navigator-question-button {
+  margin-left: 5px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 30px;
+  color: black;
+  font-weight: bold;
+  background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
+}
+.button-setting {
+  background: #4ba3c7;
+  color: white;
 }
 .navigator-button-active {
   background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
