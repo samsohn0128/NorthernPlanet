@@ -111,6 +111,30 @@ export default {
     presentationTransition() {
       return this.$store.state.meetingRoom.transition;
     },
+    LocationLeft() {
+      return this.$store.state.meetingRoom.left;
+    },
+    LocationTop() {
+      return this.$store.state.meetingRoom.top;
+    },
+    LocationRight() {
+      return this.$store.state.meetingRoom.right;
+    },
+    size0() {
+      return this.$store.state.meetingRoom.size0;
+    },
+    size1() {
+      return this.$store.state.meetingRoom.size1;
+    },
+    size2() {
+      return this.$store.state.meetingRoom.size2;
+    },
+    size3() {
+      return this.$store.state.meetingRoom.size3;
+    },
+    size4() {
+      return this.$store.state.meetingRoom.size4;
+    },
   },
   // : watch
   watch: {
@@ -142,9 +166,30 @@ export default {
       };
       this.$store.dispatch('meetingRoom/sendMessage', message);
     },
-    // '$store.state.plus': function () {
-    //   console.log('InPresentationLocation', this.$store.state.plus);
-    // },
+    LocationLeft: function () {
+      this.selectLeft();
+    },
+    LocationTop: function () {
+      this.selectTop();
+    },
+    LocationRight: function () {
+      this.selectRight();
+    },
+    size0: function () {
+      this.selectSize(0);
+    },
+    size1: function () {
+      this.selectSize(1);
+    },
+    size2: function () {
+      this.selectSize(2);
+    },
+    size3: function () {
+      this.selectSize(3);
+    },
+    size4: function () {
+      this.selectSize(4);
+    },
   },
   // : lifecycle hook
   mounted() {
