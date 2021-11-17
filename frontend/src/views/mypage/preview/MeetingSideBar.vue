@@ -4,13 +4,19 @@
     <div class="d-flex justify-content-center navigator">
       <button
         :class="[
-          { 'button-setting': GestureShow },
-          { 'navigator-button-inactive': !GestureShow },
+          { 'button-setting': handactive },
+          { 'navigator-button-inactive': !handactive },
+          { gestureNotWorking: gestureNotWorking },
           'navigator-Gesture-button',
         ]"
-        @click="selectGestureMenu"
+        @click="handAct"
       >
-        Gesture
+        <div v-if="!gestureLoading">Gesture</div>
+        <LoadingSpinner
+          v-show="gestureLoading"
+          class="load-spinner"
+          color="#15182a"
+        ></LoadingSpinner>
       </button>
       <button
         :class="[
@@ -172,12 +178,30 @@
         </button>
       </div>
     </div>
+    <Hand
+      class="hand"
+      v-model="handactive"
+      @isLoading="changeGestureLoading"
+      @next="nextImage"
+      @locationTop="selectTop"
+      @locationRight="selectRight"
+      @sizeUp="sizeUp"
+      @sizeDown="sizeDown"
+      @gestureNotWorking="setGestureNotWorking"
+    />
   </div>
 </template>
 
 <script>
+import LoadingSpinner from 'vue-spinner/src/PulseLoader.vue';
+import Hand from '../components/Hand.vue';
+
 export default {
   name: 'MeetingSideBar',
+  components: {
+    LoadingSpinner,
+    Hand,
+  },
   // : props
   props: {
     slideList: Array,
@@ -186,12 +210,14 @@ export default {
   // : data
   data() {
     return {
-      GestureShow: false,
-      ScriptShow: true,
+      handactive: false,
+      gestureNotWorking: false,
+      gestureLoading: false,
+      ScriptShow: false,
 
       LocationSizeShow: true,
-      selectedSize: null,
-      selectedLocation: null,
+      selectedSize: 3,
+      selectedLocation: 'right',
       effects: {
         default: 0,
         fadein: 1,
@@ -220,12 +246,11 @@ export default {
     },
   },
   // : lifecycle hook
-  mounted() {},
+  mounted() {
+    this.emitLocation();
+  },
   // : methods
   methods: {
-    selectGestureMenu: function () {
-      this.GestureShow = !this.GestureShow;
-    },
     selectScriptMenu: function () {
       this.ScriptShow = !this.ScriptShow;
       this.emitScriptShow();
@@ -251,6 +276,12 @@ export default {
     selectTop: function () {
       this.selectedLocation = 'top';
       this.emitLocation();
+    },
+    sizeUp: function () {
+      if (this.selectedSize < 4) this.selectedSize++;
+    },
+    sizeDown: function () {
+      if (this.selectedSize > 0) this.selectedSize--;
     },
     // Effect의 예시를 보여준다.
     showExample(idx, effect) {
@@ -292,6 +323,15 @@ export default {
     },
     emitEffect(effect) {
       this.$emit('selectedEffect', effect);
+    },
+    handAct: function () {
+      this.handactive = !this.handactive;
+    },
+    changeGestureLoading: function (isLoading) {
+      this.gestureLoading = isLoading;
+    },
+    setGestureNotWorking: function () {
+      this.gestureNotWorking = !this.gestureNotWorking;
     },
   },
 };
@@ -505,6 +545,7 @@ export default {
 .rotatein {
   animation: rotateIn 0.7s;
 }
-.img-location {
+.gestureNotWorking {
+  background: #ba635f;
 }
 </style>

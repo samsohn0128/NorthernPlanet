@@ -194,7 +194,7 @@ export default {
       ],
       idx: 0,
       size: 2,
-      selectedLocation: 'top',
+      selectedLocation: 'right',
       timerWork: null, // 타이머가 0.01초마다 돌아가는 곳
       stTime: 0, // 시작 시간
       endTime: 0, // 마지막 시간
