@@ -41,7 +41,7 @@
     <div
       v-html="scriptList[currentPage]"
       class="script"
-      v-if="currentPage !== null && showScriptnow"
+      v-if="presenter == myName && currentPage !== null && showScriptnow"
     ></div>
     <div class="overlay" style="z-index: 5">
       <span>{{ mainParticipantName }}</span>
@@ -107,6 +107,12 @@ export default {
     },
     showScript() {
       return this.$store.state.meetingRoom.showScript;
+    },
+    presenter() {
+      return this.$store.getters['meetingRoom/getPresenter'];
+    },
+    myName() {
+      return this.$store.getters['meetingRoom/getMyName'];
     },
   },
   watch: {

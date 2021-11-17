@@ -71,6 +71,7 @@ export default {
       return this.$store.getters['meetingRoom/getMyName'];
     },
   },
+
   methods: {
     addChat: function () {
       if (this.chatInput === '') return;
@@ -86,7 +87,6 @@ export default {
       const message = {
         id: 'addChat',
         time: this.nowTime,
-        name: this.myName,
         chatContent: this.chatInput,
       };
 
