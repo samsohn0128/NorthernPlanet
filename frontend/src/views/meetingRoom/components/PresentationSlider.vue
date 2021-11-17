@@ -35,7 +35,7 @@
       <button class="slider-prev-button" @click="progressPrev">prev</button>
       <button @keyup.right="progressNext" @keyup.left="progressPrev">
         <div class="slider-progress-indicator">
-          {{ now + 1 }}/{{ slideUrls.length }}
+          {{ this.$store.state.meetingRoom.now + 1 }}/{{ slideUrls.length }}
         </div>
       </button>
       <button class="slider-next-button" @click="progressNext">next</button>
@@ -50,9 +50,9 @@
     <!-- slider alert: 첫 슬라이드, 마지막 슬라이드 alert -->
   </div>
 </template>
-
 <script>
 import PresentationSlideItem from './PresentationSlideItem.vue';
+import store from '@/store';
 
 export default {
   name: 'PresentationSlider.vue',
@@ -122,14 +122,17 @@ export default {
   },
   // : lifecycle hook
   mounted() {
-    this.prev = this.currentPage - 1;
-    this.now = this.currentPage;
-    this.next = this.currentPage + 1;
+    this.$store.state.meetingRoom.prev = this.currentPage - 1;
+    this.$store.state.meetingRoom.now = this.currentPage;
+    this.$store.state.meetingRoom.next = this.currentPage + 1;
+    console.log(this.$store.state.meetingRoom.now);
   },
   // : methods
   methods: {
     progressPrev: function () {
-      if (this.now > 0) {
+      if (this.$store.state.meetingRoom.now > 0) {
+        store.dispatch('meetingRoom/goPrev');
+
         this.prev -= 1;
         this.now -= 1;
         this.next -= 1;
@@ -139,7 +142,12 @@ export default {
       }
     },
     progressNext: function () {
-      if (this.now < this.slideUrls.length - 1) {
+      if (
+        this.$store.state.meetingRoom.now <
+        this.$store.state.meetingRoom.imgLength - 1
+      ) {
+        store.dispatch('meetingRoom/goNext');
+
         this.prev += 1;
         this.now += 1;
         this.next += 1;

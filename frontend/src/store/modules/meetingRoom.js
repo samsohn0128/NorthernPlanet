@@ -39,6 +39,10 @@ export default {
     // 초기 카메라, 마이크 세팅
     startWithMic: null,
     startWithVideo: null,
+    prev: null,
+    now: null,
+    next: null,
+    imgLength: null,
     // 단축키 설정을 위한 변수
     // idx
     plus: 0,
@@ -173,6 +177,23 @@ export default {
       }
 
       state.messageList.push(chatMessage);
+    },
+    GO_PREV(state) {
+      state.prev -= 1;
+      state.now -= 1;
+      state.next -= 1;
+      state.currentPage = state.now;
+    },
+    GO_NEXT(state) {
+      state.next += 1;
+      state.now += 1;
+      state.prev += 1;
+      state.currentPage = state.now;
+    },
+    SET_LENGTH(state, imglength) {
+      console.log(imglength);
+      state.imgLength = imglength;
+      console.log(state.imgLength);
     },
     PLUS_IDX(state) {
       if (state.plus == 1) {
@@ -487,17 +508,20 @@ export default {
         });
         context.commit('SET_IMAGE_SRCS', imageSrcs);
         context.commit('SET_SCRIPTS', scriptList);
+        console.log(res.data.slideList.length);
+        //SET_LENGTH 지우거나 쓰시는분?
+        context.commit('SET_LENGTH', res.data.slideList.length);
         context.commit('SET_EFFECTS', effectList);
       });
       context.commit('CHANGE_CONTENT', message);
     },
     // ContentSelector에서 컨텐츠 선택 시 action
     /* setImageUrls(context, imageUrls) {
-      context.commit('SET_IMAGE_URLS', imageUrls);
-    }, */
+        context.commit('SET_IMAGE_URLS', imageUrls);
+      }, */
     /* setSelectedContentId(context, id) {
-      context.commit('SET_SELECTED_CONTENT_ID', id);
-    }, */
+        context.commit('SET_SELECTED_CONTENT_ID', id);
+      }, */
     setOngoingPresentation(context, message) {
       if (message.presentationUserId !== null) {
         axios({
@@ -519,6 +543,16 @@ export default {
     },
     addChatMessage(context, chatMessage) {
       context.commit('ADD_CHAT_MESSAGE', chatMessage);
+    },
+    goPrev(context) {
+      if (context.state.now > 0) {
+        context.commit('GO_PREV');
+      }
+    },
+    goNext(context) {
+      if (context.state.now < context.state.imgLength - 1) {
+        context.commit('GO_NEXT');
+      }
     },
     // 단축키 설정
     // idx
@@ -564,6 +598,15 @@ export default {
     },
     getMyName(state) {
       return state.myName;
+    },
+    getPrev(state) {
+      return state.prev;
+    },
+    getNext(state) {
+      return state.next;
+    },
+    getNow(state) {
+      return state.now;
     },
   },
 };
