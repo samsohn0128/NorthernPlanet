@@ -164,7 +164,8 @@ import { mapActions } from 'vuex';
 import { updateScript } from '@/api/slide.js';
 import { Editor } from '@toast-ui/vue-editor';
 import store from '@/store';
-
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 export default {
   name: 'ModifyPresentation',
   components: { draggable, AppNav, AddSlideModal, Editor },
