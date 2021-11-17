@@ -132,6 +132,7 @@ export default {
       } else if (prediction[4].probability.toFixed(2) > 0.99) {
         this.predictFlag = false;
         this.handactive2 = !this.handactive2;
+        this.$emit('gestureNotWorking');
       } else if (
         prediction[5].probability.toFixed(2) > 0.99 &&
         this.handactive2
@@ -166,4 +167,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.gestureNotWorking {
+  background: #ba635f;
+}
+</style>

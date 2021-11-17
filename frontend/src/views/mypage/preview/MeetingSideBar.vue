@@ -6,6 +6,7 @@
         :class="[
           { 'button-setting': handactive },
           { 'navigator-button-inactive': !handactive },
+          { gestureNotWorking: gestureNotWorking },
           'navigator-Gesture-button',
         ]"
         @click="handAct"
@@ -185,6 +186,7 @@
       @locationRight="selectRight"
       @sizeUp="sizeUp"
       @sizeDown="sizeDown"
+      @gestureNotWorking="setGestureNotWorking"
     />
   </div>
 </template>
@@ -208,6 +210,7 @@ export default {
   data() {
     return {
       handactive: false,
+      gestureNotWorking: false,
       gestureLoading: false,
       ScriptShow: false,
 
@@ -325,6 +328,9 @@ export default {
     },
     changeGestureLoading: function (isLoading) {
       this.gestureLoading = isLoading;
+    },
+    setGestureNotWorking: function () {
+      this.gestureNotWorking = !this.gestureNotWorking;
     },
   },
 };
@@ -538,6 +544,7 @@ export default {
 .rotatein {
   animation: rotateIn 0.7s;
 }
-.img-location {
+.gestureNotWorking {
+  background: #ba635f;
 }
 </style>
