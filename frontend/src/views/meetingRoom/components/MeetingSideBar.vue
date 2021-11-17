@@ -51,7 +51,8 @@
       class="presentation-controller"
     />
     <Chat v-if="chatShow" :messageList="messageList" class="chat" />
-    <Hand v-if="handactive" class="hand" />
+    <!-- <Hand v-if="handactive" class="hand" /> -->
+    <Hand class="hand" v-model="handactive" />
 
     <!-- SideBar Items -->
     <!-- access alert -->
