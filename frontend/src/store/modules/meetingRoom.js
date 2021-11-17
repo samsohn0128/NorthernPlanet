@@ -57,6 +57,8 @@ export default {
     left: 0,
     top: 0,
     right: 0,
+    // 대본 끄고 킬 때
+    showScript: true,
   }),
   // mutations
   mutations: {
@@ -264,6 +266,9 @@ export default {
       } else {
         state.right = 1;
       }
+    },
+    SHOW_SCRIPT(state) {
+      state.showScript = !state.showScript;
     },
   },
   // actions
@@ -587,6 +592,10 @@ export default {
     },
     rightLocation(context) {
       context.commit('RIGHT_LOCATION');
+    },
+    // script 설정
+    showScript(context) {
+      context.commit('SHOW_SCRIPT');
     },
   },
   getters: {
