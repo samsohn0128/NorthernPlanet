@@ -4,13 +4,18 @@
     <div class="d-flex justify-content-center navigator">
       <button
         :class="[
-          { 'button-setting': GestureShow },
-          { 'navigator-button-inactive': !GestureShow },
+          { 'button-setting': handactive },
+          { 'navigator-button-inactive': !handactive },
           'navigator-Gesture-button',
         ]"
-        @click="selectGestureMenu"
+        @click="handAct"
       >
-        Gesture
+        <div v-if="!gestureLoading">Gesture</div>
+        <LoadingSpinner
+          v-show="gestureLoading"
+          class="load-spinner"
+          color="#15182a"
+        ></LoadingSpinner>
       </button>
       <button
         :class="[
@@ -171,12 +176,20 @@
         </button>
       </div>
     </div>
+    <Hand class="hand" v-model="handactive" @isLoading="changeGestureLoading" />
   </div>
 </template>
 
 <script>
+import LoadingSpinner from 'vue-spinner/src/PulseLoader.vue';
+import Hand from '../components/Hand.vue';
+
 export default {
   name: 'MeetingSideBar',
+  components: {
+    LoadingSpinner,
+    Hand,
+  },
   // : props
   props: {
     slideList: Array,
@@ -185,7 +198,8 @@ export default {
   // : data
   data() {
     return {
-      GestureShow: false,
+      handactive: false,
+      gestureLoading: false,
       ScriptShow: false,
 
       LocationSizeShow: true,
@@ -291,6 +305,12 @@ export default {
     },
     emitEffect(effect) {
       this.$emit('selectedEffect', effect);
+    },
+    handAct: function () {
+      this.handactive = !this.handactive;
+    },
+    changeGestureLoading: function (isLoading) {
+      this.gestureLoading = isLoading;
     },
   },
 };

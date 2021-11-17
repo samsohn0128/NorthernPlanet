@@ -32,25 +32,12 @@
       >
         Chat
       </button>
-      <!-- <button
-        :class="[
-          { 'navigator-button-active': handactive },
-          { 'navigator-button-inactive': !handactive },
-          'navigator-hand-button',
-        ]"
-        @click="handAct"
-        v-show="!gestureLoading"
-      >
-        손짓
-      </button>
-      <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner> -->
     </div>
     <div class="d-flex justify-content-center navigator">
       <button
         :class="[
           { 'button-toggle-setting': handactive && !gestureLoading },
-          { 'navigator-toggle-inactive': gestureLoading },
-          { 'navigator-toggle-inactive': !handactive },
+          { 'navigator-toggle-inactive': !handactive || gestureLoading },
           'navigator-Gesture-button',
         ]"
         @click="handAct"
@@ -62,11 +49,6 @@
           color="#15182a"
         ></LoadingSpinner>
       </button>
-      <!-- <LoadingSpinner
-        v-show="gestureLoading"
-        class="load-spinner"
-        color="#15182a"
-      ></LoadingSpinner> -->
       <button
         :class="[
           { 'button-toggle-setting': ScriptShow },

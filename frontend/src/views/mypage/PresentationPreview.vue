@@ -195,7 +195,7 @@ export default {
       ],
       idx: 0,
       size: 2,
-      selectedLocation: 'top',
+      selectedLocation: 'right',
       timerWork: null, // 타이머가 0.01초마다 돌아가는 곳
       stTime: 0, // 시작 시간
       endTime: 0, // 마지막 시간
@@ -363,28 +363,28 @@ export default {
     setIdxplus() {
       if (this.idx < this.slideList.length - 2) {
         this.idx += 1;
-        this.content = this.slideList[this.idx].script;
-        if (this.content != null) {
-          document.getElementById('changeinitialValue').innerHTML =
-            this.content;
-        } else {
-          document.getElementById('changeinitialValue').innerHTML =
-            '대본을<br>설정해주세요';
-        }
+        // this.content = this.slideList[this.idx].script;
+        // if (this.content != null) {
+        //   document.getElementById('changeinitialValue').innerHTML =
+        //     this.content;
+        // } else {
+        //   document.getElementById('changeinitialValue').innerHTML =
+        //     '대본을<br>설정해주세요';
+        // }
       }
       // console.log(this.content);
     },
     setIdxminus() {
       if (this.idx > 1) {
         this.idx -= 1;
-        this.content = this.slideList[this.idx].script;
-        if (this.content != null) {
-          document.getElementById('changeinitialValue').innerHTML =
-            this.content;
-        } else {
-          document.getElementById('changeinitialValue').innerHTML =
-            '대본을<br>설정해주세요';
-        }
+        // this.content = this.slideList[this.idx].script;
+        // if (this.content != null) {
+        //   document.getElementById('changeinitialValue').innerHTML =
+        //     this.content;
+        // } else {
+        //   document.getElementById('changeinitialValue').innerHTML =
+        //     '대본을<br>설정해주세요';
+        // }
       }
       // console.log(this.content);
     },
