@@ -39,9 +39,11 @@
           'navigator-hand-button',
         ]"
         @click="handAct"
+        v-show="!gestureLoading"
       >
         손짓
       </button>
+      <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner>
     </div>
     <!-- navigator -->
     <!-- SideBar Items -->
@@ -52,7 +54,7 @@
     />
     <Chat v-if="chatShow" :messageList="messageList" class="chat" />
     <!-- <Hand v-if="handactive" class="hand" /> -->
-    <Hand class="hand" v-model="handactive" />
+    <Hand class="hand" v-model="handactive" @isLoading="changeGestureLoading" />
 
     <!-- SideBar Items -->
     <!-- access alert -->
@@ -67,12 +69,20 @@
 <script>
 import MeetingParticipants from './MeetingParticipants.vue';
 import PresentationController from './PresentationController.vue';
+import LoadingSpinner from 'vue-spinner/src/PulseLoader.vue';
+
 import Chat from './Chat.vue';
 import Hand from './Hand.vue';
 
 export default {
   name: 'MeetingSideBar',
-  components: { MeetingParticipants, PresentationController, Chat, Hand },
+  components: {
+    MeetingParticipants,
+    PresentationController,
+    Chat,
+    Hand,
+    LoadingSpinner,
+  },
   // : props
   props: {},
   // : data
@@ -83,6 +93,7 @@ export default {
       chatShow: false,
       alertShow: false,
       handactive: false,
+      gestureLoading: false,
     };
   },
   // : computed
@@ -145,6 +156,9 @@ export default {
     },
     handAct: function () {
       this.handactive = !this.handactive;
+    },
+    changeGestureLoading: function (isLoading) {
+      this.gestureLoading = isLoading;
     },
   },
 };
