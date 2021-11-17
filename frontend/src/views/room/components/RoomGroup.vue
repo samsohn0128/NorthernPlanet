@@ -52,7 +52,7 @@
             v-show="lengthRooms > 0 && isToggle"
             @click.stop="moreCard"
           >
-            <a href="#"
+            <a
               ><h2><i class="fas fa-plus text-global"></i></h2>
               <h4 class="text-global">more</h4>
             </a>
