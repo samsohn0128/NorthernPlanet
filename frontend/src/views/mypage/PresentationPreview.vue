@@ -45,10 +45,12 @@
         </div> -->
 
         <!-- 타이머 -->
-        <div class="upside-ppt-inside set-timer-location">
+        <div class="set-timer-location">
           <div class="time-space">
-            <span id="showMin">00</span> : <span id="showSec">00</span>
-            <span class="time-button-space">
+            <span style="display: flex"
+              ><span id="showMin">00</span> : <span id="showSec">00</span></span
+            >
+            <span style="display: flex">
               <!-- 시작 -->
               <i
                 class="ni ni-button-play time-button"
@@ -62,10 +64,7 @@
                 v-if="timerStart"
               ></i>
               <!-- 초기화 -->
-              <i
-                class="ni ni-button-power time-button"
-                @click="resetButton"
-              ></i>
+              <i class="fa fa-stop time-button" @click="resetButton"></i>
             </span>
           </div>
         </div>
@@ -596,10 +595,6 @@ dbecec
   color: white;
   font-weight: bold;
 }
-/* .upside-ppt-inside {
-  width: 20vw;
-  height: 15vh;
-} */
 .script-setting {
   display: flex;
   flex-direction: row;
@@ -615,6 +610,9 @@ dbecec
   align-items: flex-start;
 }
 .time-space {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
   width: 8vw;
   height: 2.3vw;
   text-align: center;
