@@ -105,11 +105,12 @@
           </div>
           <!-- local video element -->
           <video
+            class="video-insert-setting"
             width="70%"
             height="10%"
             :id="'local-video' + roomId"
             autoplay="true"
-            poster="@/assets/img/logos/focus_camera3.jpg"
+            poster="@/assets/img/logos/focus_camera4.jpg"
           ></video>
         </div>
 
@@ -524,6 +525,7 @@ export default {
 #ppt-image-setting {
   margin-top: 57px;
   max-width: 100%;
+  z-index: 1;
   width: 70%;
   height: 60vh;
   display: flex;
@@ -698,6 +700,9 @@ dbecec
   max-width: 100%;
   max-height: 100%;
   margin: 5px;
+}
+.video-insert-setting {
+  transform: scaleX(-1);
 }
 .right-side-bar {
   width: 400px;
