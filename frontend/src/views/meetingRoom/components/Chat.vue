@@ -282,6 +282,10 @@ body {
   width: 80%;
 }
 
+.chat-input-div:focus {
+  outline: 3px solid #456357;
+}
+
 @media only screen and (max-width: 767px) {
   .chat-app .people-list {
     height: 465px;

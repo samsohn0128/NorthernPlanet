@@ -114,7 +114,7 @@ export default {
   height: auto;
 }
 .container-border {
-  border: 0.4rem solid;
+  border: 0.4rem solid #495c4d;
 }
 .overlay {
   position: absolute;

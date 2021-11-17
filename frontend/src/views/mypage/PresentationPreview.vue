@@ -515,7 +515,7 @@ export default {
   padding: 20px 20px;
   /* background: linear-gradient(90deg, #2c3153 0%, #15182a 100%); */
   /* background: #66806a; */
-  background: #29332b;
+  background: linear-gradient(90deg, #495c4d 0%, #29332b 100%);
 }
 /* RGB
 93 244 237 #5df4ec
@@ -792,7 +792,7 @@ dbecec
   visibility: hidden;
 }
 .button-color-setting {
-  background: #66806a;
+  background: #8c7c5f;
   color: white;
 }
 .button-outline-setting {

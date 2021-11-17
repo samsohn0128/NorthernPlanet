@@ -277,7 +277,7 @@ export default {
   height: 100vh;
   width: 100vw;
   padding: 20px 20px;
-  background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
+  background: linear-gradient(90deg, #495c4d 0%, #29332b 100%);
 }
 .left-side-bar {
   background: none;
@@ -303,7 +303,7 @@ export default {
   top: 0;
   right: 0;
   height: 100vh;
-  background: #e9ecef;
+  background: #f7fbf9;
   position: fixed;
   overflow: auto;
 }
