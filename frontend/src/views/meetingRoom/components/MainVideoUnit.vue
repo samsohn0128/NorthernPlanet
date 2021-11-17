@@ -41,7 +41,7 @@
     <div
       v-html="scriptList[currentPage]"
       class="script"
-      v-if="currentPage !== null"
+      v-if="currentPage !== null && showScriptnow"
     >
       {{ scriptList[currentPage] }}
     </div>
@@ -74,6 +74,7 @@ export default {
       min: '00', // 분 표시하기
       sec: '00', // 초 표시하기
       // milisec: '00', // ms 표시하기
+      showScriptnow: true,
     };
   },
   // : computed
@@ -106,23 +107,15 @@ export default {
     transitionPreset() {
       return 'transition-' + this.effectList[this.currentPage];
     },
-    /* presetCss() {
-      return (
-        'presentation-image-' +
-        this.$store.state.meetingRoom.location +
-        '-' +
-        this.$store.state.meetingRoom.size
-      );
-    }, */
+    showScript() {
+      return this.$store.state.meetingRoom.showScript;
+    },
   },
-  // Effect 실시간 반영을 위한 시도.. 실패..
-  // watch: {
-  //   '$store.state.meetingRoom.effectList'(dd, old) {
-  //     console.log(dd, old);
-  //     console.log('watch effectList');
-  //     this.transitionPreset();
-  //   },
-  // },
+  watch: {
+    showScript() {
+      this.showScriptnow = this.showScript;
+    },
+  },
   mounted() {
     this.mainVideo.classList.add('video-insert');
     document.getElementById('main-video-container').appendChild(this.mainVideo);
