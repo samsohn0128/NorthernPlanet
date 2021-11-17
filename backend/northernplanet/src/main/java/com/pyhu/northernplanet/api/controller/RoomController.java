@@ -113,7 +113,7 @@ public class RoomController {
       @ApiResponse(code = 500, message = "서버 오류")})
   public ResponseEntity<?> updateRoom(
       @RequestBody @ApiParam(value = "방업데이트", required = true) RoomPutReq roomInfo) {
-    RoomPutRes room=null;
+    RoomPutRes room = null;
     try {
       log.info("[update] roomUpdateReq: {}", roomInfo);
       room = roomService.updateRoom(roomInfo);
@@ -145,24 +145,23 @@ public class RoomController {
     }
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
-  //
-  // @GetMapping("/")
-  // @ApiOperation(value = "전체 방 보기")
-  // @ApiResponses({@ApiResponse(code = 200, message = "성공"),
-  // @ApiResponse(code = 401, message = "인증 실패"),
-  // @ApiResponse(code = 404, message = "사용자 없음"),
-  // @ApiResponse(code = 409, message = "이미 존재하는 유저"),
-  // @ApiResponse(code = 500, message = "서버 오류")})
-  // public ResponseEntity<List<RoomGetRes>> showRooms() {
-  //
-  // List<RoomGetRes> rooms = roomService.findAll();
-  // for (RoomGetRes item : rooms) {
-  // item.setParticipants(participantService.getParticipantByRoomId(item.getRoom_id()));
-  // }
-  // return new ResponseEntity<List<RoomGetRes>>(rooms, HttpStatus.OK);
-  // }
-  //
 
+  @PutMapping("/leave/{roomId}")
+  @ApiOperation(value = "방 정보 수정")
+  @ApiResponses({@ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "방 정보 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")})
+  public ResponseEntity<?> leaveRoom(@PathVariable("roomId") Long roomId) {
+    try {
+      log.info("[update] leave room requesst: {}", roomId);
+      roomService.leaveRoom(roomId);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
   //
   // @GetMapping("/onlive/{roomId}")
   // @ApiOperation(value = "방이 현재 활동중인지 보기")

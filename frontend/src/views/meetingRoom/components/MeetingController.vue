@@ -22,7 +22,7 @@
 
 <script>
 // import "./template.scss";
-
+import { leaveRoom } from '@/api/rooms.js';
 export default {
   name: 'MeetingController',
   components: {},
@@ -98,6 +98,7 @@ export default {
       };
       this.$store.dispatch('meetingRoom/sendMessage', message);
       this.$store.dispatch('meetingRoom/leaveRoom');
+      leaveRoom();
     },
     progressNext: function () {
       const message = {

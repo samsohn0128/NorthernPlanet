@@ -25,6 +25,9 @@ function createRoom(roomData) {
 function updateRoom(roomData) {
   return instance.put('/' + roomData.roomId, roomData);
 }
+function leaveRoom(roomId) {
+  return instance.put('/leave/' + roomId);
+}
 
 function deleteRoom(roomId) {
   return instance.delete('/' + roomId);
@@ -56,4 +59,5 @@ export {
   deleteRoom,
   getRoomIsOnLive,
   setRoomOnLive,
+  leaveRoom,
 };
