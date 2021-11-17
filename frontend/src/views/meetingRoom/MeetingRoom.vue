@@ -142,49 +142,39 @@ export default {
   // : lifecycle hook
   mounted() {
     document.addEventListener('keydown', e => {
-      console.log(e);
       switch (e.key) {
         case 'ArrowLeft':
-          // if (this.idx > 1) {
-          //   // this.setIdxminus();
-          // }
+          this.$store.dispatch('meetingRoom/minusIdx');
           break;
         case 'ArrowRight':
-          // if (this.idx < this.slideList.length - 2) {
-          //   // this.setIdxplus();
-          // }
+          this.$store.dispatch('meetingRoom/plusIdx');
           break;
         case 'a':
         case 'A':
-          this.setLocation('left');
+          this.$store.dispatch('meetingRoom/leftLocation');
           break;
         case 'd':
         case 'D':
-          this.setLocation('right');
+          this.$store.dispatch('meetingRoom/rightLocation');
           break;
         case 'w':
         case 'W':
-          this.setLocation('top');
+          this.$store.dispatch('meetingRoom/topLocation');
           break;
         case '0':
-          this.selectedSize = 0;
-          this.setSize(this.selectedSize);
+          this.$store.dispatch('meetingRoom/size0Size');
           break;
         case '1':
-          this.selectedSize = 1;
-          this.setSize(this.selectedSize);
+          this.$store.dispatch('meetingRoom/size1Size');
           break;
         case '2':
-          this.selectedSize = 2;
-          this.setSize(this.selectedSize);
+          this.$store.dispatch('meetingRoom/size2Size');
           break;
         case '3':
-          this.selectedSize = 3;
-          this.setSize(this.selectedSize);
+          this.$store.dispatch('meetingRoom/size3Size');
           break;
         case '4':
-          this.selectedSize = 4;
-          this.setSize(this.selectedSize);
+          this.$store.dispatch('meetingRoom/size4Size');
           break;
       }
     });
@@ -201,20 +191,6 @@ export default {
     },
     toggleRightSide: function () {
       this.rightSideShow = !this.rightSideShow;
-    },
-    // Size 세팅
-    setSize(selectedSize) {
-      this.size = selectedSize;
-      document
-        .getElementById('img-setting')
-        .setAttribute('class', 'presentation-' + selectedSize);
-    },
-    // 위치 세팅
-    setLocation(selectedLocation) {
-      this.selectedLocation = selectedLocation;
-      document
-        .getElementById('ppt-image-setting')
-        .setAttribute('class', 'img-' + selectedLocation);
     },
     // 시작
     startButton() {
