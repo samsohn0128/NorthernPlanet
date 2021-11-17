@@ -39,6 +39,20 @@ export default {
     // 초기 카메라, 마이크 세팅
     startWithMic: null,
     startWithVideo: null,
+    // 단축키 설정을 위한 변수
+    // idx
+    plus: 0,
+    minus: 0,
+    // size
+    size0: 0,
+    size1: 0,
+    size2: 0,
+    size3: 0,
+    size4: 0,
+    // location
+    left: 0,
+    top: 0,
+    right: 0,
   }),
   // mutations
   mutations: {
@@ -159,6 +173,76 @@ export default {
       }
 
       state.messageList.push(chatMessage);
+    },
+    PLUS_IDX(state) {
+      if (state.plus == 1) {
+        state.plus = 0;
+      } else {
+        state.plus = 1;
+      }
+    },
+    MINUS_IDX(state) {
+      if (state.minus == 1) {
+        state.minus = 0;
+      } else {
+        state.minus = 1;
+      }
+    },
+    SIZE0_SIZE(state) {
+      if (state.size0 == 1) {
+        state.size0 = 0;
+      } else {
+        state.size0 = 1;
+      }
+    },
+    SIZE1_SIZE(state) {
+      if (state.size1 == 1) {
+        state.size1 = 0;
+      } else {
+        state.size1 = 1;
+      }
+    },
+    SIZE2_SIZE(state) {
+      if (state.size2 == 1) {
+        state.size2 = 0;
+      } else {
+        state.size2 = 1;
+      }
+    },
+    SIZE3_SIZE(state) {
+      if (state.size3 == 1) {
+        state.size3 = 0;
+      } else {
+        state.size3 = 1;
+      }
+    },
+    SIZE4_SIZE(state) {
+      if (state.size4 == 1) {
+        state.size4 = 0;
+      } else {
+        state.size4 = 1;
+      }
+    },
+    LEFT_LOCATION(state) {
+      if (state.left == 1) {
+        state.left = 0;
+      } else {
+        state.left = 1;
+      }
+    },
+    TOP_LOCATION(state) {
+      if (state.top == 1) {
+        state.top = 0;
+      } else {
+        state.top = 1;
+      }
+    },
+    RIGHT_LOCATION(state) {
+      if (state.right == 1) {
+        state.right = 0;
+      } else {
+        state.right = 1;
+      }
     },
   },
   // actions
@@ -295,7 +379,7 @@ export default {
       context.dispatch('changePresenter', message);
       context.dispatch('setOngoingPresentation', message);
       // console.log('onExistingParticipants end')
-      console.log('MeetingRoom', context.state.roomNumber);
+      // console.log('MeetingRoom', context.state.roomNumber);
       router.push({
         name: 'MeetingRoom',
         params: {
@@ -343,7 +427,7 @@ export default {
     leaveRoom(context) {
       window.location.reload(); // 새로고침
       router.push({ path: '/dashboard' });
-      console.log(context.state.roomNumber);
+      // console.log(context.state.roomNumber);
       if (context.state.myName === context.state.manager) {
         const roomData = {
           room_id: context.state.roomNumber,
@@ -395,7 +479,6 @@ export default {
         const imageSrcs = [];
         const scriptList = [];
         const effectList = [];
-        console.log('slidelist: ', res.data.slideList);
         res.data.slideList.forEach(data => {
           let imageSrc = 'data:image/jpeg;base64,' + data.slideFile;
           imageSrcs.push(imageSrc);
@@ -436,6 +519,40 @@ export default {
     },
     addChatMessage(context, chatMessage) {
       context.commit('ADD_CHAT_MESSAGE', chatMessage);
+    },
+    // 단축키 설정
+    // idx
+    plusIdx(context) {
+      context.commit('PLUS_IDX');
+    },
+    minusIdx(context) {
+      context.commit('MINUS_IDX');
+    },
+    // size
+    size0Size(context) {
+      context.commit('SIZE0_SIZE');
+    },
+    size1Size(context) {
+      context.commit('SIZE1_SIZE');
+    },
+    size2Size(context) {
+      context.commit('SIZE2_SIZE');
+    },
+    size3Size(context) {
+      context.commit('SIZE3_SIZE');
+    },
+    size4Size(context) {
+      context.commit('SIZE4_SIZE');
+    },
+    // location
+    leftLocation(context) {
+      context.commit('LEFT_LOCATION');
+    },
+    topLocation(context) {
+      context.commit('TOP_LOCATION');
+    },
+    rightLocation(context) {
+      context.commit('RIGHT_LOCATION');
     },
   },
   getters: {
