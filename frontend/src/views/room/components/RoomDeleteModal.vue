@@ -28,22 +28,20 @@
         <div class="modal-body">
           <div class="py-3 text-center">
             <i class="ni ni-bell-55 ni-3x"></i>
-            <h4 class="text-gradient text-danger mt-4">
-              Are you sure delete your room?
-            </h4>
+            <h4 class="mt-4 delete-title">Are you sure delete your room?</h4>
           </div>
         </div>
         <div class="modal-footer">
           <button
             type="button"
-            class="btn bg-gradient-secondary"
+            class="btn btn-outline-dark"
             data-bs-dismiss="modal"
           >
             No
           </button>
           <button
             type="button"
-            class="btn bg-gradient-danger"
+            class="btn button-danger-setting"
             @click="deleteRoom"
             data-bs-dismiss="modal"
           >
@@ -78,3 +76,12 @@ export default {
   },
 };
 </script>
+<style scoped>
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
+}
+.delete-title {
+  color: #ba635f;
+}
+</style>

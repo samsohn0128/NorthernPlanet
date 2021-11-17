@@ -98,7 +98,9 @@ export default {
       };
       this.$store.dispatch('meetingRoom/sendMessage', message);
       this.$store.dispatch('meetingRoom/leaveRoom');
-      leaveRoom();
+      if (this.myName == this.manager) {
+        leaveRoom();
+      }
     },
     progressNext: function () {
       const message = {

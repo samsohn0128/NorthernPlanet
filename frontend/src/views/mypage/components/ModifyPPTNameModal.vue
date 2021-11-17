@@ -38,7 +38,7 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="btn bg-gradient-secondary"
+            class="btn btn-outline-dark"
             data-bs-dismiss="modal"
           >
             Cancel
@@ -46,7 +46,7 @@
           </button>
           <button
             type="button"
-            class="btn bg-gradient-danger"
+            class="btn button-danger-setting"
             @click="modifyPPTName()"
             data-bs-dismiss="modal"
           >
@@ -125,4 +125,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.button-danger-setting {
+  background: #ba635f;
+  color: white;
+}
+.button-danger-setting:hover {
+  color: white;
+}
+</style>
