@@ -45,7 +45,10 @@
       </button>
       <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner> -->
     </div>
-    <div class="d-flex justify-content-center navigator">
+    <div
+      class="d-flex justify-content-center navigator"
+      v-if="presentationShow"
+    >
       <button
         :class="[
           { 'button-toggle-setting': handactive && !gestureLoading },
