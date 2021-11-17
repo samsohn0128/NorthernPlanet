@@ -94,7 +94,7 @@ export default {
   border-radius: 5px;
 }
 .card-presentation {
-  margin: 2% 2% 60px 2%;
+  margin: 2% 2% 0% 2%;
 }
 .container-box {
   display: flex;
