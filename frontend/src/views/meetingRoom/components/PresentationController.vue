@@ -150,7 +150,7 @@ export default {
 
 <style scoped>
 .prsent-control-navigator {
-  background: #e9ecef;
+  background: #f7fbf9;
   position: fixed;
   bottom: 0;
   right: 0;
@@ -192,9 +192,13 @@ export default {
   border-radius: 0px 30px 30px 0px;
 }
 .navigator-button-active {
-  background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
+  /* background: linear-gradient(90deg, #2c3153 0%, #15182a 100%); */
+  background: #66806a;
+  color: white;
 }
 .navigator-button-inactive {
-  background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
+  /* background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%); */
+  border: 2px solid #66806a;
+  color: #456357;
 }
 </style>

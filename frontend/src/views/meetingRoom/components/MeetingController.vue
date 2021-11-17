@@ -98,7 +98,9 @@ export default {
       };
       this.$store.dispatch('meetingRoom/sendMessage', message);
       this.$store.dispatch('meetingRoom/leaveRoom');
-      leaveRoom();
+      if (this.myName == this.manager) {
+        leaveRoom();
+      }
     },
     progressNext: function () {
       const message = {
@@ -113,7 +115,8 @@ export default {
 
 <style scoped>
 .controller-button {
-  background: linear-gradient(90deg, #f10488 0%, #a51bb2 100%);
+  /* background: linear-gradient(90deg, #66806a 0%, #aebdb6 100%); */
+  background: #8c7c5f;
   box-shadow: 0px 4px 4px black;
   border: none;
   width: 150px;
@@ -131,5 +134,9 @@ export default {
   border-radius: 30px;
   color: white;
   font-weight: bold;
+}
+.button-color-setting {
+  background: #66806a;
+  color: white;
 }
 </style>

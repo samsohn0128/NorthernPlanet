@@ -48,27 +48,36 @@
     <div class="d-flex justify-content-center navigator">
       <button
         :class="[
-          { 'button-setting': handactive },
-          { 'navigator-button-inactive': !handactive },
+          { 'button-toggle-setting': handactive && !gestureLoading },
+          { 'navigator-toggle-inactive': gestureLoading },
+          { 'navigator-toggle-inactive': !handactive },
           'navigator-Gesture-button',
         ]"
         @click="handAct"
-        v-show="!gestureLoading"
       >
-        Gesture
+        <div v-if="!gestureLoading">Gesture</div>
+        <LoadingSpinner
+          v-show="gestureLoading"
+          class="load-spinner"
+          color="#15182a"
+        ></LoadingSpinner>
       </button>
-      <LoadingSpinner v-show="gestureLoading" color="#15182a"></LoadingSpinner>
+      <!-- <LoadingSpinner
+        v-show="gestureLoading"
+        class="load-spinner"
+        color="#15182a"
+      ></LoadingSpinner> -->
       <button
         :class="[
-          { 'button-setting': ScriptShow },
-          { 'navigator-button-inactive': !ScriptShow },
+          { 'button-toggle-setting': ScriptShow },
+          { 'navigator-toggle-inactive': !ScriptShow },
           'navigator-script-button',
         ]"
         @click="selectScriptMenu"
       >
         Script
       </button>
-      <button class="navigator-question-button">?</button>
+      <!-- <button class="navigator-question-button">?</button> -->
     </div>
     <!-- navigator -->
     <!-- SideBar Items -->
@@ -228,9 +237,10 @@ export default {
 .navigator-Gesture-button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border: none;
+  margin-right: 5px;
   width: 150px;
   height: 35px;
-  border-radius: 30px 0px 0px 30px;
+  border-radius: 30px 30px 30px 30px;
   color: white;
   font-weight: bold;
 }
@@ -239,7 +249,7 @@ export default {
   border: none;
   width: 150px;
   height: 35px;
-  border-radius: 0px 30px 30px 0px;
+  border-radius: 30px 30px 30px 30px;
   color: white;
   font-weight: bold;
 }
@@ -254,15 +264,26 @@ export default {
   font-weight: bold;
   background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
 }
-.button-setting {
-  background: #4ba3c7;
+.button-toggle-setting {
+  background: #959663;
   color: white;
 }
 .navigator-button-active {
-  background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
+  /* background: linear-gradient(90deg, #2c3153 0%, #15182a 100%); */
+  /* background: #66806a;
+  color: white; */
+  background: #66806a;
+  color: white;
 }
 .navigator-button-inactive {
-  background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
+  /* background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%); */
+  border: 2px solid #66806a;
+  color: #456357;
+}
+.navigator-toggle-inactive {
+  /* background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%); */
+  border: 2px solid #959663;
+  color: #71734b;
 }
 .meeting-participants {
   margin: 25px 25px;
@@ -300,4 +321,7 @@ export default {
   position: fixed;
   top: 0;
 } */
+.load-spinner {
+  z-index: 5;
+}
 </style>

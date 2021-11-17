@@ -95,7 +95,7 @@ export default {
 }
 
 .chat .chat-history .my-message {
-  background: white;
+  background: #dbc194;
 }
 
 .chat .chat-history .my-message:after {
@@ -107,19 +107,19 @@ export default {
   width: 0;
   position: absolute;
   pointer-events: none;
-  border-bottom-color: white;
+  border-bottom-color: #dbc194;
   border-width: 10px;
   margin-left: -10px;
 }
 
 .chat .chat-history .other-message {
-  background: lightgoldenrodyellow;
+  background: #d8da90;
   text-align: right;
 }
 
 .chat .chat-history .other-message:after {
-  border-bottom-color: lightgoldenrodyellow;
-  left: 93%;
+  border-bottom-color: #d8da90;
+  left: 65%;
 }
 
 .chat .chat-message {

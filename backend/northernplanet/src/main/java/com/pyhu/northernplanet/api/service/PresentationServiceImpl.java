@@ -61,7 +61,9 @@ public class PresentationServiceImpl implements PresentationService {
   // juyeop
  // private final String presentationDirectory = "C:\\Users\\JuYeop\\pjt3-picture";
   // minji
-  private final String presentationDirectory = "C:\\Users\\multicampus\\ssafy-2-semester\\free-pjt\\presentation";
+//  private final String presentationDirectory = "C:\\Users\\multicampus\\ssafy-2-semester\\free-pjt\\presentation";
+  // youngeun
+  private final String presentationDirectory = "C:\\yes\\lastPJT\\presentation";
 
   @Override
   public int createPresentation(PresentationPostReq presentationPostReq) throws IOException {

@@ -242,7 +242,7 @@ export default {
   top: 5%;
   left: 50%;
   transform: translate(-50%);
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.4);
   width: 80%;
   height: 10%;
   transition: 0.3s ease;
@@ -254,6 +254,7 @@ export default {
   align-items: center;
   z-index: 5;
   overflow: auto;
+  border-radius: 10px;
 }
 /* scroll bar*/
 /* 스크롤바 설정*/

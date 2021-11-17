@@ -173,7 +173,7 @@ export default {
   border-radius: 30px 0px 0px 30px;
   color: white;
   font-weight: bold;
-  background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
+  background: linear-gradient(90deg, #66806a 0%, #66806a 100%);
 }
 .slider-next-button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -183,7 +183,7 @@ export default {
   border-radius: 0px 30px 30px 0px;
   color: white;
   font-weight: bold;
-  background: linear-gradient(90deg, #2c3153 0%, #15182a 100%);
+  background: linear-gradient(90deg, #66806a 0%, #66806a 100%);
 }
 .slider-progress-indicator {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -192,7 +192,7 @@ export default {
   height: 35px;
   color: white;
   font-weight: bold;
-  background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
+  background: linear-gradient(90deg, #aebdb6 0%, #aebdb6 100%);
   display: flex;
   justify-content: center;
   align-items: center;
