@@ -186,7 +186,7 @@ export default {
   data() {
     return {
       GestureShow: false,
-      ScriptShow: false,
+      ScriptShow: true,
 
       LocationSizeShow: true,
       selectedSize: null,
