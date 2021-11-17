@@ -1,8 +1,33 @@
 <template>
   <div
     :class="[locationPreset, 'main-video-container']"
+    class="set-location"
     id="main-video-container"
   >
+    <div class="set-timer-location">
+      <div class="time-space">
+        <span style="display: flex"
+          ><span id="showMin">00</span> : <span id="showSec">00</span></span
+        >
+        <span style="display: flex">
+          <!-- 시작 -->
+          <i
+            class="ni ni-button-play time-button"
+            @click="startButton"
+            v-if="!timerStart"
+          ></i>
+          <!-- 일시정지 -->
+          <i
+            class="ni ni-button-pause time-button"
+            @click="startButton"
+            v-if="timerStart"
+          ></i>
+          <!-- 초기화 -->
+          <i class="fa fa-stop time-button" @click="resetButton"></i>
+        </span>
+      </div>
+    </div>
+
     <!-- <transition :name="transitionPreset" v-if="currentPage !== null"> -->
     <transition name="fade" mode="out-in" v-if="currentPage !== null">
       <img
@@ -41,7 +66,15 @@ export default {
   },
   // : data
   data() {
-    return {};
+    return {
+      timerWork: null, // 타이머가 0.01초마다 돌아가는 곳
+      stTime: 0, // 시작 시간
+      endTime: 0, // 마지막 시간
+      timerStart: false, // 타이머가 돌아가고 있는지 확인
+      min: '00', // 분 표시하기
+      sec: '00', // 초 표시하기
+      // milisec: '00', // ms 표시하기
+    };
   },
   // : computed
   computed: {
@@ -95,7 +128,54 @@ export default {
     document.getElementById('main-video-container').appendChild(this.mainVideo);
   },
   // : methods
-  methods: {},
+  methods: {
+    // 시작
+    startButton() {
+      // 시작 버튼을 누를 때
+      if (this.timerStart == false) {
+        this.timerStart = true;
+        // 0.001초마다 시간 갱신
+        this.timerWork = setInterval(() => {
+          let nowTime = new Date(Date.now() - this.stTime);
+
+          this.min = this.addZero(nowTime.getMinutes());
+          this.sec = this.addZero(nowTime.getSeconds());
+
+          document.getElementById('showMin').innerText = this.min;
+          document.getElementById('showSec').innerText = this.sec;
+          // document.getElementById('showMilisec').innerText = this.milisec;
+        }, 1000);
+      } else {
+        // 일시정지 버튼을 누를 때
+        this.endTime = Date.now();
+        this.timerStart = false;
+        clearInterval(this.timerWork);
+      }
+      // 시간 체크
+      if (!this.stTime) {
+        this.stTime = Date.now();
+      } else {
+        this.stTime += Date.now() - this.endTime;
+      }
+    },
+    // 리셋하기, 종료 버튼
+    resetButton() {
+      this.stTime = 0;
+      this.min = 0;
+      this.sec = 0;
+      this.endTime = Date.now();
+      this.timerStart = false;
+      clearInterval(this.timerWork);
+      this.timerWork = null;
+      document.getElementById('showMin').innerText = '00';
+      document.getElementById('showSec').innerText = '00';
+      // document.getElementById('showMilisec').innerText = '00';
+    },
+    // 계산
+    addZero(num) {
+      return num < 10 ? '0' + num : '' + num;
+    },
+  },
 };
 </script>
 
@@ -112,6 +192,36 @@ export default {
   display: flex;
   overflow: hidden;
 }
+.set-location {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* 스톱워치 */
+.set-timer-location {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.time-space {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 8vw;
+  height: 2.3vw;
+  text-align: center;
+  /* background: #505753; */
+  background: #505753;
+  color: white;
+  font-size: 15px;
+  padding: 5px;
+  border-radius: 10px 10px 10px 10px;
+}
+.time-button {
+  margin: 2px;
+}
+
 .overlay {
   position: absolute;
   bottom: 5%;
