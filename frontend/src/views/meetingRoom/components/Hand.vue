@@ -8,28 +8,35 @@
 import store from '@/store';
 import _ from 'lodash';
 
-//aeeun
-// const URL = 'https://teachablemachine.withgoogle.com/models/sHKstMnIt/';
-//dongwoo right hand only
 const URL = 'https://teachablemachine.withgoogle.com/models/-8b4izMaY/';
 let model, webcam, ctx, labelContainer, maxPredictions;
 export default {
   name: 'handcolntroler',
-  props: {},
+  props: {
+    value: {
+      default: false,
+    },
+  },
   data() {
     return {
       predictFlag: true,
-      mountFlag: false,
+      handactive: this.value,
     };
   },
   mounted() {
-    this.mountFlag = true;
-    console.log('this.mountFlag: ' + this.mountFlag + ' - mounted()');
-    this.init();
+    // this.init();
+    console.log('value: ' + this.value + ' - mounted');
+    console.log('handactive: ' + this.handactive + ' - mounted');
   },
-  unmounted() {
-    console.log('this.mountFlag: ' + this.mountFlag + ' - unmounted()');
-    this.mountFlag = false;
+  watch: {
+    value: function () {
+      this.handactive = this.value;
+      console.log('value: ' + this.value);
+      console.log('handactive: ' + this.handactive);
+      if (this.handactive) {
+        this.init();
+      }
+    },
   },
   methods: {
     async init() {
@@ -66,9 +73,9 @@ export default {
       if (this.predictFlag) await this.predict();
       else {
         console.log('before wait, this.predictFlag: ' + this.predictFlag);
-        await this.wait(500);
+        await this.wait(800);
       }
-      if (this.mountFlag) window.requestAnimationFrame(this.loop);
+      if (this.handactive) window.requestAnimationFrame(this.loop);
     },
 
     async predict() {
@@ -104,7 +111,6 @@ export default {
           };
           this.$store.dispatch('meetingRoom/sendMessage', message);
         }
-        // if (this.selectedSize < 5) this.selectedSize++;
       } else if (prediction[3].probability.toFixed(2) > 0.99) {
         console.log('prediction[3]33333333333333333333333');
         this.predictFlag = false;
@@ -119,26 +125,43 @@ export default {
           };
           this.$store.dispatch('meetingRoom/sendMessage', message);
         }
-        // if (this.selectedSize > 1) this.selectedSize--;
+      } else if (prediction[4].probability.toFixed(2) > 0.99) {
+        console.log('prediction[4]4444444444444444444444444');
+        this.predictFlag = false;
+        this.$store.state.meetingRoom.location = 'left';
+        const message = {
+          id: 'changePresentation',
+          currentPage: this.$store.state.meetingRoom.currentPage,
+          location: this.$store.state.meetingRoom.location,
+          size: this.$store.state.meetingRoom.size,
+          transition: this.$store.state.meetingRoom.transition,
+        };
+        this.$store.dispatch('meetingRoom/sendMessage', message);
+      } else if (prediction[5].probability.toFixed(2) > 0.99) {
+        console.log('prediction[5]55555555555555555555555555');
+        this.predictFlag = false;
+        this.$store.state.meetingRoom.location = 'right';
+        const message = {
+          id: 'changePresentation',
+          currentPage: this.$store.state.meetingRoom.currentPage,
+          location: this.$store.state.meetingRoom.location,
+          size: this.$store.state.meetingRoom.size,
+          transition: this.$store.state.meetingRoom.transition,
+        };
+        this.$store.dispatch('meetingRoom/sendMessage', message);
+      } else if (prediction[6].probability.toFixed(2) > 0.99) {
+        console.log('prediction[6]666666666666666666666666');
+        this.predictFlag = false;
+        this.$store.state.meetingRoom.location = 'top';
+        const message = {
+          id: 'changePresentation',
+          currentPage: this.$store.state.meetingRoom.currentPage,
+          location: this.$store.state.meetingRoom.location,
+          size: this.$store.state.meetingRoom.size,
+          transition: this.$store.state.meetingRoom.transition,
+        };
+        this.$store.dispatch('meetingRoom/sendMessage', message);
       }
-      //aeeun
-      // if (prediction[1].probability.toFixed(2) > 0.99) {
-      //   console.log('nextPage');
-      //   // this.predictFlag = false;
-      //   // store.dispatch('meetingRoom/goNext');
-      //   //setTimeout(store.dispatch('meetingRoom/goNext'), 1000);
-      //   //_.throttle(store.dispatch('meetingRoom/goNext'), 1000);
-
-      //   // const classPrediction =
-      //   //     prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-      //   //     labelContainer.childNodes[i].innerHTML = classPrediction;
-      // } else if (prediction[2].probability.toFixed(2) > 0.99) {
-      //   console.log('prediction[2]');
-      // } else if (prediction[3].probability.toFixed(2) > 0.99) {
-      //   console.log('prediction[3]');
-      // } else if (prediction[0].probability.toFixed(2) > 0.99) {
-      //   console.log('prediction[0]');
-      // }
     },
   },
 };
