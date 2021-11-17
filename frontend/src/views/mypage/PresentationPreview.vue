@@ -91,32 +91,29 @@
               }"
             ></span>
           </button>
-
+          <div id="ppt-image-setting">
+            <transition name="fade" mode="out-in" v-if="idx !== null">
+              <img
+                :src="imageSrcs"
+                :key="imageSrcs"
+                alt="presentation image"
+                :class="[sizePreset, transitionPreset]"
+                id="img-setting"
+                style="max-width: 100%"
+              />
+            </transition>
+          </div>
           <!-- local video element -->
           <video
-            width="100%"
-            height="750vh"
+            width="70%"
+            height="10%"
             :id="'local-video' + roomId"
             autoplay="true"
             poster="@/assets/img/logos/focus_camera3.jpg"
           ></video>
         </div>
 
-        <div id="ppt-image-setting">
-          <!-- <img
-            v-if="idx == 0"
-            src="@/assets/presentationTemplates/first-slide.png"
-            id="img-setting"
-            alt="prev-image"
-            class="size-2"
-          />
-          <img
-            v-else-if="idx == slideList.length - 1"
-            src="@/assets/presentationTemplates/last-slide.png"
-            id="img-setting"
-            alt="next-image"
-            class="size-2"
-          /> -->
+        <!-- <div id="ppt-image-setting">
           <transition name="fade" mode="out-in" v-if="idx !== null">
             <img
               :src="imageSrcs"
@@ -126,14 +123,7 @@
               id="img-setting"
             />
           </transition>
-          <!-- <img
-            v-else
-            :src="slideList[idx].slideFile"
-            id="img-setting"
-            alt="current-slide"
-            class="size-4"
-          /> -->
-        </div>
+        </div> -->
       </div>
 
       <!-- right side bar control buttons -->
@@ -533,7 +523,8 @@ export default {
 <style scoped>
 #ppt-image-setting {
   margin-top: 57px;
-  width: 70vw;
+  max-width: 100%;
+  width: 70%;
   height: 60vh;
   display: flex;
   align-items: center;
@@ -637,7 +628,7 @@ dbecec
   width: 70vw;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 .btn-setting {
   width: 20%;
@@ -704,8 +695,8 @@ dbecec
   height: 100%;
 }
 .img-setting {
-  max-width: 60vw;
-  max-height: 50vh;
+  max-width: 100%;
+  max-height: 100%;
   margin: 5px;
 }
 .right-side-bar {
