@@ -59,7 +59,7 @@ public class PresentationServiceImpl implements PresentationService {
   // aeeun
 //  private final String presentationDirectory = "/Users/gim-aeeun/file";
   // juyeop
- private final String presentationDirectory = "C:\\Users\\JuYeop\\pjt3-picture";
+  private final String presentationDirectory = "C:\\Users\\JuYeop\\pjt3-picture";
   // minji
 //  private final String presentationDirectory = "C:\\Users\\multicampus\\ssafy-2-semester\\free-pjt\\presentation";
   // youngeun
@@ -127,7 +127,7 @@ public class PresentationServiceImpl implements PresentationService {
   public List<PresentationDto> getPresentationList(Long userId) {
     log.info("[getPresentationList - service] userId : {}", userId);
     List<Presentation> presentationList = presentationRepository.findByUser_userId(userId)
-        .orElseThrow(() -> new RuntimeException());
+        .orElse(new ArrayList<Presentation>());
     List<PresentationDto> presentationDtoList = new ArrayList<>();
     presentationList.forEach(presentation -> {
       Slide slide = slideRepository.findByPresentation_presentationIdOrderBySequence(
