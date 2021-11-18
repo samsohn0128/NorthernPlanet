@@ -6,7 +6,7 @@ import store from '@/store';
 Vue.use(VueRouter);
 const router = new VueRouter({
   //8443포트에서 테스트할때는 history 모드 주석처리하세요.
-  // mode: 'history',
+  mode: 'history',
   routes,
 });
 

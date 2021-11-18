@@ -182,6 +182,10 @@ export default {
       };
       console.log('message: ', message);
       console.log('meetingInfo: ', meetingInfo);
+      console.log('message==================');
+      console.log(message);
+      console.log('meetingInfo==================');
+      console.log(meetingInfo);
       this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
       this.$store.dispatch('meetingRoom/sendMessage', message);
     },
