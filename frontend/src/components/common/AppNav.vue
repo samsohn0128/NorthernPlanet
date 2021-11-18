@@ -53,7 +53,7 @@ export default {
     userImage() {
       return this.user.image
         ? this.user.image
-        : require('@/assets/img/logos/focus_logo.png');
+        : require('@/assets/img/logos/northernplanet_character_square.png');
     },
   },
 
@@ -100,6 +100,7 @@ export default {
 .image-user {
   width: 30px;
   border: 1.5px solid white;
+  background-color: white;
 }
 .profile-image {
   display: flex;
