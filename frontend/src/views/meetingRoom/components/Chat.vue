@@ -6,11 +6,7 @@
     />
 
     <div class="container">
-      <div
-        id="make-chatting-bottom"
-        class="row clearfix"
-        style="overflow: auto; height: 79vh"
-      >
+      <div id="make-chatting-bottom" class="chat-room-setting row clearfix">
         <div class="col-lg-12">
           <div class="chat">
             <div class="chat-history">
@@ -105,6 +101,10 @@ export default {
 body {
   background-color: #f4f7f6;
   margin-top: 20px;
+}
+.chat-room-setting {
+  overflow: auto;
+  height: calc(100vh - 160px);
 }
 
 .chat-app .people-list {
@@ -290,6 +290,7 @@ body {
   width: 80%;
   border: 1.5px solid #6d9e8a;
   border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .send-icon {

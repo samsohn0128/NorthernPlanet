@@ -1,45 +1,49 @@
 <template>
   <div>
-    <div class="small-img-container">
-      <!-- prev -->
-      <PresentationSlideItem
-        v-if="prev >= 0"
-        :slideUrl="slideUrls[prev]"
-        :Next="false"
-        @selectPrev="progressPrev"
-        @selectNext="progressNext"
-      />
-      <img
-        v-else
-        src="@/assets/presentationTemplates/first-slide.png"
-        alt=""
-        class="small-img-setting"
-      />
-      <!-- next -->
-      <PresentationSlideItem
-        v-if="next < slideUrls.length"
-        :slideUrl="slideUrls[next]"
-        :Next="true"
-        @selectPrev="progressPrev"
-        @selectNext="progressNext"
-      />
-      <img
-        v-else
-        src="@/assets/presentationTemplates/last-slide.png"
-        alt=""
-        class="small-img-setting"
-      />
+    <!-- prev -->
+    <PresentationSlideItem
+      v-if="prev >= 0"
+      :slideUrl="slideUrls[prev]"
+      :Next="false"
+      @selectPrev="progressPrev"
+      @selectNext="progressNext"
+    />
+    <img
+      v-else
+      src="@/assets/presentationTemplates/first-slide.png"
+      alt=""
+      class="small-img-setting"
+    />
+    <!-- now -->
+    <div style="position: relative">
+      <PresentationSlideItem :slideUrl="slideUrls[now]" />
+      <div class="overlay"><span>Now</span></div>
     </div>
+    <!-- next -->
+    <PresentationSlideItem
+      v-if="next < slideUrls.length"
+      :slideUrl="slideUrls[next]"
+      :Next="true"
+      @selectPrev="progressPrev"
+      @selectNext="progressNext"
+    />
+    <img
+      v-else
+      src="@/assets/presentationTemplates/last-slide.png"
+      alt=""
+      class="small-img-setting"
+    />
     <!-- slider: 슬라이드 넘기기 ui -->
     <div class="d-flex justify-content-center align-items-center mb-5">
       <button class="slider-prev-button" @click="progressPrev">prev</button>
       <button @keyup.right="progressNext" @keyup.left="progressPrev">
         <div class="slider-progress-indicator">
-          {{ this.$store.state.meetingRoom.now + 1 }}/{{ slideUrls.length }}
+          {{ now + 1 }}/{{ slideUrls.length }}
         </div>
       </button>
       <button class="slider-next-button" @click="progressNext">next</button>
     </div>
+
     <!-- slider: 슬라이드 넘기기 ui -->
     <!-- slider alert: 첫 슬라이드, 마지막 슬라이드 alert -->
     <transition name="fade">
@@ -245,9 +249,12 @@ export default {
   align-items: center;
 }
 .small-img-setting {
-  max-width: 190px;
-  max-height: 100px;
+  width: 350px;
+  height: 200px;
   padding: 5px;
   cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 25px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 </style>

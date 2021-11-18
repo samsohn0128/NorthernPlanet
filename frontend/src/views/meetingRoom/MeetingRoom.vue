@@ -336,6 +336,7 @@ export default {
   transform: translate(-100%, -50%);
 }
 .room-title {
+  height: 30px;
   color: white;
 }
 .left-slide-enter-active {
