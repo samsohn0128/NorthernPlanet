@@ -57,6 +57,9 @@ export default {
     contentLength() {
       return this.$store.state.meetingRoom.imageSrcs.length;
     },
+    roomNumber() {
+      return this.$store.getters['meetingRoom/getRoomNumber'];
+    },
     messageData() {
       const data = {
         id: 'changePresentation',
@@ -73,7 +76,8 @@ export default {
     this.myAudioEnabled = this.$store.state.meetingRoom.startWithMic;
   },
   destroyed() {
-    window.location.reload(); // 새로고침
+    // window.location.reload(); // 새로고침
+    // this.leaveRoom();
   },
   // : methods
   methods: {
@@ -97,10 +101,16 @@ export default {
         id: 'leaveRoom',
       };
       this.$store.dispatch('meetingRoom/sendMessage', message);
-      this.$store.dispatch('meetingRoom/leaveRoom');
       if (this.myName == this.manager) {
-        leaveRoom();
+        leaveRoom(this.roomNumber);
+        console.log(this.roomNumber);
       }
+      this.$store.dispatch('meetingRoom/leaveRoom');
+      // if (this.myName == this.manager) {
+      //   leaveRoom(this.roomNumber);
+      //   console.log(this.roomNumber);
+      // }
+      // window.location.reload(); // 새로고침
     },
     progressNext: function () {
       const message = {
