@@ -189,7 +189,7 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
-  max-height: 79vh;
+  max-height: calc(100vh - 210px);
   display: flex;
   /* overflow: hidden; */
 }
