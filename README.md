@@ -5,6 +5,15 @@
   * [Notion 개발 WIKI](https://www.notion.so/Put-your-hands-up-7c7767c9ba724182a6c1618d8536bd89)
   * **북쪽행성**은 온라인 발표환경에서 발표를 쉽게 할 수 있게 도와주는 서비스입니다. 
   * 청취자는 발표자의 비언어적 표현과 발표자료를 함께 볼 수 있어 정보를 더 효과적으로 전달받을 수 있습니다.
+### 실행화면
+* 발표 방(1)
+
+<img src="https://i.imgur.com/htYMCzI.gif" width="700px"/>
+
+* 발표 방(2)
+
+<img src="https://i.imgur.com/N4ky5dD.gif" width="700px"/>
+
 
 ### 주요 기능
   * 발표 방
@@ -16,15 +25,6 @@
      * 발표 자료를 다양한 형식으로 올릴 수 있습니다. **(PPT, PDF, GIF, PNG, JPG)**
      * 발표자료를 수정하며 애니메이션을 적용하고, 대본을 작성할 수 있습니다.
      * 발표 연습 페이지에서 발표를 연습할 수 있습니다.
-### 실행화면
-* 발표 방(1)
-
-<img src="https://i.imgur.com/htYMCzI.gif" width="700px"/>
-
-* 발표 방(2)
-
-<img src="https://i.imgur.com/N4ky5dD.gif" width="700px"/>
-
 
 
 ## 📌 목차
