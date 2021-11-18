@@ -33,7 +33,9 @@
                 @keyup.enter="addChat"
               />
               <div class="input-group-prepend" @click="addChat">
-                <span class="input-group-text"><i class="fa fa-send"></i></span>
+                <span class="input-group-text send-icon"
+                  ><i class="fa fa-send"></i
+                ></span>
               </div>
             </div>
           </div>
@@ -87,6 +89,7 @@ export default {
       const message = {
         id: 'addChat',
         time: this.nowTime,
+        name: this.myName,
         chatContent: this.chatInput,
       };
 
@@ -285,10 +288,19 @@ body {
 
 .chat-input-div {
   width: 80%;
+  border: 1.5px solid #6d9e8a;
+  border-radius: 8px;
+}
+
+.send-icon {
+  display: inline-block;
+  margin-left: 1px;
+  background: #6d9e8a;
+  color: white;
 }
 
 .chat-input-div:focus {
-  outline: 3px solid #456357;
+  border: 0px solid;
 }
 
 @media only screen and (max-width: 767px) {

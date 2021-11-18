@@ -5,9 +5,9 @@ module.exports = {
   outputDir: path.resolve(
     __dirname,
     //'../backend/northernplanet/src/main/resources/static',
-    // '../backend/webrtc/src/main/resources/static',
+    '../backend/webrtc/src/main/resources/static',
     //배포 설정
-    './build',
+    // './build',
   ), //빌드파일을 올릴 곳(디폴트(dist)에서 스프링 부트 static폴더로 )
   devServer: {
     historyApiFallback: true, // history mode 새로고침시 정상 작동
