@@ -76,11 +76,6 @@ export default {
     this.myVideoEnabled = this.$store.state.meetingRoom.startWithVideo;
     this.myAudioEnabled = this.$store.state.meetingRoom.startWithMic;
   },
-  beforeUnmount() {
-    if (!this.leaveCheck) {
-      this.leaveRoom();
-    }
-  },
   // : methods
   methods: {
     toggleVideo: function () {
