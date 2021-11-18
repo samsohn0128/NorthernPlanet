@@ -1,10 +1,7 @@
 <template>
-  <div
-    :class="[locationPreset, 'main-video-container']"
-    class="set-location"
-    id="main-video-container"
-  >
-    <div class="set-timer-location">
+  <div class="set-location">
+    <!-- <div class="set-timer-location"> -->
+    <div class="set-timer">
       <div class="time-space">
         <span style="display: flex"
           ><span id="showMin">00</span> : <span id="showSec">00</span></span
@@ -29,23 +26,26 @@
     </div>
 
     <!-- <transition :name="transitionPreset" v-if="currentPage !== null"> -->
-    <transition name="fade" mode="out-in" v-if="currentPage !== null">
-      <img
-        :src="imageSrcs[currentPage]"
-        :key="imageSrcs[currentPage]"
-        alt="presentation image"
-        :class="[sizePreset, transitionPreset, 'img-fluid']"
-        id="presentation-image"
-      />
-    </transition>
+    <div :class="[locationPreset]" class="img-setting">
+      <transition name="fade" mode="out-in" v-if="currentPage !== null">
+        <img
+          :src="imageSrcs[currentPage]"
+          :key="imageSrcs[currentPage]"
+          alt="presentation image"
+          :class="[sizePreset, transitionPreset, 'img-fluid']"
+          id="presentation-image"
+        />
+      </transition>
+    </div>
     <div
       v-html="scriptList[currentPage]"
       class="script"
       v-if="presenter == myName && currentPage !== null && showScriptnow"
     ></div>
     <div class="overlay" style="z-index: 5">
-      <span>{{ mainParticipantName }}</span>
+      <span style="height: 100%; width: 100%">{{ mainParticipantName }}</span>
     </div>
+    <div :class="['main-video-container']" id="main-video-container"></div>
   </div>
   <!-- presentation image -->
   <!-- </div> -->
@@ -177,6 +177,9 @@ export default {
 </script>
 
 <style scoped>
+#presentation-image {
+  border-radius: 25px;
+}
 /* .main-video-container {
   position: relative;
   height: 100%;
@@ -185,14 +188,19 @@ export default {
 .main-video-container {
   position: relative;
   height: 100%;
-  width: auto;
+  width: 100%;
+  max-height: 79vh;
   display: flex;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .set-location {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+.set-timer {
+  width: 100%;
+  z-index: 1;
 }
 
 /* 스톱워치 */
@@ -217,6 +225,12 @@ export default {
 }
 .time-button {
   margin: 2px;
+}
+.img-setting {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 90%;
 }
 
 .overlay {
@@ -258,6 +272,7 @@ export default {
   align-items: center;
   z-index: 5;
   overflow: auto;
+  margin-top: 20px;
   border-radius: 10px;
 }
 /* scroll bar*/
@@ -280,45 +295,45 @@ export default {
 }
 /* location presets */
 .presentation-right {
-  /* justify-content: flex-end;
-  align-items: center; */
-  justify-content: center;
-  align-items: end;
+  justify-content: flex-end;
+  align-items: center;
+  /* justify-content: center;
+  align-items: end; */
 }
 .presentation-left {
-  /* justify-content: start;
-  align-items: center; */
-  justify-content: center;
-  align-items: start;
-}
-.presentation-top {
-  /* justify-content: center;
-  align-items: start; */
   justify-content: start;
   align-items: center;
+  /* justify-content: center;
+  align-items: start; */
+}
+.presentation-top {
+  justify-content: center;
+  align-items: start;
+  /* justify-content: start;
+  align-items: center; */
 }
 /* size presets */
 .presentation-0 {
   position: absolute;
-  margin: 2%;
+  margin-top: 5vh;
   height: 30%;
   z-index: 1;
 }
 .presentation-1 {
   position: absolute;
-  margin: 2%;
+  margin-top: 5vh;
   height: 40%;
   z-index: 1;
 }
 .presentation-2 {
   position: absolute;
-  margin: 2%;
+  margin-top: 5vh;
   height: 50%;
   z-index: 1;
 }
 .presentation-3 {
   position: absolute;
-  margin: 2%;
+  margin-top: 5vh;
   height: 60%;
   z-index: 1;
 }
@@ -328,6 +343,7 @@ export default {
   height: 100%;
   border-radius: 25px;
   z-index: 1;
+  margin-top: 5vh;
 }
 /* presentation preset css : 프레젠테이션 위치, 크기 프리셋 */
 /* right */
@@ -507,9 +523,10 @@ export default {
 
 <style>
 .video-insert {
+  width: 100%;
   height: 100%;
   border-radius: 25px;
   box-shadow: 0px 4px 4px black;
-  transform: scale(-1, 1);
+  transform: scaleX(-1);
 }
 </style>

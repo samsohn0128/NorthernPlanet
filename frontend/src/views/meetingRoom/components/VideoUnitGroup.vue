@@ -12,7 +12,7 @@
       v-if="participants === null || participants.length === 0"
       class="video-container"
     >
-      <img src="@/assets/icons/empty.png" alt="" class="video-insert" />
+      <img src="@/assets/icons/empty.png" alt="" class="video-insert3" />
     </div>
     <!-- 객체 v-for 시 index를 key로 주면 발표자 변경 시 비디오 렌더링 문제 발생, key를 name으로 변경 -->
     <VideoUnit
@@ -88,8 +88,13 @@ export default {
 <style scoped>
 .video-container {
   height: 20%;
-  width: auto;
   padding: 5px 5px;
+}
+.video-insert3 {
+  width: 240px;
+  transform: scaleX(-1);
+  border-radius: 25px;
+  box-shadow: 0px 4px 4px black;
 }
 .up-button {
   position: absolute;
