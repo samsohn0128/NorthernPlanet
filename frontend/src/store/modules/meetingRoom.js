@@ -462,6 +462,8 @@ export default {
       //   setRoomOnLive(roomData);
       // }
       context.commit('LEAVE_ROOM');
+
+      window.location.reload(); // 새로고침
     },
     receiveVideoResponse(context, result) {
       context.state.participants[result.name].rtcPeer.processAnswer(

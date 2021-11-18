@@ -33,6 +33,7 @@ export default {
     return {
       myVideoEnabled: null,
       myAudioEnabled: null,
+      leaveCheck: false,
     };
   },
   // : computed
@@ -75,9 +76,10 @@ export default {
     this.myVideoEnabled = this.$store.state.meetingRoom.startWithVideo;
     this.myAudioEnabled = this.$store.state.meetingRoom.startWithMic;
   },
-  destroyed() {
-    // window.location.reload(); // 새로고침
-    // this.leaveRoom();
+  beforeUnmount() {
+    if (!this.leaveCheck) {
+      this.leaveRoom();
+    }
   },
   // : methods
   methods: {
@@ -97,6 +99,7 @@ export default {
       this.$store.dispatch('meetingRoom/sendMessage', message);
     },
     leaveRoom: function () {
+      this.leaveCheck = true;
       const message = {
         id: 'leaveRoom',
       };
@@ -106,11 +109,6 @@ export default {
         console.log(this.roomNumber);
       }
       this.$store.dispatch('meetingRoom/leaveRoom');
-      // if (this.myName == this.manager) {
-      //   leaveRoom(this.roomNumber);
-      //   console.log(this.roomNumber);
-      // }
-      // window.location.reload(); // 새로고침
     },
     progressNext: function () {
       const message = {
