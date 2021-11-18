@@ -183,6 +183,12 @@ export default {
         startWithMic: this.isMicOn,
         startWithVideo: this.isVideoOn,
       };
+      console.log('message: ', message);
+      console.log('meetingInfo: ', meetingInfo);
+      console.log('message==================');
+      console.log(message);
+      console.log('meetingInfo==================');
+      console.log(meetingInfo);
       await this.$store.dispatch('meetingRoom/setMeetingInfo', meetingInfo);
       await this.$store.dispatch('meetingRoom/sendMessage', message);
     },

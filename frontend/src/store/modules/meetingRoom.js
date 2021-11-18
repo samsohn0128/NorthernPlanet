@@ -1,7 +1,7 @@
 import Participant from './js/participant.js';
 import Vue from 'vue';
 import router from '../../router';
-import { setRoomOnLive } from '@/api/rooms.js';
+// import { setRoomOnLive } from '@/api/rooms.js';
 import { BASE_URL } from '@/constant/index.js';
 import kurentoUtils from 'kurento-utils';
 import axios from 'axios';
@@ -451,17 +451,19 @@ export default {
       context.commit('DISPOSE_PARTICIPANT', participantName);
     },
     leaveRoom(context) {
-      window.location.reload(); // 새로고침
+      // window.location.reload(); // 새로고침
       router.push({ path: '/dashboard' });
       // console.log(context.state.roomNumber);
-      if (context.state.myName === context.state.manager) {
-        const roomData = {
-          room_id: context.state.roomNumber,
-          on_live: false,
-        };
-        setRoomOnLive(roomData);
-      }
+      // if (context.state.myName === context.state.manager) {
+      //   const roomData = {
+      //     room_id: context.state.roomNumber,
+      //     on_live: false,
+      //   };
+      //   setRoomOnLive(roomData);
+      // }
       context.commit('LEAVE_ROOM');
+
+      window.location.reload(); // 새로고침
     },
     receiveVideoResponse(context, result) {
       context.state.participants[result.name].rtcPeer.processAnswer(
@@ -636,6 +638,9 @@ export default {
     },
     getPresenter(state) {
       return state.presenter;
+    },
+    getRoomNumber(state) {
+      return state.roomNumber;
     },
   },
 };
