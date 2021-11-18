@@ -143,13 +143,13 @@ export default {
   },
   watch: {
     chat(value) {
-      console.log('watch chat', value);
+      // console.log('watch chat', value);
 
       this.$store.dispatch('meetingRoom/addChatMessage', value);
     },
-    messageList(value) {
-      console.log('watch messageList', value);
-    },
+    // messageList(value) {
+    //   console.log('watch messageList', value);
+    // },
   },
   // : lifecycle hook
   mounted() {},

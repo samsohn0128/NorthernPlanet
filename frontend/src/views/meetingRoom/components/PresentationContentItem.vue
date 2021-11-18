@@ -92,6 +92,10 @@ export default {
         id: 'changeContent',
         presentationUserId: this.content.presentationId,
       };
+      this.$store.state.meetingRoom.prev = -1;
+      this.$store.state.meetingRoom.now = 0;
+      this.$store.state.meetingRoom.next = 2;
+      this.$store.state.meetingRoom.currentPage = 0;
       this.$store.dispatch('meetingRoom/sendMessage', message);
     },
   },
