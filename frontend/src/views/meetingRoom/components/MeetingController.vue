@@ -127,6 +127,7 @@ export default {
   border-radius: 30px;
   color: white;
   font-weight: bold;
+  z-index: 1;
 }
 .controller-button-disabled {
   background: linear-gradient(90deg, #a0b0d0 0%, #7587a6 100%);
@@ -137,6 +138,7 @@ export default {
   border-radius: 30px;
   color: white;
   font-weight: bold;
+  z-index: 1;
 }
 .button-color-setting {
   background: #66806a;
