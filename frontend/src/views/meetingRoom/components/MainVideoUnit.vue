@@ -263,13 +263,14 @@ export default {
   background: rgba(0, 0, 0, 0.4);
   width: 80%;
   height: 10%;
+  padding: 0px 10px;
   transition: 0.3s ease;
   color: white;
   font-size: 1.5rem;
   line-height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   z-index: 5;
   overflow: auto;
   margin-top: 20px;
