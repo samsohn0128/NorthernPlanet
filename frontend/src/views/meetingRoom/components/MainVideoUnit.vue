@@ -270,7 +270,6 @@ export default {
   line-height: 100%;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   z-index: 5;
   overflow: auto;
   margin-top: 20px;
