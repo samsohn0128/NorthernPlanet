@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: northernplanet_front
+    build:
+      context: frontend/
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:80"
+    restart: always
