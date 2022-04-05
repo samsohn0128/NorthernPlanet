@@ -4,6 +4,10 @@
 # Created by httpswww.toptal.comdevelopersgitignoreapiwindows,java,vue,vuejs
 # Edit at httpswww.toptal.comdevelopersgitignoretemplates=windows,java,vue,vuejs
 
+### docker-compose mysql ###
+/mysql-northernplanet/
+
+
 ### Spring Boot ###
 /.metadata/
 /backend/WebRTC/.metadata/

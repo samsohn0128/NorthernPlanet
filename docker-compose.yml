@@ -2,6 +2,7 @@ version: '3'
 
 services:
   frontend:
+    restart: always
     container_name: northernplanet_front
     build:
       context: frontend/
@@ -9,4 +10,22 @@ services:
     ports:
       - "80:80"
       - "443:80"
+  mysql:
+    image: mysql:5.7
     restart: always
+    container_name: northernplanet_mysql
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=mysql-northernplanet
+      - MYSQL_ROOT_PASSWORD=northernplanet
+      - MYSQL_User=qnrWhrgodtjd
+      - MYSQL_PASSWORD=qnrWhrgodtjd2021!
+      - TZ=Asia/Seoul
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes: 
+      - ./mysql-northernplanet/data:/var/lib/mysql
+      - ./mysql:/docker-entrypoint-initdb.d
+    
