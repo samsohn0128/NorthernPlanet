@@ -7,6 +7,9 @@
 ### docker-compose mysql ###
 /mysql-northernplanet/
 
+### docker-compose certbot ###
+/data/
+
 
 ### Spring Boot ###
 /.metadata/
