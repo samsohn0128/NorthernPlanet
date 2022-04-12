@@ -2,14 +2,28 @@ version: '3'
 
 services:
   frontend:
-    restart: always
-    container_name: northernplanet_front
     build:
       context: frontend/
       dockerfile: Dockerfile
+    container_name: northernplanet_frontend
+    restart: "on-failure"
     ports:
       - "80:80"
-      - "443:80"
+      - "443:443"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/app/certbot
+    command : "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+        image: certbot/certbot
+        restart: unless-stopped
+        container_name: certbot
+        volumes: 
+            - ./data/certbot/conf:/etc/letsencrypt    #nginx컨테이너에 certbot컨테이너 연결
+            - ./data/certbot/www:/app/certbot
+        depends_on:
+            - frontend
+        entrypoint : "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
   mysql:
     image: mysql:5.7
     restart: always
