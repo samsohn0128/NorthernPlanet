@@ -43,8 +43,10 @@ services:
     network_mode: host
     volumes:
       - ./backend/northernplanet:/app
+      - ./presentation:/presentation
     working_dir: /app
-    command: ["./gradlew","bootRun"]
+    # command: ./gradlew bootRun
+    command: bash -c "./gradlew build && java -jar build/libs/northernplanet-0.0.1-SNAPSHOT.jar"
     depends_on:
       - mysql
 
