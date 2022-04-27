@@ -23,6 +23,7 @@
 /backend/webrtc/.mvn/
 /backend/webrtc/src/main/resources/static
 /backend/webrtc/target/
+/backend/webrtc/.m2/
 
 /backend/northernplanet/.metadata/
 /backend/northernplanet/.gradle/

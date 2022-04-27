@@ -1,19 +1,85 @@
 version: '3'
 
 services:
+  kms:
+    build:
+      context: Kurento-Media-Server/
+      dockerfile: Dockerfile
+    container_name: kms
+    network_mode: host
+
+  coturn:
+    build:
+      context: coturn/
+      dockerfile: Dockerfile
+    container_name: coturn
+    network_mode: host
+
+  mysql:
+      image: mysql:5.7
+      restart: always
+      container_name: northernplanet_mysql
+      ports:
+        - "3307:3306"
+      environment:
+        - MYSQL_DATABASE=mysql-northernplanet
+        - MYSQL_ROOT_PASSWORD=northernplanet
+        - MYSQL_User=qnrWhrgodtjd
+        - MYSQL_PASSWORD=qnrWhrgodtjd2021!
+        - TZ=Asia/Seoul
+      command: 
+        - --character-set-server=utf8mb4
+        - --collation-server=utf8mb4_unicode_ci
+      volumes: 
+        - ./mysql-northernplanet/data:/var/lib/mysql
+        - ./mysql:/docker-entrypoint-initdb.d
+
+  backend:
+    container_name: northernplanet_backend
+    image: openjdk:8
+    restart: on-failure
+    # ports:
+    #   - "8446:8446"
+    network_mode: host
+    volumes:
+      - ./backend/northernplanet:/app
+    working_dir: /app
+    command: ["./gradlew","bootRun"]
+    depends_on:
+      - mysql
+
+  webrtc:
+    container_name: northernplanet_webrtc
+    image: maven
+    restart: on-failure
+    # ports:
+    #   - "8443:8443"
+    network_mode: host
+    volumes:
+      - ./backend/webrtc:/app
+      - ./backend/webrtc/.m2:/root/.m2
+    working_dir: /app
+    command: bash -c "mvn package && java -jar target/WebRtc-0.0.1-SNAPSHOT.jar"
+    # java -jar target/WebRtc-0.0.1-SNAPSHOT.jar
+      # - ["mvn", "package"]
+      # ["java", "-jar", "target/WebRtc-0.0.1-SNAPSHOT.jar"]
+    # command: ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments=\"-Dkms.url=ws://3.35.131.86:8888/kurento\""]
+
   frontend:
     build:
       context: frontend/
       dockerfile: Dockerfile
     container_name: northernplanet_frontend
     restart: "on-failure"
-    ports:
-      - "80:80"
-      - "443:443"
+    # ports:
+    #   - "80:80"
+    #   - "443:443"
+    network_mode: host
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/app/certbot
     command : "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    
   certbot:
         image: certbot/certbot
         restart: unless-stopped
@@ -24,22 +90,3 @@ services:
         depends_on:
             - frontend
         entrypoint : "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-  mysql:
-    image: mysql:5.7
-    restart: always
-    container_name: northernplanet_mysql
-    ports:
-      - "3307:3306"
-    environment:
-      - MYSQL_DATABASE=mysql-northernplanet
-      - MYSQL_ROOT_PASSWORD=northernplanet
-      - MYSQL_User=qnrWhrgodtjd
-      - MYSQL_PASSWORD=qnrWhrgodtjd2021!
-      - TZ=Asia/Seoul
-    command: 
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
-    volumes: 
-      - ./mysql-northernplanet/data:/var/lib/mysql
-      - ./mysql:/docker-entrypoint-initdb.d
-    
