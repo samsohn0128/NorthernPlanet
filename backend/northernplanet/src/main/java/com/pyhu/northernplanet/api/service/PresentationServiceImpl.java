@@ -53,7 +53,9 @@ public class PresentationServiceImpl implements PresentationService {
   private final SlideRepository slideRepository;
 
   // ubuntu
- private final String presentationDirectory = "/home/ubuntu/presentation";
+// private final String presentationDirectory = "/home/ubuntu/presentation";
+  // docker
+  private final String presentationDirectory = "/presentation";
   // dongwoo
   //private final String presentationDirectory = "/Users/dongwoosohn/presentation";
   // aeeun
