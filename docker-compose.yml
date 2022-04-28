@@ -38,14 +38,11 @@ services:
     container_name: northernplanet_backend
     image: openjdk:8
     restart: on-failure
-    # ports:
-    #   - "8446:8446"
     network_mode: host
     volumes:
       - ./backend/northernplanet:/app
       - ./presentation:/presentation
     working_dir: /app
-    # command: ./gradlew bootRun
     command: bash -c "./gradlew build && java -jar build/libs/northernplanet-0.0.1-SNAPSHOT.jar"
     depends_on:
       - mysql
@@ -54,18 +51,12 @@ services:
     container_name: northernplanet_webrtc
     image: maven
     restart: on-failure
-    # ports:
-    #   - "8443:8443"
     network_mode: host
     volumes:
+      - /home/ubuntu/.m2:/root/.m2
       - ./backend/webrtc:/app
-      - ./backend/webrtc/.m2:/root/.m2
     working_dir: /app
     command: bash -c "mvn package && java -jar target/WebRtc-0.0.1-SNAPSHOT.jar"
-    # java -jar target/WebRtc-0.0.1-SNAPSHOT.jar
-      # - ["mvn", "package"]
-      # ["java", "-jar", "target/WebRtc-0.0.1-SNAPSHOT.jar"]
-    # command: ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments=\"-Dkms.url=ws://3.35.131.86:8888/kurento\""]
 
   frontend:
     build:
@@ -73,9 +64,6 @@ services:
       dockerfile: Dockerfile
     container_name: northernplanet_frontend
     restart: "on-failure"
-    # ports:
-    #   - "80:80"
-    #   - "443:443"
     network_mode: host
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
