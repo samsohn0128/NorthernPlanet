@@ -159,7 +159,7 @@
 
 
 ### 시스템 아키텍쳐
-![Imgur](https://imgur.com/nGNdX2Z.png)
+![Imgur](https://imgur.com/BvygnnS.png)
 
 ### 데이터베이스 ERD
 ![](https://i.imgur.com/fjsRpcf.png)
