@@ -1,16 +1,19 @@
 # <img src="https://i.imgur.com/JD6WL4Y.png" width="300px"/>
 ### 프로젝트 소개
-  * [Focus HomePage](https://k5a204.p.ssafy.io)
+  * [북쪽행성 HomePage](https://northernplanet.p.ssafy.io)
   * [YouTube](https://www.youtube.com/watch?v=hzazfNSwmiw)
   * [Notion 개발 WIKI](https://www.notion.so/Put-your-hands-up-7c7767c9ba724182a6c1618d8536bd89)
-  * **북쪽행성**은 온라인 발표환경에서 발표를 쉽게 할 수 있게 도와주는 서비스입니다. 
-  * 청취자는 발표자의 비언어적 표현과 발표자료를 함께 볼 수 있어 정보를 더 효과적으로 전달받을 수 있습니다.
+  * **북쪽행성**은 화면 공유와 마우스 만으로 진행되는 비대면 발표의 한계를 극복하여, 비언어적 요소를 포함한 인상 깊은 발표를 진행할 수 있도록 도와주는 온라인 발표 플랫폼입니다.
 ### 실행화면
 * 발표 방(1)
+  * 제스쳐를 활용해서 발표 자료를 제어할 수 있습니다.
+
 
 <img src="https://i.imgur.com/htYMCzI.gif" width="700px"/>
 
 * 발표 방(2)
+  * gif 발표 자료를 활용하면 더욱 효과적인 발표를 진행할 수 있습니다.
+
 
 <img src="https://i.imgur.com/N4ky5dD.gif" width="700px"/>
 
@@ -40,7 +43,7 @@
      * 발표자료를 수정하며 애니메이션을 적용하고, 대본을 작성할 수 있습니다.
      * 발표 연습 페이지에서 발표를 연습할 수 있습니다.
 
- 
+
 ## 📌 목차
 - [시작하기](#시작하기)  
   - [실행환경](#실행환경)  
@@ -66,21 +69,32 @@
 
 ## 시작하기
 ### 실행환경
-* java 1.8.0_301
-* lombok 1.18.20
-* npm 6.14.13
-* Intellij 2021.1.3
-* VisualStudioCode 1.59.0
-* Chrome 92.0
+* Deploy
+  * Ubuntu 20.04 LTS
+  * Docker 20.10.12
+  * docker-compose 1.29.2
+* Northernplanet API Server
+  - OpenJDK 1.8.0_322
+  - Gradle 7.2
+  - Spring Boot 2.5.5
+  - Spring 5.5.2
+* Northernplanet Kurento Signaling Server
+  - OpenJDK 17.0.2
+  - Apache Maven 3.8.5
+  - Spring Boot 2.5.3
+  - Spring 5.3.9
+* Northernplanet FrontEnd
+  - Node 14.19.1
+  - npm 6.14.16
+  - Nginx 1.20.2
+  - Vue 2.6.14
+* IDE
+  * Intellij 2021.1.3
+  * VisualStudioCode 1.59.0
+* Browser
+  * Chrome 92.0
 ### 실행하기
 * [보러가기✔](exec/21-11-18_실행하기.md)
-
-### 배포환경
-- __URL__ : https://k5a204.p.ssafy.io
-- __배포 여부__ : O 
-- __접속 가능__ : 접속 가능
-- __HTTPS 적용__ : O 
-- __PORT__ : 8443
 
 ### 배포하기
 * [보러가기✔](exec/21-11-18_배포하기.md)
@@ -102,7 +116,8 @@
 *  디자인 및 css
 
 ### 손동우(FE, BE)
-* 발표 자료 수정 
+* 발표 자료 관련 API 코드 리팩토링
+* 발표 방 관련 API 코드 리팩토링
 * 다른 파일 형식 업로드
 * 모션 인식
 * 배포
@@ -125,7 +140,7 @@
 
 #### Back-end
 - Java
-- Spring Boot, Spring MVC, Spring Data JPA
+- Spring Boot, Spring Data JPA
 - Gradle
 - MySQL
 - Intellij
@@ -144,9 +159,9 @@
 
 
 ### 시스템 아키텍쳐
-![](https://i.imgur.com/QChANZP.png)
+![Imgur](https://imgur.com/nGNdX2Z.png)
 
-### 데이터베이스
+### 데이터베이스 ERD
 ![](https://i.imgur.com/fjsRpcf.png)
 
 
