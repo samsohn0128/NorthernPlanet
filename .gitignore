@@ -10,6 +10,9 @@
 ### docker-compose certbot ###
 /data/
 
+### docker-compose backend ###
+presentation
+
 
 ### Spring Boot ###
 /.metadata/

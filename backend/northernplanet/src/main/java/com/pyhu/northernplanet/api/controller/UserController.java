@@ -41,7 +41,8 @@ public class UserController {
   @PreAuthorize("hasRole('USER')")
   public ResponseEntity<UserOauthDto> getCurrentUser(
       @ApiIgnore @CurrentUser UserPrincipal userPrincipal) {
-    log.info("getCurrentUser: userPrincipal - {}", userPrincipal);
+    log.info("[getCurrentUser]: userPrincipal - userName : {}, Email : {}, name: {}, id: {}, password: {}",
+                userPrincipal.getUsername(), userPrincipal.getEmail(), userPrincipal.getName(), userPrincipal.getId(), userPrincipal.getPassword());
     UserOauthDto user = null;
     try {
       user = userService.getOauthUserByOauthId(userPrincipal.getPassword());
